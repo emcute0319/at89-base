@@ -1,0 +1,7 @@
+
+[WORKSPACE]
+  MPW_NAME="AT89_Base"
+  Project=".\os\RTX51_Tiny_Lib.Uv2",X
+  Project=".\prj\AT89_Base_NoOS.Uv2",A,X
+  Project=".\prj\AT89_Base_OsRtxTiny.Uv2",X
+
