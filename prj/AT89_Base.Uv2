@@ -10,6 +10,7 @@ Group (drv)
 
 File 1,1,<..\startup\main.c><main.c>
 File 2,1,<..\apl\apl.c><apl.c>
+File 2,1,<..\apl\apl_idle.c><apl_idle.c>
 File 3,1,<..\plf\plf.c><plf.c>
 File 4,1,<..\drv\drv.c><drv.c>
 File 4,1,<..\drv\drv_cpu.c><drv_cpu.c>

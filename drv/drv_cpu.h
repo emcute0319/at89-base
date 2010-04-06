@@ -39,9 +39,9 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_CPU_GetCpuTick
+ *      DRV_CPU_GetSysTick
  * DESCRIPTION:
- *      Get CPU Real-Time Tick.
+ *      Get System Real-Time Tick.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -51,7 +51,7 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
  * HISTORY:
  *      2009.6.16        Panda.Xiong         Create/Update
  *****************************************************************************/
-#define DRV_CPU_GetCpuTick()        (vSysTickCount)
+#define DRV_CPU_GetSysTick()        (vSysTickCount)
 
 /******************************************************************************
  * FUNCTION NAME:

@@ -17,75 +17,34 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   apl.c
+ *   apl_idle.h
  * DESCRIPTION:
- *   Application Entry.
+ *   N/A
  * HISTORY:
- *   2010.2.1        panda.xiong         Create/Update
+ *   2010.4.6        PANDA         Create/Update
  *
 *****************************************************************************/
 
-#include "plf.h"
-#include "apl.h"
-
-
-static THREAD_FUNC thread_list[] =
-{
-    _thread_Idle,    /* Idle Thread */
-};
-
-
-#define THREAD_MAX_NO    COUNT_OF(thread_list)
-
-/* thread TCB heap */
-static PT_TCB   thread_tcb[THREAD_MAX_NO];
-
-/******************************************************************************
- * FUNCTION NAME:
- *      APL_Entry
- * DESCRIPTION:
- *      Application Entry.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.2.1        panda.xiong         Create/Update
- *****************************************************************************/
-void APL_Entry(void)
-{
-    UINT8   i;
-
-    for (i=0; i<THREAD_MAX_NO; i++)
-    {
-        thread_list[i](&thread_tcb[i]);
-    }
-}
+#ifndef __APL_IDLE_H
+#define __APL_IDLE_H
 
 
 /******************************************************************************
  * FUNCTION NAME:
- *      APL_Init
+ *      _thread_Idle
  * DESCRIPTION:
- *      Application Init.
+ *      Idle Thread.
  * PARAMETERS:
  *      N/A
  * RETURN:
- *      N/A
+ *      PT_HANDLE
  * NOTES:
  *      N/A
  * HISTORY:
- *      2010.2.1        panda.xiong         Create/Update
+ *      2010.3.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-void APL_Init(void)
-{
-    UINT8   i;
+PT_HANDLE _thread_Idle(THREAD_VOID);
 
-    for (i=0; i<THREAD_MAX_NO; i++)
-    {
-        PT_INIT(&thread_tcb[i]);
-    }
-}
+
+#endif /* __APL_IDLE_H */
 

@@ -17,53 +17,39 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   apl.h
+ *   pt_api.h
  * DESCRIPTION:
  *   N/A
  * HISTORY:
- *   2010.2.1        panda.xiong         Create/Update
+ *   2010.4.6        PANDA         Create/Update
  *
 *****************************************************************************/
 
-#ifndef __APL_H
-#define __APL_H
-
-#include "pt_api.h"
-#include "apl_idle.h"
+#ifndef __PT_API_H
+#define __PT_API_H
 
 
-/******************************************************************************
- * FUNCTION NAME:
- *      APL_Entry
- * DESCRIPTION:
- *      Application Entry.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.2.1        panda.xiong         Create/Update
- *****************************************************************************/
-void APL_Entry(void);
+#include "drv.h"
+#include "pt-sem.h"
 
-/******************************************************************************
- * FUNCTION NAME:
- *      APL_Init
- * DESCRIPTION:
- *      Application Init.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.2.1        panda.xiong         Create/Update
- *****************************************************************************/
-void APL_Init(void);
+typedef char            PT_HANDLE;
+typedef struct pt       PT_TCB;
+typedef struct pt_sem   PT_SCB;
+
+#define THREAD_VOID     PT_TCB  *tcb
+#define THREAD_START    PT_BEGIN(tcb)
+#define THREAD_END      PT_END(tcb)
+
+/* sleep millisecond */
+#define THREAD_SLEEP_MS(ms)                                                 \
+    do {                                                                    \
+        static unsigned long end_tick;                                      \
+        end_tick = (DRV_CPU_GetSysTick() + (ms)/DRV_TIMER_SysTimerTick);    \
+        PT_WAIT_WHILE(tcb, (DRV_CPU_GetSysTick() < end_tick));              \
+    } while (0)
+
+typedef PT_HANDLE (*THREAD_FUNC)(PT_TCB *tcb);
 
 
-#endif /* __APL_H */
+#endif /* __PT_API_H */
 
