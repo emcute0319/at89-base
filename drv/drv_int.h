@@ -29,8 +29,13 @@
 #define __DRV_INT_H
 
 
-#define DRV_INT_GlobalEnableInterrupt()      do { EA = 1; } while (0)
-#define DRV_INT_GlobalDisableInterrupt()     do { EA = 0; } while (0)
+/* enable/disable global interrupt */
+#define DRV_INT_GlobalEnableInterrupt()     do { EA = 1; } while (0)
+#define DRV_INT_GlobalDisableInterrupt()    do { EA = 0; } while (0)
+
+/* lock/unlock global interrupt */
+#define DRV_INT_LockGlobalInterrupt()       ((EA)? (EA=0, TRUE) : FALSE)
+#define DRV_INT_UnlockGlobalInterrupt(_s)   do { EA=(_s); } while (0)
 
 
 #endif /* __DRV_INT_H */

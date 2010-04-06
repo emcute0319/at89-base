@@ -44,14 +44,17 @@
  *****************************************************************************/
 void DRV_Init(void)
 {
-    /* Init IO    */
+    /* Vector Init */
+    DRV_Vector_Init();
+
+    /* Init IO */
     DRV_IO_Init();
 
     /* Init Timer */
     DRV_TIMER_Init();
 
 #if DRV_UART_SUPPORT
-    /* Init UART  */
+    /* Init UART */
     DRV_UART_Init();
 #endif
 
