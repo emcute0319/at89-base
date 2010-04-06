@@ -5,20 +5,18 @@ Target (AT89_Base), 0x0000 // Tools: 'MCS-51'
 
 Group (startup)
 Group (apl)
-Group (plf)
 Group (drv)
 
 File 1,1,<..\startup\main.c><main.c>
 File 2,1,<..\apl\apl.c><apl.c>
 File 2,1,<..\apl\apl_idle.c><apl_idle.c>
-File 3,1,<..\plf\plf.c><plf.c>
-File 4,1,<..\drv\drv.c><drv.c>
-File 4,1,<..\drv\drv_cpu.c><drv_cpu.c>
-File 4,1,<..\drv\drv_io.c><drv_io.c>
-File 4,1,<..\drv\drv_uart.c><drv_uart.c>
-File 4,1,<..\drv\drv_spi.c><drv_spi.c>
-File 4,1,<..\drv\drv_i2cm.c><drv_i2cm.c>
-File 4,1,<..\drv\drv_vector.c><drv_vector.c>
+File 3,1,<..\drv\drv.c><drv.c>
+File 3,1,<..\drv\drv_cpu.c><drv_cpu.c>
+File 3,1,<..\drv\drv_io.c><drv_io.c>
+File 3,1,<..\drv\drv_uart.c><drv_uart.c>
+File 3,1,<..\drv\drv_spi.c><drv_spi.c>
+File 3,1,<..\drv\drv_i2cm.c><drv_i2cm.c>
+File 3,1,<..\drv\drv_vector.c><drv_vector.c>
 
 
 Options 1,0,0  // Target 'AT89_Base'
@@ -87,7 +85,7 @@ Options 1,0,0  // Target 'AT89_Base'
  C51MSC ()
  C51DEF ()
  C51UDF ()
- INCC5 (..\apl;..\cfg;..\drv;..\inc;..\os;..\plf)
+ INCC5 (..\apl;..\cfg;..\drv;..\inc;..\os)
  AX51FL=4
  AX51MSC ()
  AX51SET ()

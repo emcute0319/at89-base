@@ -26,7 +26,6 @@
 *****************************************************************************/
 
 #include "drv.h"
-#include "plf.h"
 #include "apl.h"
 
 
@@ -61,12 +60,12 @@
  * HISTORY:
  *      2009.6.11        Panda.Xiong         Create/Update
  *****************************************************************************/
-#define _system_Init()                          \
-    do {                                        \
-        DRV_Init();     /* Driver      Init */  \
-        PLF_Init();     /* Platform    Init */  \
-        APL_Init();     /* Application Init */  \
-    } while (0)
+#define _system_Init()                      \
+    do {                                    \
+        DRV_Init();     /* Driver Init */   \
+        OS_Init();      /* OS     Init */   \
+        APL_Init();     /* App    Init */   \
+} while (0)
 
 
 /******************************************************************************
@@ -91,13 +90,8 @@ static void _system_Start(void)
     /* Globally enable Interrupt */
     DRV_INT_GlobalEnableInterrupt();
 
-    /* dead loop here */
-    while (1)
-    {
-        DRV_Entry();    /* Driver     Entry */
-        PLF_Entry();    /* Platform   Entry */
-        APL_Entry();    /* Appliction Entry */
-    }
+    /* Start OS, and never return back */
+    OS_Start();
 }
 
 

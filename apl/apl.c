@@ -25,26 +25,36 @@
  *
 *****************************************************************************/
 
-#include "plf.h"
+#include "drv.h"
 #include "apl.h"
 
 
-static THREAD_FUNC thread_list[] =
+/* thread list */
+static struct
 {
-    _thread_Idle,    /* Idle Thread */
+    THREAD_FUNC         p_thread;
+    THREAD_INIT_FUNC    p_init;
+} const thread_list[] =
+{
+    /* Add other threads here */
+
+    /* Idle Thread */
+    {
+        _thread_Idle,
+        _thread_Idle_Init,
+    },
 };
 
 
-#define THREAD_MAX_NO    COUNT_OF(thread_list)
-
 /* thread TCB heap */
+#define THREAD_MAX_NO    COUNT_OF(thread_list)
 static PT_TCB   thread_tcb[THREAD_MAX_NO];
 
 /******************************************************************************
  * FUNCTION NAME:
- *      APL_Entry
+ *      OS_Start
  * DESCRIPTION:
- *      Application Entry.
+ *      OS Start Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -54,13 +64,13 @@ static PT_TCB   thread_tcb[THREAD_MAX_NO];
  * HISTORY:
  *      2010.2.1        panda.xiong         Create/Update
  *****************************************************************************/
-void APL_Entry(void)
+void OS_Start(void)
 {
     UINT8   i;
 
     for (i=0; i<THREAD_MAX_NO; i++)
     {
-        thread_list[i](&thread_tcb[i]);
+        thread_list[i].p_thread(&thread_tcb[i]);
     }
 }
 
@@ -86,6 +96,7 @@ void APL_Init(void)
     for (i=0; i<THREAD_MAX_NO; i++)
     {
         PT_INIT(&thread_tcb[i]);
+        thread_list[i].p_init();
     }
 }
 

@@ -49,6 +49,7 @@ typedef struct pt_sem   PT_SCB;
     } while (0)
 
 typedef PT_HANDLE (*THREAD_FUNC)(PT_TCB *tcb);
+typedef void (*THREAD_INIT_FUNC)(void);
 
 
 #endif /* __PT_API_H */

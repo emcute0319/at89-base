@@ -45,6 +45,22 @@
  *****************************************************************************/
 PT_HANDLE _thread_Idle(THREAD_VOID);
 
+/******************************************************************************
+ * FUNCTION NAME:
+ *      _thread_Idle_Init
+ * DESCRIPTION:
+ *      N/A
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.4.6        PANDA         Create/Update
+ *****************************************************************************/
+void _thread_Idle_Init(void);
+
 
 #endif /* __APL_IDLE_H */
 

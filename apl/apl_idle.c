@@ -48,10 +48,33 @@ PT_HANDLE _thread_Idle(THREAD_VOID)
 
     while (1)
     {
-        /* update device status, at every 500ms */
+        /* delay 500ms */
         THREAD_SLEEP_MS(500);
+
+        /* Kick Watchdog */
+        DRV_WATCHDOG_Kick();
     }
 
     THREAD_END;
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      _thread_Idle_Init
+ * DESCRIPTION:
+ *      N/A
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.4.6        PANDA         Create/Update
+ *****************************************************************************/
+void _thread_Idle_Init(void)
+{
+    /* do nothing */
 }
 

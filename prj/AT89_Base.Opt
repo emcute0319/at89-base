@@ -13,20 +13,18 @@
 Target (AT89_Base), 0x0000 // Tools: 'MCS-51'
 GRPOPT 1,(startup),0,0,0
 GRPOPT 2,(apl),0,0,0
-GRPOPT 3,(plf),0,0,0
-GRPOPT 4,(drv),0,0,0
+GRPOPT 3,(drv),0,0,0
 
 OPTFFF 1,1,1,0,0,0,0,0,<..\startup\main.c><main.c> 
-OPTFFF 2,2,1,218103808,0,0,0,0,<..\apl\apl.c><apl.c> 
+OPTFFF 2,2,1,251658240,0,0,0,0,<..\apl\apl.c><apl.c> 
 OPTFFF 2,3,1,603979776,0,0,0,0,<..\apl\apl_idle.c><apl_idle.c> 
-OPTFFF 3,4,1,0,0,0,0,0,<..\plf\plf.c><plf.c> 
-OPTFFF 4,5,1,0,0,0,0,0,<..\drv\drv.c><drv.c> 
-OPTFFF 4,6,1,352321536,0,0,0,0,<..\drv\drv_cpu.c><drv_cpu.c> 
-OPTFFF 4,7,1,872415232,0,0,0,0,<..\drv\drv_io.c><drv_io.c> 
-OPTFFF 4,8,1,0,0,0,0,0,<..\drv\drv_uart.c><drv_uart.c> 
-OPTFFF 4,9,1,0,0,0,0,0,<..\drv\drv_spi.c><drv_spi.c> 
-OPTFFF 4,10,1,0,0,0,0,0,<..\drv\drv_i2cm.c><drv_i2cm.c> 
-OPTFFF 4,11,1,0,0,0,0,0,<..\drv\drv_vector.c><drv_vector.c> 
+OPTFFF 3,4,1,0,0,0,0,0,<..\drv\drv.c><drv.c> 
+OPTFFF 3,5,1,352321536,0,0,0,0,<..\drv\drv_cpu.c><drv_cpu.c> 
+OPTFFF 3,6,1,872415232,0,0,0,0,<..\drv\drv_io.c><drv_io.c> 
+OPTFFF 3,7,1,0,0,0,0,0,<..\drv\drv_uart.c><drv_uart.c> 
+OPTFFF 3,8,1,0,0,0,0,0,<..\drv\drv_spi.c><drv_spi.c> 
+OPTFFF 3,9,1,0,0,0,0,0,<..\drv\drv_i2cm.c><drv_i2cm.c> 
+OPTFFF 3,10,1,0,0,0,0,0,<..\drv\drv_vector.c><drv_vector.c> 
 
 
 TARGOPT 1, (AT89_Base)

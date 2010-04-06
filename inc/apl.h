@@ -32,11 +32,13 @@
 #include "apl_idle.h"
 
 
+#define OS_Init()   /* do nothing */
+
 /******************************************************************************
  * FUNCTION NAME:
- *      APL_Entry
+ *      OS_Start
  * DESCRIPTION:
- *      Application Entry.
+ *      OS Start Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -46,7 +48,7 @@
  * HISTORY:
  *      2010.2.1        panda.xiong         Create/Update
  *****************************************************************************/
-void APL_Entry(void);
+void OS_Start(void);
 
 /******************************************************************************
  * FUNCTION NAME:

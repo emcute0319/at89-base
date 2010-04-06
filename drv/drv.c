@@ -90,24 +90,3 @@ void DRV_FixupInit(void)
     DRV_WATCHDOG_Enable();
 }
 
-
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_Init
- * DESCRIPTION:
- *      Driver Init.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.1.28        panda.xiong         Create/Update
- *****************************************************************************/
-void DRV_Entry(void)
-{
-    /* Kick Watchdog */
-    DRV_WATCHDOG_Kick();
-}
-
