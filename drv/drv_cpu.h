@@ -28,6 +28,46 @@
 #ifndef __DRV_CPU_H
 #define __DRV_CPU_H
 
+#ifdef _DRV_CPU_INTERNAL_
+ #define _DRV_CPU_EXTERN_   /* nothing */
+#else
+ #define _DRV_CPU_EXTERN_   extern
+#endif
+
+_DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_CPU_GetCpuTick
+ * DESCRIPTION:
+ *      Get CPU Real-Time Tick.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.6.16        Panda.Xiong         Create/Update
+ *****************************************************************************/
+#define DRV_CPU_GetCpuTick()        (vSysTickCount)
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_CPU_UpdateSysTick
+ * DESCRIPTION:
+ *      Update System Tick, every time update 1 tick.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.6.16        Panda.Xiong         Create/Update
+ *****************************************************************************/
+#define DRV_CPU_UpdateSysTick()     do { vSysTickCount++; } while (0)
 
 /******************************************************************************
  * FUNCTION NAME:

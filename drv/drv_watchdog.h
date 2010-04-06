@@ -30,13 +30,13 @@
 
 
 #if ( defined(_CPU_AT89S51_) || defined(_CPU_AT89S52_) )
- #define DRV_Watchdog_Enable()   do { WDTRST = 0x1E; WDTRST = 0xE1; } while (0)
- #define DRV_Watchdog_Disable()  /* the Watchdog cannot be disabled, till CPU reset */
- #define DRV_Watchdog_Kick()     DRV_Watchdog_Enable()
+ #define DRV_WATCHDOG_Enable()   do { WDTRST = 0x1E; WDTRST = 0xE1; } while (0)
+ #define DRV_WATCHDOG_Disable()  /* the Watchdog cannot be disabled, till CPU reset */
+ #define DRV_WATCHDOG_Kick()     DRV_WATCHDOG_Enable()
 #else
- #define DRV_Watchdog_Enable()   /* do nothing */
- #define DRV_Watchdog_Disable()  /* do nothing */
- #define DRV_Watchdog_Kick()     /* do nothing */
+ #define DRV_WATCHDOG_Enable()   /* do nothing */
+ #define DRV_WATCHDOG_Disable()  /* do nothing */
+ #define DRV_WATCHDOG_Kick()     /* do nothing */
 #endif
 
 

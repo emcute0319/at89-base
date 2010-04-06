@@ -25,7 +25,7 @@
  *
 *****************************************************************************/
 
-#include <drv.h>
+#include "drv.h"
 
 #define IO_INPUT         1
 #define IO_OUTPUT        0
@@ -52,12 +52,12 @@ void DRV_IO_Init(void)
     {                                                                       \
         if ((_mode) == IO_INPUT)                                            \
         {                                                                   \
-            DRV_IO_SetPinInput(IO_PIN(_name));                              \
+            DRV_IO_SetInput(IO_PIN(_name));                                 \
         }                                                                   \
         else                                                                \
         {                                                                   \
-            DRV_IO_SetPinOutput(IO_PIN(_name));                             \
-            DRV_IO_WritePinData(IO_PIN(_name), (_init_val));                \
+            DRV_IO_SetOutput(IO_PIN(_name));                                \
+            DRV_IO_Write(IO_PIN(_name), (_init_val));                       \
         }                                                                   \
     } while (0);
 

@@ -25,9 +25,9 @@
  *
 *****************************************************************************/
 
-#include <drv.h>
-#include <plf.h>
-#include <apl.h>
+#include "drv.h"
+#include "plf.h"
+#include "apl.h"
 
 
 /******************************************************************************
@@ -103,7 +103,7 @@ static void _system_Start(void)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      MAIN
+ *      main
  * DESCRIPTION:
  *      System entry of C file.
  * PARAMETERS:
@@ -115,12 +115,7 @@ static void _system_Start(void)
  * HISTORY:
  *      2009.4.10        Panda.Xiong         Create/Update
  *****************************************************************************/
-#if OS_RtxTiny_SUPPORT
-#define MAIN    main_task
-#else
-#define MAIN    main
-#endif
-void MAIN(void) OS_TASK_ID(0)
+void main(void)
 {
     /* Pre-Init system */
     _system_PreInit();

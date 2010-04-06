@@ -21,7 +21,7 @@
  * DESCRIPTION:
  *   I2C Master Driver.
  * HISTORY:
- *   2010.2.2        panda.xiong         Create/Update
+ *   2009.8.26        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
@@ -29,131 +29,78 @@
 #define __DRV_I2CM_H
 
 
-#if DRV_I2cM_SUPPORT
+#define DRV_I2CM_RandomRead     DRV_I2CM_ReadBytes
+#define DRV_I2CM_RandomWrite    DRV_I2CM_WriteBytes
 
-/*******************************************************************************
+
+/******************************************************************************
  * FUNCTION NAME:
- *      DRV_I2cM_RandomWrite
+ *      DRV_I2cM_WriteBytes
  * DESCRIPTION:
- *      I2C Bus random write driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vOffset     : I2C chip offset to be start to write.
- *      vDataLen    : I2C data buffer length to be written.
- *      aDataBuf    : I2C data buffer to be written.
- * OUTPUT:
+ *      Random write one or more bytes.
+ * PARAMETERS:
+ *      vI2cAddr    : I2C slave chip address.
+ *      vOffsetLen  : offset buffer length to be send.
+ *      aOffsetBuf  : offset buffer.
+ *      aDataBuf    : data length to be write.
+ *      data_buf    : data buffer.
+ * RETURN:
+ *      TRUE   : write success.
+ *      FALSE  : write fail.
+ * NOTES:
  *      None
- * RETURN:
- *      TRUE        : I2C write success.
- *      FALSE       : I2C write fail.
- * NOTES:
- *      N/A
  * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
+ *      V1.00     2008.12.5     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2cM_RandomWrite
+BOOL DRV_I2CM_WriteBytes
 (
-    IN        UINT8     vI2cAddr,
-    IN        UINT8     vOffset,
-    IN        UINT8     vDataLen,
-    IN  const UINT8    *aDataBuf
+    IN       UINT8       vI2cAddr,
+    IN       UINT8       vOffset,
+    IN       UINT8       vDataLen,
+    IN const UINT8      *aDataBuf
 );
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION NAME:
- *      DRV_I2cM_RandomRead
+ *      DRV_I2cM_ReadBytes
  * DESCRIPTION:
- *      I2C Bus random read driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vOffset     : I2C chip offset to be start to read.
- *      vDataLen    : I2C data buffer length to be read.
- * OUTPUT:
- *      aDataBuf    : I2C data buffer to be read.
+ *      Random read one or more bytes.
+ * PARAMETERS:
+ *      vI2cAddr   : I2C slave chip address.
+ *      vOffset    : Read start offset.
+ *      vDataLen   : data length to be read.
+ *      aDataBuf   : data buffer.
  * RETURN:
- *      TRUE        : I2C read success.
- *      FALSE       : I2C read fail.
+ *      TRUE   : read success.
+ *      FALSE  : read fail.
  * NOTES:
- *      N/A
+ *      None
  * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
+ *      V1.00     2008.12.5     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2cM_RandomRead
+BOOL DRV_I2CM_ReadBytes
 (
-    IN  UINT8     vI2cAddr,
-    IN  UINT8     vOffset,
-    IN  UINT8     vDataLen,
-    OUT UINT8    *aDataBuf
-);
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_CurrentWrite
- * DESCRIPTION:
- *      I2C Bus write current driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vDataLen    : I2C data buffer length to be write.
- * OUTPUT:
- *      aDataBuf    : I2C data buffer to be write.
- * RETURN:
- *      TRUE        : I2C write success.
- *      FALSE       : I2C write fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- ******************************************************************************/
-BOOL DRV_I2cM_CurrentWrite
-(
-    IN       UINT8     vI2cAddr,
-    IN       UINT8     vDataLen,
-    IN const UINT8    *aDataBuf
-);
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_CurrentRead
- * DESCRIPTION:
- *      I2C Bus read current driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vDataLen    : I2C data buffer length to be read.
- * OUTPUT:
- *      aDataBuf    : I2C data buffer to be read.
- * RETURN:
- *      TRUE        : I2C read success.
- *      FALSE       : I2C read fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- ******************************************************************************/
-BOOL DRV_I2cM_CurrentRead
-(
-    IN  UINT8     vI2cAddr,
-    IN  UINT8     vDataLen,
-    OUT UINT8    *aDataBuf
+    IN  UINT8       vI2cAddr,
+    IN  UINT8       vOffset,
+    IN  UINT8       vDataLen,
+    OUT UINT8      *aDataBuf
 );
 
 /*******************************************************************************
  * FUNCTION NAME:
  *      DRV_I2cM_Detect
  * DESCRIPTION:
- *      I2C Bus chip detect driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- * OUTPUT:
- *      None
+ *      I2C detect chip.
+ * PARAMETERS:
+ *      vI2cAddr : I2C chip address.
  * RETURN:
- *      GT_TRUE     : I2C chip is been detected.
- *      FALSE    : I2C chip is not been detected.
+ *      None
  * NOTES:
- *      N/A
+ *      None
  * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- *****************************************************************************/
-BOOL DRV_I2cM_Detect
+ *      V1.00     2009.1.16     Panda Xiong       Create
+ ******************************************************************************/
+BOOL DRV_I2CM_Detect
 (
     IN UINT8    vI2cAddr
 );
@@ -172,12 +119,10 @@ BOOL DRV_I2cM_Detect
  * HISTORY:
  *      V1.00     2008.10.15     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2cM_Init
+void DRV_I2CM_Init
 (
     void
 );
-
-#endif
 
 
 #endif /* __DRV_I2CM_H */

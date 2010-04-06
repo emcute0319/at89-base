@@ -33,20 +33,19 @@
  #error "Only support Keil C51 Compiler yet!"
 #endif
 
-#include <cfg_hw_def.h>
-#include <reg_def_at89.h>
-#include <typedef.h>
+#include "cfg_hw_def.h"
+#include "reg_def_at89.h"
+#include "typedef.h"
 
-#include <os_rtxtiny.h>
-
-#include <drv_cpu.h>
-#include <drv_io.h>
-#include <drv_int.h>
-#include <drv_timer.h>
-#include <drv_uart.h>
-#include <drv_watchdog.h>
-#include <drv_spi.h>
-#include <drv_i2cm.h>
+#include "drv_cpu.h"
+#include "drv_io.h"
+#include "drv_int.h"
+#include "drv_vector.h"
+#include "drv_timer.h"
+#include "drv_uart.h"
+#include "drv_watchdog.h"
+#include "drv_spi.h"
+#include "drv_i2cm.h"
 
 
 /******************************************************************************

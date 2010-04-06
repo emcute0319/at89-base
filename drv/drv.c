@@ -25,7 +25,7 @@
  *
 *****************************************************************************/
 
-#include <drv.h>
+#include "drv.h"
 
 
 /******************************************************************************
@@ -48,7 +48,7 @@ void DRV_Init(void)
     DRV_IO_Init();
 
     /* Init Timer */
-    DRV_Timer_Init();
+    DRV_TIMER_Init();
 
 #if DRV_UART_SUPPORT
     /* Init UART  */
@@ -60,9 +60,9 @@ void DRV_Init(void)
     DRV_SPI_Init();
 #endif
 
-#if DRV_I2cM_SUPPORT
+#if DRV_I2CM_SUPPORT
     /* Init I2C Master Bus */
-    DRV_I2cM_Init();
+    DRV_I2CM_Init();
 #endif
 }
 
@@ -83,10 +83,8 @@ void DRV_Init(void)
  *****************************************************************************/
 void DRV_FixupInit(void)
 {
-#if DRV_WATCHDOG_SUPPORT
     /* Enable Watchdog */
-    DRV_Watchdog_Enable();
-#endif
+    DRV_WATCHDOG_Enable();
 }
 
 
@@ -106,9 +104,7 @@ void DRV_FixupInit(void)
  *****************************************************************************/
 void DRV_Entry(void)
 {
-#if DRV_WATCHDOG_SUPPORT
     /* Kick Watchdog */
-    DRV_Watchdog_Kick();
-#endif
+    DRV_WATCHDOG_Kick();
 }
 

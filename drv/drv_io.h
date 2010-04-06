@@ -33,23 +33,19 @@
 #define _IO_BIT(_x)             (_x)
 #define IO_PIN(_name)           IO_PIN_##_name
 
-typedef UINT8           DRV_IO_PIN_T;
+typedef UINT8   DRV_IO_PIN_T;
 
 /* GPIO pin definition */
-#define DECLARE_IO_PIN(_name,_port,_bit,_mode,_init_val,_pin_no,_desc)  sbit IO_PIN(_name) = _port^_bit;
-#include <cfg_hw_def.h>
+#define DECLARE_IO_PIN(_name,_port,_bit,_mode,_init_val,_pin_no,_desc)  \
+                                            sbit IO_PIN(_name) = _port^_bit;
+#include "cfg_hw_def.h"
 #undef DECLARE_IO_PIN
 
 
-#define DRV_IO_SetPinInput(_pin)            do { (_pin) = HIGH;     } while (0)
-#define DRV_IO_SetPinOutput(_pin)           /* do nothing */
-#define DRV_IO_WritePinData(_pin, _bit)     do { (_pin) = (_bit);   } while (0)
-#define DRV_IO_ReadPinData(_pin)            (_pin)
-
-#define DRV_IO_SetPortInput(_port, _mask)   do { (_port) = (_mask); } while (0)
-#define DRV_IO_SetPortOutput(_port, _mask)  /* do nothing */
-#define DRV_IO_WritePortData(_port, _byte)  do { (_port) = (_byte); } while (0)
-#define DRV_IO_ReadPortData(_port, _byte)   (_port)
+#define DRV_IO_SetInput(_pin)               do { (_pin) = HIGH;     } while (0)
+#define DRV_IO_SetOutput(_pin)              /* do nothing */
+#define DRV_IO_Write(_pin, _bit)            do { (_pin) = (_bit);   } while (0)
+#define DRV_IO_Read(_pin)                   (_pin)
 
 
 /******************************************************************************

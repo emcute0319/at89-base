@@ -61,7 +61,7 @@ BOOL DRV_SPI_ReadBytes
     }
 
     /* enable SPI transfer */
-    DRV_IO_WritePinData(IO_PIN(SPI_nCS), LOW);
+    DRV_IO_Write(IO_PIN(SPI_nCS), LOW);
 
     /* add a short delay after enable SPI transferring,
      * cause some SPI slaves need some time to be ready.
@@ -76,11 +76,11 @@ BOOL DRV_SPI_ReadBytes
             /* Output serial data is clocked out on the falling
              *  edge of the SPI clock.
              */
-            DRV_IO_WritePinData(IO_PIN(SPI_SCK), LOW);
-            DRV_IO_WritePinData(IO_PIN(SPI_SCK), HIGH);
+            DRV_IO_Write(IO_PIN(SPI_SCK), LOW);
+            DRV_IO_Write(IO_PIN(SPI_SCK), HIGH);
 
             /* Read in the data on the rising edge of the clock */
-            if (DRV_IO_ReadPinData(IO_PIN(SPI_MISO)))
+            if (DRV_IO_Read(IO_PIN(SPI_MISO)))
             {
                 SET_BIT(vData, vBitIndex-1);
             }
@@ -90,7 +90,7 @@ BOOL DRV_SPI_ReadBytes
     }
 
     /* disable SPI transfer */
-    DRV_IO_WritePinData(IO_PIN(SPI_nCS), HIGH);
+    DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);
 
     /* add a short delay after enable SPI transferring,
      * cause some SPI slaves need some time to be ready.
@@ -131,7 +131,7 @@ BOOL DRV_SPI_WriteBytes
     }
 
     /* enable SPI transfer */
-    DRV_IO_WritePinData(IO_PIN(SPI_nCS), LOW);
+    DRV_IO_Write(IO_PIN(SPI_nCS), LOW);
 
     /* add a short delay after enable SPI transferring,
      * cause some SPI slaves need some time to be ready.
@@ -145,20 +145,20 @@ BOOL DRV_SPI_WriteBytes
             /* Input serial data is captured on the rising edge
              *  of the SPI clock.
              */
-            DRV_IO_WritePinData(IO_PIN(SPI_SCK), LOW);
+            DRV_IO_Write(IO_PIN(SPI_SCK), LOW);
 
             /* Data is transmitted or received on the SPI port.
              * MSB first, LSB last.
              */
-            DRV_IO_WritePinData(IO_PIN(SPI_MISO),
+            DRV_IO_Write(IO_PIN(SPI_MISO),
                                 READ_BIT(pBuf[vLoop], vBitIndex-1));
 
-            DRV_IO_WritePinData(IO_PIN(SPI_SCK), HIGH);
+            DRV_IO_Write(IO_PIN(SPI_SCK), HIGH);
         }
     }
 
     /* disable SPI transfer */
-    DRV_IO_WritePinData(IO_PIN(SPI_nCS), HIGH);
+    DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);
 
     return TRUE;
 }
@@ -181,13 +181,13 @@ BOOL DRV_SPI_WriteBytes
 void DRV_SPI_Init(void)
 {
     /* Set SPI_nCS as high to deactive the transaxtion */
-    DRV_IO_WritePinData(IO_PIN(SPI_nCS), HIGH);
+    DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);
 
     /* Set MOSI and Clock to high as idle status */
-    DRV_IO_WritePinData(IO_PIN(SPI_SCK),  HIGH);
-    DRV_IO_WritePinData(IO_PIN(SPI_MOSI), HIGH);
+    DRV_IO_Write(IO_PIN(SPI_SCK),  HIGH);
+    DRV_IO_Write(IO_PIN(SPI_MOSI), HIGH);
 
-    DRV_IO_SetPinInput(IO_PIN(SPI_MISO));
+    DRV_IO_SetInput(IO_PIN(SPI_MISO));
 }
 
 #endif

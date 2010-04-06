@@ -25,9 +25,15 @@
  *
 *****************************************************************************/
 
-#include <drv.h>
+#include "drv.h"
 
 #if DRV_UART_SUPPORT
+
+#include <stdarg.h>
+#include "drv_uart.h"
+
+typedef void (*PUT_CHAR_FUNC)(UINT8 ch);
+
 
 /* Global variable define */
 static BOOL     bTxReady;
@@ -43,12 +49,6 @@ static UINT8    vRxBufPtr;  /* always point to the empty buffer */
 #endif
 
 
-#include <stdarg.h>
-#include <drv_uart.h>
-
-
-typedef void (*PUT_CHAR_FUNC)(UINT8 ch);
-
 static void drv_uart_vsprintf
 (
     PUT_CHAR_FUNC   put_func,
@@ -57,7 +57,7 @@ static void drv_uart_vsprintf
 )
 {
     char          fch;       /* get format value       */
-//    char         *p_str;
+    char         *p_str;
     unsigned char num, div;
     unsigned char odd;
     unsigned char len_count;
@@ -80,7 +80,6 @@ static void drv_uart_vsprintf
 
         switch (fch)
         {
-#if 0
             case 'd':
             case 'i':
             case 'u':
@@ -113,7 +112,6 @@ static void drv_uart_vsprintf
                     put_func(odd - 0x0 + '0');
                 } while (--len_count != 0);
                 break;
-#endif
 
             case 'x':
             case 'X':
@@ -155,7 +153,6 @@ static void drv_uart_vsprintf
                 } while (--len_count != 0);
                 break;
 
-#if 0
             case 'c':
                 put_func((unsigned char)va_arg(arg_prt, char));
                 break;
@@ -167,7 +164,6 @@ static void drv_uart_vsprintf
                     put_func(*p_str++);
 				}
                 break;
-#endif
 
             default:
                 put_func(fch);

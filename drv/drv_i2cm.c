@@ -17,58 +17,38 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   drv_i2cm.c
- * NODULE NAME:
- *   I2C Master Driver.
+ *   drv_i2cm.h
  * DESCRIPTION:
- *   This I2C Master Driver has been tested/verified at 1620-00101-00,
- *    with Pull-Up Resisters on SCL/SDA are both 30K ohm.
- *
- *   Note: If the Pull-Up Resisters on SCL/SDA are too large, such as 30K ohm,
- *          and, if you want to use oscilloscope to monitor the status on
- *           SCL/SDA, please DO select 'X10' mode of probes,
- *           or use High-impedance probes to monitor;
- *          else, cause there are too large capacity of probe added on SCL/SDA,
- *           the I2C Master Bus accessing may fail !!!
+ *   I2C Master Driver.
  * HISTORY:
- *   2009.08.26        Panda.Xiong         Create/Update
+ *   2009.8.26        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
-#include <drv.h>
+#include "drv.h"
 
-
-#if DRV_I2cM_SUPPORT
 
 /* =1, send I2C Stop at I2C Master Bus initializing;
  * =0, do not send I2C Stop. (default)
  */
-#define DRV_I2cM_INIT_STOP_SUPPORT          (0)
+#define DRV_I2CM_INIT_STOP_SUPPORT          (0 & DRV_I2CM_SUPPORT)
 
-/* =1, support Clock Stretch; (default)
- * =0, do not support clock stretch.
- */
-#define DRV_I2cM_CLOCK_STRETCH_SUPPORT      (0)
-#define DRV_I2cM_CLOCK_STRETCH_TIMEOUT      (25)    /* ms */
+#if DRV_I2CM_SUPPORT
 
 /* I2C Driver Porting part */
 #if 1
 /* Note:
- *  Add a short delay after write SCL/SDA,
- *  to make sure the I2C Master Bus speed is ~80KHz, when CPU clock is 41.78MHz.
- *
  *  And, this short delay is also very useful,
  *   while Pull-Up resister on SCL/SDA is too large,
  *   in this condition, the SCL/SDA may not be pull to 1, i.e. 3.3V;
  *  Thus, the Pull-Up resister on SCL/SDA should be designed to 1K-10K ohm,
  *   recommend to choice 4K-5K ohm !!!
  */
-#define DRV_I2cM_Delay_Ms(vMs)      DRV_CPU_DelayMs(vMs)
-#define DRV_I2cM_Delay_Us(vUs)      DRV_CPU_DelayUs(vUs)
-#define DRV_I2cM_SET_SCL(vData)     do { DRV_IO_WritePinData(IO_PIN(I2cM_SCL), (vData)); DRV_I2cM_Delay_Us(1); } while (0)
-#define DRV_I2cM_SET_SDA(vData)     do { DRV_IO_WritePinData(IO_PIN(I2cM_SDA), (vData)); DRV_I2cM_Delay_Us(1); } while (0)
-#define DRV_I2cM_GET_SCL(vData)     DRV_IO_ReadPinData(IO_PIN(I2cM_SCL))
-#define DRV_I2cM_GET_SDA(vData)     DRV_IO_ReadPinData(IO_PIN(I2cM_SDA))
+#define DRV_I2CM_Delay_Us(vUs)      DRV_CPU_DelayUs(vUs)
+#define DRV_I2CM_SET_SCL(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SCL), (vData)); DRV_I2CM_Delay_Us(1); } while (0)
+#define DRV_I2CM_SET_SDA(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SDA), (vData)); DRV_I2CM_Delay_Us(1); } while (0)
+#define DRV_I2CM_GET_SCL()          DRV_IO_Read(IO_PIN(I2CM_SCL))
+#define DRV_I2CM_GET_SDA()          DRV_IO_Read(IO_PIN(I2CM_SDA))
 #endif
 
 
@@ -78,279 +58,95 @@
 /* return : TRUE,  an ACK received;
  *          FALSE, no ACK received.
  */
-static BOOL _drv_i2cm_CheckAck(void)
+static BOOL _drv_i2cm_SendByte(UINT8 vData)
 {
-    BOOL vAck;
+    UINT8   vLoop;
+    BOOL    vAck;
 
-    DRV_I2cM_SET_SCL(0);
-    DRV_I2cM_SET_SDA(1);
-    DRV_I2cM_SET_SCL(1);
-    vAck = DRV_I2cM_GET_SDA();
-    DRV_I2cM_SET_SCL(0);
+    for (vLoop = 8; vLoop > 0; vLoop--)
+    {
+        DRV_I2CM_SET_SCL(0);
+        DRV_I2CM_SET_SDA(READ_BIT(vData, vLoop-1));
+        DRV_I2CM_SET_SCL(1);
+    }
+
+    /* check ACK */
+    DRV_I2CM_SET_SCL(0);
+    DRV_I2CM_SET_SDA(1);
+    DRV_I2CM_SET_SCL(1);
+    vAck = DRV_I2CM_GET_SDA();
+    DRV_I2CM_SET_SCL(0);
 
     return !vAck;
 }
 
-
-static void _drv_i2cm_SendAck(void)
-{
-    DRV_I2cM_SET_SCL(0);
-    DRV_I2cM_SET_SDA(0);
-
-    DRV_I2cM_SET_SCL(1);
-    DRV_I2cM_SET_SCL(0);
-    DRV_I2cM_SET_SDA(1);
-}
-
-
-static void _drv_i2cm_SendNoAck(void)
-{
-    DRV_I2cM_SET_SDA(1);
-    DRV_I2cM_SET_SCL(1);
-    DRV_I2cM_SET_SCL(0);
-}
-
-static BOOL _drv_i2cm_ReadBit(void)
-{
-    BOOL vBit;
-
-    DRV_I2cM_SET_SCL(0);
-
-    DRV_I2cM_SET_SCL(1);
-    vBit = DRV_I2cM_GET_SDA();
-    DRV_I2cM_SET_SCL(0);
-
-    return vBit;
-}
-
-static void _drv_i2cm_WriteBit(IN BOOL vBit)
-{
-    DRV_I2cM_SET_SCL(0);
-    DRV_I2cM_SET_SDA(vBit);
-    DRV_I2cM_SET_SCL(1);
-}
-
-
-static BOOL _drv_i2cm_SendData(IN UINT8 vData)
-{
-    UINT8   vLoop;
-
-    for (vLoop = 8; vLoop > 0; vLoop--)
-    {
-        _drv_i2cm_WriteBit(READ_BIT(vData, vLoop-1));
-    }
-
-#if DRV_I2cM_CLOCK_STRETCH_SUPPORT
-{
-    UINT8   vTimeoutCount = 0;
-
-    /* check I2C Slave is stretching the clock line */
-    while (DRV_I2cM_GET_SCL() == 0)
-    {
-        if (vTimeoutCount++ > DRV_I2cM_CLOCK_STRETCH_TIMEOUT)
-        {
-            return FALSE;
-        }
-
-        DRV_I2cM_Delay_Ms(1);
-    }
-}
-#endif
-
-    return _drv_i2cm_CheckAck();
-}
-
-
-static BOOL _drv_i2cm_ReceiveData(OUT UINT8 *pData)
+static UINT8 _drv_i2cm_ReceiveByte(void)
 {
     UINT8   vLoop;
     UINT8   vData = 0;
 
     for (vLoop = 8; vLoop > 0; vLoop--)
     {
+        DRV_I2CM_SET_SCL(0);
+
+        DRV_I2CM_SET_SCL(1);
         vData <<= 1;
-        vData  |= _drv_i2cm_ReadBit();
+        vData |= DRV_I2CM_GET_SDA();
+        DRV_I2CM_SET_SCL(0);
     }
 
-    *pData = vData;
-    _drv_i2cm_SendAck();
-
-    return TRUE;
+    return vData;
 }
 
-
-static BOOL _drv_i2cm_ReceiveLastData(OUT UINT8 *pData)
-{
-    UINT8   vLoop;
-    UINT8   vData = 0;
-
-    for (vLoop = 8; vLoop > 0; vLoop--)
-    {
-        vData <<= 1;
-        vData  |= _drv_i2cm_ReadBit();
-    }
-
-    *pData = vData;
-    _drv_i2cm_SendNoAck();
-
-    return TRUE;
-}
-
-
-static BOOL _drv_i2cm_SendAddr_R(IN UINT8 vI2cAddr)
-{
-    UINT8   vData;
-
-    vData = vI2cAddr;
-    SET_BIT(vData, 0);
-
-    return _drv_i2cm_SendData(vData);
-}
-
-
-static BOOL _drv_i2cm_SendAddr_W(IN UINT8 vI2cAddr)
-{
-    UINT8   vData;
-
-    vData = vI2cAddr;
-    CLR_BIT(vData, 0);
-
-    return _drv_i2cm_SendData(vData);
-}
-
-
-static BOOL _drv_i2cm_Start(void)
-{
-    /* I2C Start/ReStart:
-     *   SDA changed from HIGH(1) to LOW(0), while SCL is HIGH(1).
-     */
-    DRV_I2cM_SET_SDA(1);
-    DRV_I2cM_SET_SCL(1);
-    DRV_I2cM_SET_SDA(0);
-    DRV_I2cM_SET_SCL(0);
-
-    return TRUE;
-}
-
-
-static BOOL _drv_i2cm_ReStart(void)
-{
-    return _drv_i2cm_Start();
-}
-
-
-static void _drv_i2cm_Stop(void)
-{
-    /* Note: this is a I2C Start, if current SCL/SDA is HIGH;
-     *       this will only happen while initializing I2C Master Bus.
-     */
-    DRV_I2cM_SET_SDA(0);
-    DRV_I2cM_SET_SCL(0);
-
-    /* I2C Stop:
-     *   SDA changed from LOW(0) to HIGH(1), while SCL is HIGH(1).
-     */
-    DRV_I2cM_SET_SCL(1);
-    DRV_I2cM_SET_SDA(1);
-}
-
-
-/* check I2C hardware is ready to operate or not */
-static BOOL _drv_i2cm_CheckReady(void)
-{
-    BOOL    bResult;
-
-    if ((DRV_I2cM_GET_SCL() == 1)
-        && (DRV_I2cM_GET_SDA() == 1))
-    {
-        /* The I2C only can be started, while SCL/SDA is at high level */
-        bResult = TRUE;
-    }
-    else
-    {
-        /* SCL/SDA is been stretched, operation fail */
-        bResult = FALSE;
-    }
-
-    return bResult;
-}
-
-
-/******************************************************************************
- * FUNCTION NAME:
- *      drv_i2cm_Init
- * DESCRIPTION:
- *      Init I2C.
- * PARAMETERS:
- *      None
- * RETURN:
- *      None
- * NOTES:
- *      None
- * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
- ******************************************************************************/
-static BOOL _drv_i2cm_Init(void)
-{
-    /* force stop all operations on I2C bus */
-    _drv_i2cm_Stop();
-
-    return TRUE;
-}
-
-#endif
-
-
-#if 1
-
-static volatile BOOL b_locked = FALSE;
-
-static BOOL drv_i2cm_Open(void)
-{
-    if (b_locked)
-    {
-        /* if I2cM bus is busy, and interrupt is occur,
-         * force I2cM bus reset.
-         */
-        _drv_i2cm_Init();
-    }
-    else
-    {
-        /* set flag, to indicate the I2cM bus is busy */
-        b_locked = TRUE;
-    }
-
-    return TRUE;
-}
-
-static BOOL drv_i2cm_Close(void)
-{
-    if (b_locked)
-    {
-        /* unlock I2cM bus */
-        b_locked = FALSE;
-
-        return TRUE;
-    }
-    else
-    {
-        /* this transferring is been interrupted,
-         * assume transferring fail.
-         */
-        return FALSE;
-    }
-}
-
-#define DRV_I2cM_OPEN_DEVICE(err_return)    \
-    do {                                    \
-        if (!drv_i2cm_Open())               \
-            return (err_return);            \
+#define _drv_i2cm_SendAck()                                                 \
+    do {                                                                    \
+        DRV_I2CM_SET_SCL(0);                                                \
+        DRV_I2CM_SET_SDA(0);                                                \
+                                                                            \
+        DRV_I2CM_SET_SCL(1);                                                \
+        DRV_I2CM_SET_SCL(0);                                                \
+        DRV_I2CM_SET_SDA(1);                                                \
     } while (0)
 
-#define DRV_I2cM_CLOSE_DEVICE(err_return)   \
-    do {                                    \
-        if (!drv_i2cm_Close())              \
-            return (err_return);            \
+#define _drv_i2cm_SendNoAck()                                               \
+    do {                                                                    \
+        DRV_I2CM_SET_SDA(1);                                                \
+        DRV_I2CM_SET_SCL(1);                                                \
+        DRV_I2CM_SET_SCL(0);                                                \
+    } while (0)
+
+#define _drv_i2cm_Start()                                                   \
+    do {                                                                    \
+        /* I2C Start/ReStart:                                               \
+         *   SDA changed from HIGH(1) to LOW(0), while SCL is HIGH(1).      \
+         */                                                                 \
+        DRV_I2CM_SET_SDA(1);                                                \
+        DRV_I2CM_SET_SCL(1);                                                \
+        DRV_I2CM_SET_SDA(0);                                                \
+        DRV_I2CM_SET_SCL(0);                                                \
+    } while (0)
+
+#define _drv_i2cm_ReStart()     _drv_i2cm_Start()
+
+#define _drv_i2cm_Stop()                                                    \
+    do {                                                                    \
+        /* Note: this is a I2C Start, if current SCL/SDA is HIGH;           \
+         *       this will only happen while initializing I2C Master Bus.   \
+         */                                                                 \
+        DRV_I2CM_SET_SDA(0);                                                \
+        DRV_I2CM_SET_SCL(0);                                                \
+                                                                            \
+        /* I2C Stop:                                                        \
+         *   SDA changed from LOW(0) to HIGH(1), while SCL is HIGH(1).      \
+         */                                                                 \
+        DRV_I2CM_SET_SCL(1);                                                \
+        DRV_I2CM_SET_SDA(1);                                                \
+    } while (0)
+
+#define _drv_i2cm_Init()                                                    \
+    do {                                                                    \
+        /* force stop all operations on I2C bus */                          \
+        _drv_i2cm_Stop();                                                   \
     } while (0)
 
 #endif
@@ -360,13 +156,12 @@ static BOOL drv_i2cm_Close(void)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      drv_i2cm_ReadBytes
+ *      DRV_I2cM_ReadBytes
  * DESCRIPTION:
- *      Read one or more bytes, with/without offset.
+ *      Random read one or more bytes.
  * PARAMETERS:
  *      vI2cAddr   : I2C slave chip address.
- *      vOffsetLen : offset buffer length to be send.
- *      aOffsetBuf : offset buffer.
+ *      vOffset    : Read start offset.
  *      vDataLen   : data length to be read.
  *      aDataBuf   : data buffer.
  * RETURN:
@@ -377,83 +172,55 @@ static BOOL drv_i2cm_Close(void)
  * HISTORY:
  *      V1.00     2008.12.5     Panda Xiong       Create
  ******************************************************************************/
-static BOOL drv_i2cm_ReadBytes
+BOOL DRV_I2CM_ReadBytes
 (
-    IN       UINT8       vI2cAddr,
-    IN       UINT8       vOffsetLen,
-    IN const UINT8      *aOffsetBuf,
-    IN       UINT8       vDataLen,
-    OUT      UINT8      *aDataBuf
+    IN  UINT8       vI2cAddr,
+    IN  UINT8       vOffset,
+    IN  UINT8       vDataLen,
+    OUT UINT8      *aDataBuf
 )
 {
     UINT8      vLoop;
 
-    /* make sure the IIC is ready */
-    if (!_drv_i2cm_CheckReady())
+    /* send I2C start */
+    _drv_i2cm_Start();
+
+    /* send I2C slave address + Write */
+    CLR_BIT(vI2cAddr, 0);
+    if (!_drv_i2cm_SendByte(vI2cAddr))
     {
         goto _error_exit;
     }
 
-    /* send IIC start */
-    if (!_drv_i2cm_Start())
+    /* send offset */
+    if (!_drv_i2cm_SendByte(vOffset))
     {
         goto _error_exit;
     }
 
-    if (vOffsetLen > 0)
-    {
-        /* send IIC chip address, and check ACK */
-        if (!_drv_i2cm_SendAddr_W(vI2cAddr))
-        {
-            goto _error_exit;
-        }
+    /* send I2C repeat start */
+    _drv_i2cm_ReStart();
 
-        /* send offset */
-        for (vLoop = 0; vLoop < vOffsetLen; vLoop++)
-        {
-            /* send offset, and check ACK */
-            if (!_drv_i2cm_SendData(aOffsetBuf[vLoop]))
-            {
-                goto _error_exit;
-            }
-        }
-
-        /* IIC repeat start */
-        if (!_drv_i2cm_ReStart())
-        {
-            goto _error_exit;
-        }
-    }
-
-    /* send IIC chip address, and check ACK */
-    if (!_drv_i2cm_SendAddr_R(vI2cAddr))
+    /* send I2C slave address + Read */
+    SET_BIT(vI2cAddr, 0);
+    if (!_drv_i2cm_SendByte(vI2cAddr))
     {
         goto _error_exit;
     }
 
     /* read data */
-    for (vLoop = 0; vLoop < vDataLen; vLoop++)
+    for (vLoop = 0; vLoop < vDataLen-1; vLoop++)
     {
-        /* if it's the last byte data, don't send ACK */
-        if (vLoop == (vDataLen - 1))
-        {
-            if (!_drv_i2cm_ReceiveLastData(&aDataBuf[vLoop]))
-            {
-                goto _error_exit;
-            }
-        }
-        else
-        {
-            /* normal read data */
-            if (!_drv_i2cm_ReceiveData(&aDataBuf[vLoop]))
-            {
-                goto _error_exit;
-            }
-        }
+        aDataBuf[vLoop] = _drv_i2cm_ReceiveByte();
+        _drv_i2cm_SendAck();    /* send ACK  */
     }
 
+    /* read the last Byte data */
+    aDataBuf[vLoop] = _drv_i2cm_ReceiveByte();
+    _drv_i2cm_SendNoAck();      /* send NACK */
+
 /* success exit */
-    /* send IIC stop */
+    /* send I2C stop */
     _drv_i2cm_Stop();
     return TRUE;
 
@@ -466,9 +233,9 @@ _error_exit:
 
 /******************************************************************************
  * FUNCTION NAME:
- *      drv_i2cm_WriteBytes
+ *      DRV_I2cM_WriteBytes
  * DESCRIPTION:
- *      Write one or more bytes, with/without offset.
+ *      Random write one or more bytes.
  * PARAMETERS:
  *      vI2cAddr    : I2C slave chip address.
  *      vOffsetLen  : offset buffer length to be send.
@@ -483,56 +250,43 @@ _error_exit:
  * HISTORY:
  *      V1.00     2008.12.5     Panda Xiong       Create
  ******************************************************************************/
-static BOOL drv_i2cm_WriteBytes
+BOOL DRV_I2CM_WriteBytes
 (
     IN       UINT8       vI2cAddr,
-    IN       UINT8       vOffsetLen,
-    IN const UINT8      *aOffsetBuf,
+    IN       UINT8       vOffset,
     IN       UINT8       vDataLen,
     IN const UINT8      *aDataBuf
 )
 {
     UINT8   vLoop;
 
-    /* make sure the IIC is ready */
-    if (!_drv_i2cm_CheckReady())
-    {
-        goto _error_exit;
-    }
+    /* send I2C start */
+    _drv_i2cm_Start();
 
-    /* send IIC start */
-    if (!_drv_i2cm_Start())
-    {
-        goto _error_exit;
-    }
-
-    /* send IIC chip address, and check ACK */
-    if (!_drv_i2cm_SendAddr_W(vI2cAddr))
+    /* send I2C slave address + Write */
+    CLR_BIT(vI2cAddr, 0);
+    if (!_drv_i2cm_SendByte(vI2cAddr))
     {
         goto _error_exit;
     }
 
     /* send offset */
-    for (vLoop = 0; vLoop < vOffsetLen; vLoop++)
+    if (!_drv_i2cm_SendByte(vOffset))
     {
-        /* send offset, and check ACK */
-        if (!_drv_i2cm_SendData(aOffsetBuf[vLoop]))
-        {
-            goto _error_exit;
-        }
+        goto _error_exit;
     }
 
     /* send data */
     for (vLoop = 0; vLoop < vDataLen; vLoop++)
     {
-        if (!_drv_i2cm_SendData(aDataBuf[vLoop]))
+        if (!_drv_i2cm_SendByte(aDataBuf[vLoop]))
         {
             goto _error_exit;
         }
     }
 
 /* success exit */
-    /* send IIC stop */
+    /* send I2C stop */
     _drv_i2cm_Stop();
     return TRUE;
 
@@ -545,7 +299,7 @@ _error_exit:
 
 /*******************************************************************************
  * FUNCTION NAME:
- *      drv_i2cm_Detect
+ *      DRV_I2cM_Detect
  * DESCRIPTION:
  *      I2C detect chip.
  * PARAMETERS:
@@ -557,31 +311,23 @@ _error_exit:
  * HISTORY:
  *      V1.00     2009.1.16     Panda Xiong       Create
  ******************************************************************************/
-static BOOL drv_i2cm_Detect
+BOOL DRV_I2CM_Detect
 (
     IN UINT8    vI2cAddr
 )
 {
-    /* make sure the IIC is ready */
-    if (!_drv_i2cm_CheckReady())
-    {
-        goto _error_exit;
-    }
+    /* send I2C start */
+    _drv_i2cm_Start();
 
-    /* send IIC start */
-    if (!_drv_i2cm_Start())
-    {
-        goto _error_exit;
-    }
-
-    /* send IIC chip address, and check ACK */
-    if (!_drv_i2cm_SendAddr_W(vI2cAddr))
+    /* send I2C slave address + Write */
+    CLR_BIT(vI2cAddr, 0);
+    if (!_drv_i2cm_SendByte(vI2cAddr))
     {
         goto _error_exit;
     }
 
 /* success exit */
-    /* send IIC stop */
+    /* send I2C stop */
     _drv_i2cm_Stop();
     return TRUE;
 
@@ -593,202 +339,7 @@ _error_exit:
 
 #endif
 
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_RandomWrite
- * DESCRIPTION:
- *      I2C Bus random write driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vOffset     : I2C chip offset to be start to write.
- *      vDataLen    : I2C data buffer length to be written.
- *      aDataBuf    : I2C data buffer to be written.
- * OUTPUT:
- *      None
- * RETURN:
- *      TRUE        : I2C write success.
- *      FALSE       : I2C write fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- ******************************************************************************/
-BOOL DRV_I2cM_RandomWrite
-(
-    IN        UINT8     vI2cAddr,
-    IN        UINT8     vOffset,
-    IN        UINT8     vDataLen,
-    IN  const UINT8    *aDataBuf
-)
-{
-    BOOL    vResult;
-
-    if ((aDataBuf == NULL) || (vDataLen == 0))
-    {
-        return FALSE;
-    }
-
-    DRV_I2cM_OPEN_DEVICE(FALSE);
-    vResult = drv_i2cm_WriteBytes(vI2cAddr, 1, &vOffset, vDataLen, aDataBuf);
-    DRV_I2cM_CLOSE_DEVICE(FALSE);
-
-    return vResult;
-}
-
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_RandomRead
- * DESCRIPTION:
- *      I2C Bus random read driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vOffset     : I2C chip offset to be start to read.
- *      vDataLen    : I2C data buffer length to be read.
- * OUTPUT:
- *      aDataBuf    : I2C data buffer to be read.
- * RETURN:
- *      TRUE        : I2C read success.
- *      FALSE       : I2C read fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- ******************************************************************************/
-BOOL DRV_I2cM_RandomRead
-(
-    IN  UINT8     vI2cAddr,
-    IN  UINT8     vOffset,
-    IN  UINT8     vDataLen,
-    OUT UINT8    *aDataBuf
-)
-{
-    BOOL    vResult;
-
-    if ((aDataBuf == NULL) || (vDataLen == 0))
-    {
-        return FALSE;
-    }
-
-    DRV_I2cM_OPEN_DEVICE(FALSE);
-    vResult = drv_i2cm_ReadBytes(vI2cAddr, 1, &vOffset, vDataLen, aDataBuf);
-    DRV_I2cM_CLOSE_DEVICE(FALSE);
-
-    return vResult;
-}
-
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_CurrentWrite
- * DESCRIPTION:
- *      I2C Bus write current driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vDataLen    : I2C data buffer length to be write.
- * OUTPUT:
- *      aDataBuf    : I2C data buffer to be write.
- * RETURN:
- *      TRUE        : I2C write success.
- *      FALSE       : I2C write fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- ******************************************************************************/
-BOOL DRV_I2cM_CurrentWrite
-(
-    IN       UINT8     vI2cAddr,
-    IN       UINT8     vDataLen,
-    IN const UINT8    *aDataBuf
-)
-{
-    BOOL    vResult;
-
-    if ((aDataBuf == NULL) || (vDataLen == 0))
-    {
-        return FALSE;
-    }
-
-    DRV_I2cM_OPEN_DEVICE(FALSE);
-    vResult = drv_i2cm_WriteBytes(vI2cAddr, 0, NULL, vDataLen, aDataBuf);
-    DRV_I2cM_CLOSE_DEVICE(FALSE);
-
-    return vResult;
-}
-
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_CurrentRead
- * DESCRIPTION:
- *      I2C Bus read current driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- *      vDataLen    : I2C data buffer length to be read.
- * OUTPUT:
- *      aDataBuf    : I2C data buffer to be read.
- * RETURN:
- *      TRUE        : I2C read success.
- *      FALSE       : I2C read fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- ******************************************************************************/
-BOOL DRV_I2cM_CurrentRead
-(
-    IN  UINT8     vI2cAddr,
-    IN  UINT8     vDataLen,
-    OUT UINT8    *aDataBuf
-)
-{
-    BOOL    vResult;
-
-    if ((aDataBuf == NULL) || (vDataLen == 0))
-    {
-        return FALSE;
-    }
-
-    DRV_I2cM_OPEN_DEVICE(FALSE);
-    vResult = drv_i2cm_ReadBytes(vI2cAddr, 0, NULL, vDataLen, aDataBuf);
-    DRV_I2cM_CLOSE_DEVICE(FALSE);
-
-    return vResult;
-}
-
-
-/*******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_Detect
- * DESCRIPTION:
- *      I2C Bus chip detect driver.
- * INPUT:
- *      vI2cAddr    : I2C chip address.
- * OUTPUT:
- *      None
- * RETURN:
- *      GT_TRUE     : I2C chip is been detected.
- *      FALSE    : I2C chip is not been detected.
- * NOTES:
- *      N/A
- * HISTORY:
- *      Ver1.00     2008.08.21      Panda Xiong         Create
- *****************************************************************************/
-BOOL DRV_I2cM_Detect
-(
-    IN UINT8    vI2cAddr
-)
-{
-    BOOL    vResult;
-
-    DRV_I2cM_OPEN_DEVICE(FALSE);
-    vResult = drv_i2cm_Detect(vI2cAddr);
-    DRV_I2cM_CLOSE_DEVICE(FALSE);
-
-    return vResult;
-}
+#endif
 
 
 /******************************************************************************
@@ -805,25 +356,13 @@ BOOL DRV_I2cM_Detect
  * HISTORY:
  *      V1.00     2008.10.15     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2cM_Init
+void DRV_I2CM_Init
 (
     void
 )
 {
-#if DRV_I2cM_INIT_STOP_SUPPORT
-
-    BOOL    vResult;
-
-    DRV_I2cM_OPEN_DEVICE(FALSE);
-    vResult = _drv_i2cm_Init();
-    DRV_I2cM_CLOSE_DEVICE(FALSE);
-
-    return vResult;
-
-#else
-    return TRUE;
+#if DRV_I2CM_INIT_STOP_SUPPORT
+    _drv_i2cm_Init();
 #endif
 }
-
-#endif
 

@@ -26,21 +26,20 @@
 *****************************************************************************/
 
 
-/* Target CPU Definition */
+/* Target CPU Definition, select one from below CPU lists:
+ *   _CPU_AT89C2051_
+ *   _CPU_AT89C4051_
+ *   _CPU_AT89C51_
+ *   _CPU_AT89C52_
+ *   _CPU_AT89S51_
+ *   _CPU_AT89S52_
+ */
 #define _CPU_AT89C2051_
 
 #define DRV_UART_SUPPORT        0       /* UART        */
 #define DRV_WATCHDOG_SUPPORT    0       /* Watchdog    */
 #define DRV_SPI_SUPPORT         0       /* SPI         */
-#define DRV_I2cM_SUPPORT        0       /* I2C Master  */
-
-
-/* OS : __OS_RtxTiny__ is defined at Keil IDE */
-#ifdef __OS_RtxTiny__
- #define OS_RtxTiny_SUPPORT     1
-#else
- #define OS_RtxTiny_SUPPORT     0
-#endif
+#define DRV_I2CM_SUPPORT        0       /* I2C Master  */
 
 
 /* CPU Clock */

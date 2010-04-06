@@ -25,7 +25,9 @@
  *
 *****************************************************************************/
 
-#include <drv.h>
+#define _DRV_CPU_INTERNAL_
+
+#include "drv.h"
 
 
 /******************************************************************************
@@ -44,15 +46,44 @@
  *****************************************************************************/
 void DRV_CPU_DelayMs(UINT16 vMs)
 {
-	while (--vMs)
-	{
-        /* delay 200(us) * 5 = 1(ms) */
-        DRV_CPU_DelayUs(200);
-        DRV_CPU_DelayUs(200);
-        DRV_CPU_DelayUs(200);
-        DRV_CPU_DelayUs(200);
-        DRV_CPU_DelayUs(200);
-	}
+    /* If System Timer interrupt is enabled, use interrupt mode to delay,
+     *  this will auto-idle CPU & other devices, to save more power.
+     */
+    if (DRV_TIMER_IsSysTimerIntEnable())
+    {
+        UINT32  vStopTick = vSysTickCount + vMs/DRV_TIMER_SysTimerTick;
+
+        while (vSysTickCount < vStopTick)
+        {
+            /* kick watchdog, to prevent Watchdog Timeout */
+            DRV_WATCHDOG_Kick();
+
+            /* IDLE CPU, set to PAUSE mode */
+            SET_BIT(PCON, 0);
+            PCON = PCON;
+        }
+    }
+    else
+    {
+        /* System Timer interrupt is disabled, use polling mode to delay */
+    	while (vMs--)
+    	{
+            /* here, we assume System Timer is always running,
+             * else, the CPU may dead loop here!!!
+             */
+            while (!DRV_TIMER_IsSysTimerTimeout())
+            {}
+
+            /* clear System Timer overflow flag */
+            DRV_TIMER_ClearSysTimerFlag();
+
+            /* update System Tick */
+            DRV_CPU_UpdateSysTick();
+
+            /* kick watchdog, to prevent Watchdog Timeout */
+            DRV_WATCHDOG_Kick();
+    	}
+    }
 }
 
 
@@ -145,5 +176,8 @@ void DRV_CPU_PreInit(void)
     CLR_BIT(AUXR1, DPS_BIT);    /* Selects DPTR Registers DP0L,DP0H */
 
 #endif
+
+    /* reset CPU tick counter */
+    vSysTickCount = 0;
 }
 
