@@ -34,7 +34,7 @@ static struct
 {
     PT_FUNC         p_thread;
     PT_INIT_FUNC    p_init;
-} const thread_list[] =
+} CONST thread_list[] =
 {
     #include "cfg_protothread.h"
 };
