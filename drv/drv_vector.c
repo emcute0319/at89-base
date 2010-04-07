@@ -34,7 +34,7 @@
 
 /******************************************************************************
  * FUNCTION NAME:
- *      ISR_INT0
+ *      DRV_VECTOR_INT0
  * DESCRIPTION:
  *      External INT0 ISR.
  * PARAMETERS:
@@ -46,7 +46,7 @@
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void ISR_INT0(void) __interrupt(VECTOR_ID_INT0)
+void DRV_VECTOR_INT0(void) __interrupt(VECTOR_ID_INT0)
 {
     DRV_VECTOR_START(INT0);
     /* Add porting code here */
@@ -56,7 +56,7 @@ void ISR_INT0(void) __interrupt(VECTOR_ID_INT0)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      ISR_Timer0
+ *      DRV_VECTOR_Timer0
  * DESCRIPTION:
  *      Timer0 ISR.
  * PARAMETERS:
@@ -68,7 +68,7 @@ void ISR_INT0(void) __interrupt(VECTOR_ID_INT0)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void ISR_Timer0(void) __interrupt(VECTOR_ID_TIMER0)
+void DRV_VECTOR_Timer0(void) __interrupt(VECTOR_ID_TIMER0)
 {
     DRV_VECTOR_START(TIMER0);
 
@@ -84,7 +84,7 @@ void ISR_Timer0(void) __interrupt(VECTOR_ID_TIMER0)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      ISR_INT1
+ *      DRV_VECTOR_INT1
  * DESCRIPTION:
  *      External INT1 ISR.
  * PARAMETERS:
@@ -96,7 +96,7 @@ void ISR_Timer0(void) __interrupt(VECTOR_ID_TIMER0)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void ISR_INT1(void) __interrupt(VECTOR_ID_INT1)
+void DRV_VECTOR_INT1(void) __interrupt(VECTOR_ID_INT1)
 {
     DRV_VECTOR_START(INT1);
     /* Add porting code here */
@@ -109,7 +109,7 @@ void ISR_INT1(void) __interrupt(VECTOR_ID_INT1)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      ISR_Timer1
+ *      DRV_VECTOR_Timer1
  * DESCRIPTION:
  *      Timer1 ISR.
  * PARAMETERS:
@@ -121,7 +121,7 @@ void ISR_INT1(void) __interrupt(VECTOR_ID_INT1)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void ISR_Timer1(void) __interrupt(VECTOR_ID_TIMER1)
+void DRV_VECTOR_Timer1(void) __interrupt(VECTOR_ID_TIMER1)
 {
     DRV_VECTOR_START(TIMER1);
     /* Add porting code here */
@@ -132,7 +132,7 @@ void ISR_Timer1(void) __interrupt(VECTOR_ID_TIMER1)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      ISR_UART
+ *      DRV_VECTOR_UART
  * DESCRIPTION:
  *      UART ISR.
  * PARAMETERS:
@@ -144,7 +144,7 @@ void ISR_Timer1(void) __interrupt(VECTOR_ID_TIMER1)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void ISR_UART(void) __interrupt(VECTOR_ID_UART0)
+void DRV_VECTOR_UART(void) __interrupt(VECTOR_ID_UART0)
 {
     DRV_VECTOR_START(UART0);
     DRV_UART_ISR();
@@ -158,7 +158,7 @@ void ISR_UART(void) __interrupt(VECTOR_ID_UART0)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      ISR_Timer2
+ *      DRV_VECTOR_Timer2
  * DESCRIPTION:
  *      Timer2 ISR.
  * PARAMETERS:
@@ -170,7 +170,7 @@ void ISR_UART(void) __interrupt(VECTOR_ID_UART0)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void ISR_Timer2(void) __interrupt(VECTOR_ID_TIMER2)
+void DRV_VECTOR_Timer2(void) __interrupt(VECTOR_ID_TIMER2)
 {
     DRV_VECTOR_START(TIMER2);
     /* Add porting code here */
