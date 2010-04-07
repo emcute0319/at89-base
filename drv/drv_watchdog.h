@@ -29,7 +29,7 @@
 #define __DRV_WATCHDOG_H
 
 
-#if ( defined(_CPU_AT89S51_) || defined(_CPU_AT89S52_) )
+#if ( DRV_WATCHDOG_SUPPORT && (defined(_CPU_AT89S51_) || defined(_CPU_AT89S52_)) )
  #define DRV_WATCHDOG_Enable()   do { WDTRST = 0x1E; WDTRST = 0xE1; } while (0)
  #define DRV_WATCHDOG_Disable()  /* the Watchdog cannot be disabled, till CPU reset */
  #define DRV_WATCHDOG_Kick()     DRV_WATCHDOG_Enable()
