@@ -67,7 +67,10 @@ void PT_Start(void)
 
         for (i=0; i<THREAD_MAX_NO; i++)
         {
-            thread_list[i].p_thread(&thread_tcb[i]);
+            if (thread_list[i].p_thread != NULL)
+            {
+                thread_list[i].p_thread(&thread_tcb[i]);
+            }
         }
     }
 }
@@ -94,7 +97,11 @@ void PT_Init(void)
     for (i=0; i<THREAD_MAX_NO; i++)
     {
         PT_INIT(&thread_tcb[i]);
-        thread_list[i].p_init();
+
+        if (thread_list[i].p_init != NULL)
+        {
+            thread_list[i].p_init();
+        }
     }
 }
 

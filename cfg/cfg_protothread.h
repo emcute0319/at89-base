@@ -33,8 +33,8 @@
 
 /* Protothread Definition.
  *
- *   entry     : Thread entry;
- *   init_func : Thread init function;
+ *   entry     : Thread entry; (if non-exist or unused, set to NULL)
+ *   init_func : Thread init function; (if non-exist or unused, set to NULL)
  *   cookie    : Thread cookie; (unsupported yet)
  *   desc      : Thread description;
  *
