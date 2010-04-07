@@ -5,7 +5,7 @@ Target (AT89_Base), 0x0000 // Tools: 'MCS-51'
 
 Group (startup)
 Group (drv)
-Group (os)
+Group (protothread)
 Group (app)
 
 File 1,1,<..\startup\main.c><main.c>
@@ -16,7 +16,7 @@ File 2,1,<..\drv\drv_uart.c><drv_uart.c>
 File 2,1,<..\drv\drv_spi.c><drv_spi.c>
 File 2,1,<..\drv\drv_i2cm.c><drv_i2cm.c>
 File 2,1,<..\drv\drv_vector.c><drv_vector.c>
-File 3,1,<..\os\os.c><os.c>
+File 3,1,<..\os\protothread.c><protothread.c>
 File 4,1,<..\app\thread_idle.c><thread_idle.c>
 
 
