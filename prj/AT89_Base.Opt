@@ -16,8 +16,8 @@ GRPOPT 2,(drv),0,0,0
 GRPOPT 3,(protothread),0,0,0
 GRPOPT 4,(app),0,0,0
 
-OPTFFF 1,1,2,0,0,0,0,0,<..\startup\startup.S><startup.S> 
-OPTFFF 1,2,1,0,0,0,0,0,<..\startup\main.c><main.c> 
+OPTFFF 1,1,1,0,0,0,0,0,<..\startup\main.c><main.c> 
+OPTFFF 2,2,2,0,0,0,0,0,<..\drv\startup.S><startup.S> 
 OPTFFF 2,3,1,0,0,0,0,0,<..\drv\drv.c><drv.c> 
 OPTFFF 2,4,1,352321536,0,0,0,0,<..\drv\drv_cpu.c><drv_cpu.c> 
 OPTFFF 2,5,1,872415232,0,0,0,0,<..\drv\drv_io.c><drv_io.c> 

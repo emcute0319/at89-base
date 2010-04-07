@@ -8,8 +8,8 @@ Group (drv)
 Group (protothread)
 Group (app)
 
-File 1,2,<..\startup\startup.S><startup.S>
 File 1,1,<..\startup\main.c><main.c>
+File 2,2,<..\drv\startup.S><startup.S>
 File 2,1,<..\drv\drv.c><drv.c>
 File 2,1,<..\drv\drv_cpu.c><drv_cpu.c>
 File 2,1,<..\drv\drv_io.c><drv_io.c>
