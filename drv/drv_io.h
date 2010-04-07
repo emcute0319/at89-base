@@ -42,10 +42,13 @@ typedef UINT8   DRV_IO_PIN_T;
 #undef DECLARE_IO_PIN
 
 
-#define DRV_IO_SetInput(_pin)               do { (_pin) = HIGH;     } while (0)
+#define DRV_IO_SetInput(_pin)               do { (_pin) = HIGH;    } while (0)
 #define DRV_IO_SetOutput(_pin)              /* do nothing */
-#define DRV_IO_Write(_pin, _bit)            do { (_pin) = (_bit);   } while (0)
+#define DRV_IO_Write(_pin, _bit)            do { (_pin) = (_bit);  } while (0)
 #define DRV_IO_Read(_pin)                   (_pin)
+
+#define DRV_IO_WritePort(_port, _val)       do { (_port) = (_val); } while (0)
+#define DRV_IO_ReadPort(_port)              (_port)
 
 
 /******************************************************************************

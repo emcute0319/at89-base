@@ -61,7 +61,7 @@ void DRV_IO_Init(void)
         }                                                                   \
     } while (0);
 
-#include <cfg_hw_def.h>
+#include "cfg_hw_def.h"
 
 #undef DECLARE_IO_PIN
 }

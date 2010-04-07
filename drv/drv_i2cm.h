@@ -29,10 +29,6 @@
 #define __DRV_I2CM_H
 
 
-#define DRV_I2CM_RandomRead     DRV_I2CM_ReadBytes
-#define DRV_I2CM_RandomWrite    DRV_I2CM_WriteBytes
-
-
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_I2cM_WriteBytes
