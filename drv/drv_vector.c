@@ -72,6 +72,9 @@ void DRV_VECTOR_Timer0(void) __interrupt(VECTOR_ID_TIMER0)
 {
     DRV_VECTOR_START(TIMER0);
 
+    /* Reload System Timer Value */
+    DRV_TIMER_SysTimerReload();
+
     /* Clear System Timer Interrupt Flag */
     DRV_TIMER_ClearSysTimerFlag();
 

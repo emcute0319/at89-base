@@ -13,7 +13,7 @@
 Target (AT89_Base), 0x0000 // Tools: 'MCS-51'
 GRPOPT 1,(startup),0,0,0
 GRPOPT 2,(drv),0,0,0
-GRPOPT 3,(protothread),0,0,0
+GRPOPT 3,(os),0,0,0
 GRPOPT 4,(app),0,0,0
 
 OPTFFF 1,1,1,0,0,0,0,0,<..\startup\main.c><main.c> 

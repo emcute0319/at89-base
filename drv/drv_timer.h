@@ -52,13 +52,7 @@
     } while (0)
 
 /* clear Sysem Timer timeout flag */
-#define DRV_TIMER_ClearSysTimerFlag()   do { TF0 = 0; } while (0)
-
-/* =TRUE, Sysem Timer timeout; else, not timeout */
-#define DRV_TIMER_IsSysTimerTimeout()   (TF0)
-
-/* =TRUE, System Timer Interrupt is enabled; else, disabled */
-#define DRV_TIMER_IsSysTimerIntEnable() (ET0 || EA)
+#define DRV_TIMER_ClearSysTimerFlag()   /* do nothing */
 
 /* Enable/Disable System Timer */
 #define DRV_TIMER_SysTimer_Enable()                                     \
