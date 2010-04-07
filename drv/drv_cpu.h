@@ -71,22 +71,6 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_CPU_DelayMs
- * DESCRIPTION:
- *      CPU Delay ms driver.
- * PARAMETERS:
- *      vMs : How many ms to delay, maximum 65535 ms.
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.1.26        PANDA         Create/Update
- *****************************************************************************/
-void DRV_CPU_DelayMs(UINT16 vMs);
-
-/******************************************************************************
- * FUNCTION NAME:
  *      DRV_CPU_DelayUs
  * DESCRIPTION:
  *      CPU Delay us driver.
