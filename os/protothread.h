@@ -31,10 +31,12 @@
 
 #include "pt-sem.h"
 
-
 typedef char            PT_HANDLE;
 typedef struct pt       PT_TCB;
 typedef struct pt_sem   PT_SCB;
+
+#include "cfg_protothread.h"
+
 
 /* sleep millisecond */
 #define PT_SLEEP_MS(pt, ms)                                                 \
@@ -44,11 +46,9 @@ typedef struct pt_sem   PT_SCB;
         PT_WAIT_WHILE(pt, (DRV_CPU_GetSysTick() < end_tick));               \
     } while (0)
 
-typedef PT_HANDLE (*PT_FUNC)(PT_TCB *pt);
-typedef void (*PT_INIT_FUNC)(void);
+typedef PT_HANDLE (SEG_CODE *PT_FUNC)(PT_TCB *pt);
+typedef void (SEG_CODE *PT_INIT_FUNC)(void);
 
-
-#include "cfg_protothread.h"
 
 /******************************************************************************
  * FUNCTION NAME:
