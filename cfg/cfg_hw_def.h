@@ -35,6 +35,7 @@
  *   _CPU_AT89S52_
  */
 #define _CPU_AT89C2051_
+#define CPU_TYPE                'AT89C2051'
 
 #define DRV_UART_SUPPORT        0       /* UART        */
 #define DRV_WATCHDOG_SUPPORT    0       /* Watchdog    */

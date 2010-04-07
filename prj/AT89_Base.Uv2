@@ -8,6 +8,7 @@ Group (drv)
 Group (protothread)
 Group (app)
 
+File 1,2,<..\startup\startup.S><startup.S>
 File 1,1,<..\startup\main.c><main.c>
 File 2,1,<..\drv\drv.c><drv.c>
 File 2,1,<..\drv\drv_cpu.c><drv_cpu.c>
@@ -45,18 +46,18 @@ Options 1,0,0  // Target 'AT89_Base'
  EnvReg (ÿAtmel\)
  OrgReg (ÿAtmel\)
  TgStat=16
- OutDir (..\build\)
+ OutDir (..\build\obj\)
  OutName (AT89_Base)
  GenApp=1
  GenLib=0
  GenHex=1
  Debug=1
  Browse=1
- LstDir (..\build\)
+ LstDir (..\build\obj\)
  HexSel=0
  MG32K=0
  TGMORE=8
- RunUsr 0 0 <>
+ RunUsr 0 1 <after_build.bat $P.. @L>
  RunUsr 1 0 <>
  BrunUsr 0 0 <>
  BrunUsr 1 0 <>

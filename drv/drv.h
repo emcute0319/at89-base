@@ -37,6 +37,7 @@
 #include "reg_def_at89.h"
 #include "typedef.h"
 
+#include "version.h"
 #include "drv_cpu.h"
 #include "drv_io.h"
 #include "drv_int.h"
