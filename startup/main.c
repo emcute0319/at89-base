@@ -26,7 +26,7 @@
 *****************************************************************************/
 
 #include "drv.h"
-#include "os.h"
+#include "protothread.h"
 
 
 /******************************************************************************
@@ -45,9 +45,9 @@
  *****************************************************************************/
 #define _system_Init()                          \
     do {                                        \
-        DRV_PreInit();  /* Driver Pre-Init */   \
-        DRV_Init();     /* Driver Init     */   \
-        OS_Init();      /* OS     Init     */   \
+        DRV_PreInit();  /* Driver Pre-Init  */  \
+        DRV_Init();     /* Driver Init      */  \
+        PT_Init();      /* Protothread Init */  \
 } while (0)
 
 
@@ -73,8 +73,8 @@ static void _system_Start(void)
     /* Globally enable Interrupt */
     DRV_INT_GlobalEnableInterrupt();
 
-    /* Start OS, and never return back */
-    OS_Start();
+    /* Start Protothread, and never return back */
+    PT_Start();
 }
 
 

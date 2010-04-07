@@ -17,48 +17,39 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   os_api.h
+ *   protothread.c
  * DESCRIPTION:
- *   N/A
+ *   Application Entry.
  * HISTORY:
- *   2010.4.7        Panda.Xiong         Create/Update
+ *   2010.2.1        panda.xiong         Create/Update
  *
 *****************************************************************************/
 
-#ifndef __OS_API_H
-#define __OS_API_H
+#include "protothread.h"
 
 
-#include "pt-sem.h"
+/* Protothread Thread List */
+#define DECLARE_PROTOTHREAD(entry, init_func, cookie, desc)   { entry, init_func },
+static struct
+{
+    PT_FUNC         p_thread;
+    PT_INIT_FUNC    p_init;
+} const thread_list[] =
+{
+    #include "cfg_protothread.h"
+};
+#undef DECLARE_PROTOTHREAD
 
 
-typedef char            OS_HANDLE;
-typedef struct pt       OS_TCB;
-typedef struct pt_sem   OS_SCB;
-
-#define OS_THREAD_PARAM OS_TCB  *tcb
-#define OS_THREAD_START PT_BEGIN(tcb)
-#define OS_THREAD_END   PT_END(tcb)
-
-/* sleep millisecond */
-#define OS_THREAD_SLEEP_MS(ms)                                              \
-    do {                                                                    \
-        static unsigned long end_tick;                                      \
-        end_tick = (DRV_CPU_GetSysTick() + (ms)/DRV_TIMER_SysTimerTick);    \
-        PT_WAIT_WHILE(tcb, (DRV_CPU_GetSysTick() < end_tick));              \
-    } while (0)
-
-typedef OS_HANDLE (*OS_THREAD_FUNC)(OS_TCB *tcb);
-typedef void (*OS_THREAD_INIT_FUNC)(void);
-
-
-#include "cfg_os_thread.h"
+/* thread TCB heap */
+#define THREAD_MAX_NO    COUNT_OF(thread_list)
+static PT_TCB   thread_tcb[THREAD_MAX_NO];
 
 /******************************************************************************
  * FUNCTION NAME:
- *      OS_Start
+ *      PT_Start
  * DESCRIPTION:
- *      OS Start Entry.
+ *      Protothread Start Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -68,13 +59,25 @@ typedef void (*OS_THREAD_INIT_FUNC)(void);
  * HISTORY:
  *      2010.2.1        panda.xiong         Create/Update
  *****************************************************************************/
-void OS_Start(void);
+void PT_Start(void)
+{
+    while (1)
+    {
+        UINT8   i;
+
+        for (i=0; i<THREAD_MAX_NO; i++)
+        {
+            thread_list[i].p_thread(&thread_tcb[i]);
+        }
+    }
+}
+
 
 /******************************************************************************
  * FUNCTION NAME:
- *      OS_Init
+ *      PT_Init
  * DESCRIPTION:
- *      OS Init, including Application Init.
+ *      Protothread Init, including Application Init.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -84,8 +87,14 @@ void OS_Start(void);
  * HISTORY:
  *      2010.2.1        panda.xiong         Create/Update
  *****************************************************************************/
-void OS_Init(void);
+void PT_Init(void)
+{
+    UINT8   i;
 
-
-#endif /* __OS_API_H */
+    for (i=0; i<THREAD_MAX_NO; i++)
+    {
+        PT_INIT(&thread_tcb[i]);
+        thread_list[i].p_init();
+    }
+}
 

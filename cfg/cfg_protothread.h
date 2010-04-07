@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   cfg_os_thread.h
+ *   cfg_protothread.h
  * DESCRIPTION:
  *   N/A
  * HISTORY:
@@ -29,9 +29,9 @@
 #include "thread_idle.h"
 
 
-#ifdef DECLARE_OS_THREAD
+#ifdef DECLARE_PROTOTHREAD
 
-/* OS Thread Definition.
+/* Protothread Definition.
  *
  *   entry     : Thread entry;
  *   init_func : Thread init function;
@@ -42,8 +42,8 @@
  *      N/A
  */
 
-/*                  entry              init_func       cookie   desc        */
-DECLARE_OS_THREAD(thread_Idle_Entry, thread_Idle_Init,   NA,    "Idle Thread")
+/*                    entry              init_func       cookie   desc        */
+DECLARE_PROTOTHREAD(thread_Idle_Entry, thread_Idle_Init,   NA,    "Idle Thread")
 
 #endif
 

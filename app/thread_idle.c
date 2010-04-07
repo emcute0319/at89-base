@@ -25,7 +25,7 @@
  *
 *****************************************************************************/
 
-#include "os.h"
+#include "protothread.h"
 
 
 /******************************************************************************
@@ -42,20 +42,20 @@
  * HISTORY:
  *      2010.3.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-OS_HANDLE thread_Idle_Entry(OS_THREAD_PARAM)
+PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 {
-    OS_THREAD_START;
+    PT_BEGIN(pt);
 
     while (1)
     {
         /* delay 500ms */
-        OS_THREAD_SLEEP_MS(500);
+        PT_SLEEP_MS(pt, 500);
 
         /* Kick Watchdog */
         DRV_WATCHDOG_Kick();
     }
 
-    OS_THREAD_END;
+    PT_END(pt);
 }
 
 

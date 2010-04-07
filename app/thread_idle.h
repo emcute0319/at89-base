@@ -43,7 +43,7 @@
  * HISTORY:
  *      2010.3.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-OS_HANDLE thread_Idle_Entry(OS_THREAD_PARAM);
+PT_HANDLE thread_Idle_Entry(PT_TCB *pt);
 
 /******************************************************************************
  * FUNCTION NAME:
