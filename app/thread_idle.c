@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   apl_idle.h
+ *   thread_idle.c
  * DESCRIPTION:
  *   N/A
  * HISTORY:
@@ -25,15 +25,14 @@
  *
 *****************************************************************************/
 
-#ifndef __APL_IDLE_H
-#define __APL_IDLE_H
+#include "os.h"
 
 
 /******************************************************************************
  * FUNCTION NAME:
- *      _thread_Idle
+ *      thread_Idle_Entry
  * DESCRIPTION:
- *      Idle Thread.
+ *      Idle Thread Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -43,11 +42,26 @@
  * HISTORY:
  *      2010.3.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-PT_HANDLE _thread_Idle(THREAD_VOID);
+OS_HANDLE thread_Idle_Entry(OS_THREAD_PARAM)
+{
+    OS_THREAD_START;
+
+    while (1)
+    {
+        /* delay 500ms */
+        OS_THREAD_SLEEP_MS(500);
+
+        /* Kick Watchdog */
+        DRV_WATCHDOG_Kick();
+    }
+
+    OS_THREAD_END;
+}
+
 
 /******************************************************************************
  * FUNCTION NAME:
- *      _thread_Idle_Init
+ *      thread_Idle_Init
  * DESCRIPTION:
  *      N/A
  * PARAMETERS:
@@ -59,8 +73,8 @@ PT_HANDLE _thread_Idle(THREAD_VOID);
  * HISTORY:
  *      2010.4.6        PANDA         Create/Update
  *****************************************************************************/
-void _thread_Idle_Init(void);
-
-
-#endif /* __APL_IDLE_H */
+void thread_Idle_Init(void)
+{
+    /* do nothing */
+}
 

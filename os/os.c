@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   apl.c
+ *   os.c
  * DESCRIPTION:
  *   Application Entry.
  * HISTORY:
@@ -25,30 +25,25 @@
  *
 *****************************************************************************/
 
-#include "drv.h"
-#include "apl.h"
+#include "os.h"
 
 
-/* thread list */
+/* OS Thread List */
+#define DECLARE_OS_THREAD(entry, init_func, cookie, desc)   { entry, init_func },
 static struct
 {
-    THREAD_FUNC         p_thread;
-    THREAD_INIT_FUNC    p_init;
+    OS_THREAD_FUNC         p_thread;
+    OS_THREAD_INIT_FUNC    p_init;
 } const thread_list[] =
 {
-    /* Add other threads here */
-
-    /* Idle Thread */
-    {
-        _thread_Idle,
-        _thread_Idle_Init,
-    },
+    #include "cfg_os_thread.h"
 };
+#undef DECLARE_OS_THREAD
 
 
 /* thread TCB heap */
 #define THREAD_MAX_NO    COUNT_OF(thread_list)
-static PT_TCB   thread_tcb[THREAD_MAX_NO];
+static OS_TCB   thread_tcb[THREAD_MAX_NO];
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -77,9 +72,9 @@ void OS_Start(void)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      APL_Init
+ *      OS_Init
  * DESCRIPTION:
- *      Application Init.
+ *      OS Init, including Application Init.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -89,7 +84,7 @@ void OS_Start(void)
  * HISTORY:
  *      2010.2.1        panda.xiong         Create/Update
  *****************************************************************************/
-void APL_Init(void)
+void OS_Init(void)
 {
     UINT8   i;
 

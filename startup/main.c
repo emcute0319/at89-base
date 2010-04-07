@@ -26,24 +26,7 @@
 *****************************************************************************/
 
 #include "drv.h"
-#include "apl.h"
-
-
-/******************************************************************************
- * FUNCTION NAME:
- *      _system_PreInit
- * DESCRIPTION:
- *      System Pre-Init.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.1.28        panda.xiong         Create/Update
- *****************************************************************************/
-#define _system_PreInit()   DRV_PreInit()
+#include "os.h"
 
 
 /******************************************************************************
@@ -60,11 +43,11 @@
  * HISTORY:
  *      2009.6.11        Panda.Xiong         Create/Update
  *****************************************************************************/
-#define _system_Init()                      \
-    do {                                    \
-        DRV_Init();     /* Driver Init */   \
-        OS_Init();      /* OS     Init */   \
-        APL_Init();     /* App    Init */   \
+#define _system_Init()                          \
+    do {                                        \
+        DRV_PreInit();  /* Driver Pre-Init */   \
+        DRV_Init();     /* Driver Init     */   \
+        OS_Init();      /* OS     Init     */   \
 } while (0)
 
 
@@ -111,9 +94,6 @@ static void _system_Start(void)
  *****************************************************************************/
 void main(void)
 {
-    /* Pre-Init system */
-    _system_PreInit();
-
     /* init system */
 	_system_Init();
 
