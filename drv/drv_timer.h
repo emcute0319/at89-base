@@ -58,8 +58,8 @@
 #define DRV_TIMER_SysTimer_Enable()                                     \
     do {                                                                \
         /* 16-Bit Reload */                                             \
-        TCON &= ~0x0F;                                                  \
-        TCON |= 0x01;                                                   \
+        TMOD &= ~0x0F;                                                  \
+        TMOD |= 0x01;                                                   \
                                                                         \
         /* load System Timer Init value */                              \
         DRV_TIMER_SysTimerReload();                                     \
