@@ -45,8 +45,8 @@
  *   recommend to choice 4K-5K ohm !!!
  */
 #define DRV_I2CM_Delay_Us(vUs)      DRV_CPU_DelayUs(vUs)
-#define DRV_I2CM_SET_SCL(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SCL), (vData)); DRV_I2CM_Delay_Us(1); } while (0)
-#define DRV_I2CM_SET_SDA(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SDA), (vData)); DRV_I2CM_Delay_Us(1); } while (0)
+#define DRV_I2CM_SET_SCL(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SCL), (vData)); } while (0)
+#define DRV_I2CM_SET_SDA(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SDA), (vData)); } while (0)
 #define DRV_I2CM_GET_SCL()          DRV_IO_Read(IO_PIN(I2CM_SCL))
 #define DRV_I2CM_GET_SDA()          DRV_IO_Read(IO_PIN(I2CM_SDA))
 #endif
@@ -63,10 +63,14 @@ static BOOL _drv_i2cm_SendByte(UINT8 vData)
     UINT8   vLoop;
     BOOL    vAck;
 
+    /* Send Byte Data: MSB first, LSB last */
     for (vLoop = 8; vLoop > 0; vLoop--)
     {
         DRV_I2CM_SET_SCL(0);
-        DRV_I2CM_SET_SDA(READ_BIT(vData, vLoop-1));
+
+        vData = _crol_(vData, 1);
+        DRV_I2CM_SET_SDA(vData & 0x1);
+
         DRV_I2CM_SET_SCL(1);
     }
 
@@ -85,15 +89,17 @@ static UINT8 _drv_i2cm_ReceiveByte(void)
     UINT8   vLoop;
     UINT8   vData = 0;
 
+    /* Receive Byte Data: MSB first, LSB last */
     for (vLoop = 8; vLoop > 0; vLoop--)
     {
         DRV_I2CM_SET_SCL(0);
-
         DRV_I2CM_SET_SCL(1);
+
         vData <<= 1;
         vData |= DRV_I2CM_GET_SDA();
-        DRV_I2CM_SET_SCL(0);
     }
+
+    DRV_I2CM_SET_SCL(0);
 
     return vData;
 }

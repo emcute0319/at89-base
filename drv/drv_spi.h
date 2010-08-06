@@ -31,6 +31,15 @@
 
 #if DRV_SPI_SUPPORT
 
+ /* default, the SPI SCK pin is active high */
+#ifdef DRV_SPI_SCK_ACTIVE_LOW
+ #define IO_SPI_SCK_ACTIVE     IO_LOW
+ #define IO_SPI_SCK_INACTIVE   IO_HIGH
+#else
+ #define IO_SPI_SCK_ACTIVE     IO_HIGH
+ #define IO_SPI_SCK_INACTIVE   IO_LOW
+#endif
+
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_SPI_Open
@@ -39,61 +48,25 @@
  * PARAMETERS:
  *      N/A
  * RETURN:
- *      TRUE    : Open SPI bus success.
- *      FALSE   : Open SPI bus fail.
+ *      N/A
  * NOTES:
  *      N/A
  * HISTORY:
  *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-BOOL DRV_SPI_Open
-(
-    void
-);
-
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_SPI_ReadBytes
- * DESCRIPTION:
- *      Read SPI data.
- * PARAMETERS:
- *      vByteLen  : Read data byte length.
- *      pBuf      : Read data buffer.
- * RETURN:
- *      TRUE    : Read SPI data success.
- *      FALSE   : Read SPI data fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      2009.5.26        Panda.Xiong         Create/Update
- *****************************************************************************/
-BOOL DRV_SPI_ReadBytes
-(
-    IN  UINT32      vByteLen,
-    OUT UINT8      *pBuf
-);
-
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_SPI_WriteBytes
- * DESCRIPTION:
- *      Write SPI data.
- * PARAMETERS:
- *      vByteLen  : Write data byte length.
- *      pBuf      : Write data buffer.
- * RETURN:
- *      TRUE    : Write SPI data success.
- *      FALSE   : Write SPI data fail.
- * NOTES:
- *      N/A
- * HISTORY:
- *      2009.5.26        Panda.Xiong         Create/Update
- *****************************************************************************/
-BOOL DRV_SPI_WriteBytes
-(
-    IN       UINT32     vByteLen,
-    IN const UINT8     *pBuf
-);
+#define DRV_SPI_Open()                                                      \
+    do {                                                                    \
+        if (DRV_IO_Read(IO_PIN(SPI_CS)) == IO_LOW)                          \
+        {                                                                   \
+            /* SPI has been opened, we should close it first,               \
+             *  to force aborting the previous transmitting.                \
+             */                                                             \
+            DRV_SPI_Close();                                                \
+        }                                                                   \
+                                                                            \
+        /* enable SPI transfer */                                           \
+        DRV_IO_Write(IO_PIN(SPI_CS), IO_LOW);                               \
+    } while (0)
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -101,18 +74,98 @@ BOOL DRV_SPI_WriteBytes
  * DESCRIPTION:
  *      Close SPI bus.
  * PARAMETERS:
- *      vSpiId  : SPI bus ID.
+ *      N/A
  * RETURN:
- *      TRUE    : Close SPI bus success.
- *      FALSE   : Close SPI bus fail.
+ *      N/A
  * NOTES:
  *      N/A
  * HISTORY:
  *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-BOOL DRV_SPI_Close
+#define DRV_SPI_Close()                                                     \
+    do {                                                                    \
+        /* Set SPI_CSB as high to deactive the transaxtion */               \
+        DRV_IO_Write(IO_PIN(SPI_CS), IO_HIGH);                              \
+    } while (0)
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_SPI_ReadBytes
+ * DESCRIPTION:
+ *      Read n Bytes data, via SPI Bus.
+ * PARAMETERS:
+ *      vByteLen  : Read data byte length.
+ *      pBuf      : Read data buffer.
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.5.26        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_SPI_ReadBytes
+(
+    IN  UINT8   vByteLen,
+    OUT UINT8  *pBuf
+);
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_SPI_WriteBytes
+ * DESCRIPTION:
+ *      Write n Bytes data, via SPI Bus.
+ * PARAMETERS:
+ *      vByteLen  : Write data byte length.
+ *      pBuf      : Write data buffer.
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.5.26        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_SPI_WriteBytes
+(
+    IN       UINT8      vByteLen,
+    IN const UINT8     *pBuf
+);
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_SPI_ReadByte
+ * DESCRIPTION:
+ *      Read 1 Bytes data, via SPI Bus.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      return the read data
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.5.26        Panda.Xiong         Create/Update
+ *****************************************************************************/
+UINT8 DRV_SPI_ReadByte
 (
     void
+);
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_SPI_WriteByte
+ * DESCRIPTION:
+ *      Write 1 Bytes data, via SPI Bus.
+ * PARAMETERS:
+ *      vData      : Write data buffer.
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.5.26        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_SPI_WriteByte
+(
+    IN       UINT8      vData
 );
 
 /******************************************************************************
@@ -129,7 +182,14 @@ BOOL DRV_SPI_Close
  * HISTORY:
  *      2009.4.10        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_SPI_Init(void);
+#define DRV_SPI_Init()                                                      \
+    do {                                                                    \
+        /* Close SPI Bus, to disable SPI transfer */                        \
+        DRV_SPI_Close();                                                    \
+                                                                            \
+        /* Make sure the SCK pin is inactive state */                       \
+        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);                 \
+    } while (0)
 
 #endif
 

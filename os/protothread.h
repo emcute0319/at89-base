@@ -39,11 +39,11 @@ typedef struct pt_sem   PT_SCB;
 
 
 /* sleep millisecond */
-#define PT_SLEEP_MS(pt, ms)                                                 \
-    do {                                                                    \
-        static unsigned long end_tick;                                      \
-        end_tick = (DRV_CPU_GetSysTick() + (ms)/DRV_TIMER_SysTimerTick);    \
-        PT_WAIT_WHILE(pt, (DRV_CPU_GetSysTick() < end_tick));               \
+#define PT_SLEEP_MS(pt, ms)                                                         \
+    do {                                                                            \
+        static unsigned long end_tick;                                              \
+        end_tick = (DRV_CPU_GetSysTick() + (ms)/DRV_TIMER_SysTimerTick);            \
+        PT_WAIT_WHILE(pt, (DRV_WATCHDOG_Kick(), DRV_CPU_GetSysTick() < end_tick));  \
     } while (0)
 
 typedef PT_HANDLE (SEG_CODE *PT_FUNC)(PT_TCB *pt);

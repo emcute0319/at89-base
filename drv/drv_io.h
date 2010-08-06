@@ -29,6 +29,10 @@
 #define __DRV_IO_H
 
 
+#define IO_LOW  0
+#define IO_HIGH 1
+
+
 #define _IO_PORT(_name)         (P##_name)
 #define _IO_BIT(_x)             (_x)
 #define IO_PIN(_name)           IO_PIN_##_name

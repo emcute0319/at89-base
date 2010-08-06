@@ -30,74 +30,67 @@
 
 #if DRV_SPI_SUPPORT
 
+#define DRV_SPI_FixReadDutyCycle()                                        \
+    do {                                                                  \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+    } while (0)
+
+#define DRV_SPI_FixWriteDutyCycle()                                       \
+    do {                                                                  \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+        NOP();                                                            \
+    } while (0)
+
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_SPI_ReadBytes
  * DESCRIPTION:
- *      Read SPI data.
+ *      Read n Bytes data, via SPI Bus.
  * PARAMETERS:
  *      vByteLen  : Read data byte length.
  *      pBuf      : Read data buffer.
  * RETURN:
- *      TRUE    : Read SPI data success.
- *      FALSE   : Read SPI data fail.
+ *      N/A
  * NOTES:
  *      N/A
  * HISTORY:
  *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-BOOL DRV_SPI_ReadBytes
+void DRV_SPI_ReadBytes
 (
-    IN  UINT32      vByteLen,
-    OUT UINT8      *pBuf
+    IN  UINT8   vByteLen,
+    OUT UINT8  *pBuf
 )
 {
-    UINT32  vLoop, vBitIndex;
-    UINT8   vData;
-
-    if (pBuf == NULL)
+    while (vByteLen--)
     {
-        return FALSE;
+        *pBuf++ = DRV_SPI_ReadByte();
     }
-
-    /* enable SPI transfer */
-    DRV_IO_Write(IO_PIN(SPI_nCS), LOW);
-
-    /* add a short delay after enable SPI transferring,
-     * cause some SPI slaves need some time to be ready.
-     */
-    DRV_CPU_DelayUs(20);
-
-    for (vLoop = 0; vLoop < vByteLen; vLoop++)
-    {
-        vData = 0x00;
-        for (vBitIndex = 8; vBitIndex > 0; vBitIndex--)
-        {
-            /* Output serial data is clocked out on the falling
-             *  edge of the SPI clock.
-             */
-            DRV_IO_Write(IO_PIN(SPI_SCK), LOW);
-            DRV_IO_Write(IO_PIN(SPI_SCK), HIGH);
-
-            /* Read in the data on the rising edge of the clock */
-            if (DRV_IO_Read(IO_PIN(SPI_MISO)))
-            {
-                SET_BIT(vData, vBitIndex-1);
-            }
-        }
-
-        pBuf[vLoop] = vData;
-    }
-
-    /* disable SPI transfer */
-    DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);
-
-    /* add a short delay after enable SPI transferring,
-     * cause some SPI slaves need some time to be ready.
-     */
-    DRV_CPU_DelayUs(20);
-
-    return TRUE;
 }
 
 
@@ -105,89 +98,101 @@ BOOL DRV_SPI_ReadBytes
  * FUNCTION NAME:
  *      DRV_SPI_WriteBytes
  * DESCRIPTION:
- *      Write SPI data.
+ *      Write n Bytes data, via SPI Bus.
  * PARAMETERS:
  *      vByteLen  : Write data byte length.
  *      pBuf      : Write data buffer.
  * RETURN:
- *      TRUE    : Write SPI data success.
- *      FALSE   : Write SPI data fail.
+ *      N/A
  * NOTES:
  *      N/A
  * HISTORY:
  *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-BOOL DRV_SPI_WriteBytes
+void DRV_SPI_WriteBytes
 (
-    IN       UINT32     vByteLen,
+    IN       UINT8      vByteLen,
     IN const UINT8     *pBuf
 )
 {
-    UINT32  vLoop, vBitIndex;
-
-    if (pBuf == NULL)
+    while (vByteLen--)
     {
-        return FALSE;
+        DRV_SPI_WriteByte(*pBuf++);
     }
-
-    /* enable SPI transfer */
-    DRV_IO_Write(IO_PIN(SPI_nCS), LOW);
-
-    /* add a short delay after enable SPI transferring,
-     * cause some SPI slaves need some time to be ready.
-     */
-    DRV_CPU_DelayUs(20);
-
-    for (vLoop = 0; vLoop < vByteLen; vLoop++)
-    {
-        for (vBitIndex = 8; vBitIndex > 0; vBitIndex--)
-        {
-            /* Input serial data is captured on the rising edge
-             *  of the SPI clock.
-             */
-            DRV_IO_Write(IO_PIN(SPI_SCK), LOW);
-
-            /* Data is transmitted or received on the SPI port.
-             * MSB first, LSB last.
-             */
-            DRV_IO_Write(IO_PIN(SPI_MISO),
-                                READ_BIT(pBuf[vLoop], vBitIndex-1));
-
-            DRV_IO_Write(IO_PIN(SPI_SCK), HIGH);
-        }
-    }
-
-    /* disable SPI transfer */
-    DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);
-
-    return TRUE;
 }
 
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_SPI_Init
+ *      DRV_SPI_ReadByte
  * DESCRIPTION:
- *      SPI Driver Init.
+ *      Read 1 Bytes data, via SPI Bus.
  * PARAMETERS:
  *      N/A
+ * RETURN:
+ *      return the read data
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.5.26        Panda.Xiong         Create/Update
+ *****************************************************************************/
+UINT8 DRV_SPI_ReadByte
+(
+    void
+)
+{
+	UINT8   vData;
+	UINT8   vBitIndex;
+
+	vData = 0x00;
+    for (vBitIndex = 8; vBitIndex != 0; vBitIndex--)
+    {
+        /* Generate one clock, to tell SPI Slave to send one bit data */
+        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
+        DRV_SPI_FixReadDutyCycle();
+        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
+
+        /* Sample data: MSB first, LSB last */
+        vData <<= 1;
+        vData |= DRV_IO_Read(IO_PIN(SPI_MISO));
+	}
+
+	return vData;
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_SPI_WriteByte
+ * DESCRIPTION:
+ *      Write 1 Bytes data, via SPI Bus.
+ * PARAMETERS:
+ *      vData      : Write data buffer.
  * RETURN:
  *      N/A
  * NOTES:
  *      N/A
  * HISTORY:
- *      2009.4.10        Panda.Xiong         Create/Update
+ *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_SPI_Init(void)
+void DRV_SPI_WriteByte
+(
+    IN       UINT8      vData
+)
 {
-    /* Set SPI_nCS as high to deactive the transaxtion */
-    DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);
+	UINT8   vBitIndex;
 
-    /* Set MOSI and Clock to high as idle status */
-    DRV_IO_Write(IO_PIN(SPI_SCK),  HIGH);
-    DRV_IO_Write(IO_PIN(SPI_MOSI), HIGH);
+    for (vBitIndex = 8; vBitIndex != 0; vBitIndex--)
+    {
+        /* Transmitting data, MSB first, LSB last */
+        vData = _crol_(vData, 1);
+        DRV_IO_Write(IO_PIN(SPI_MOSI), (vData & 0x1));
 
-    DRV_IO_SetInput(IO_PIN(SPI_MISO));
+        /* Generate one clock, to tell SPI Slave one bit data is ready */
+        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
+        DRV_SPI_FixWriteDutyCycle();
+        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
+	}
 }
 
 #endif

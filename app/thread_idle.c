@@ -50,9 +50,6 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
     {
         /* delay 500ms */
         PT_SLEEP_MS(pt, 500);
-
-        /* Kick Watchdog */
-        DRV_WATCHDOG_Kick();
     }
 
     PT_END(pt);
