@@ -303,6 +303,34 @@ _error_exit:
 }
 
 
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_I2cM_WriteByte
+ * DESCRIPTION:
+ *      Random write one or more bytes.
+ * PARAMETERS:
+ *      vI2cAddr : I2C slave chip address.
+ *      vOffset  : offset buffer length to be send.
+ *      vData    : data buffer.
+ * RETURN:
+ *      TRUE   : write success.
+ *      FALSE  : write fail.
+ * NOTES:
+ *      None
+ * HISTORY:
+ *      V1.00     2008.12.5     Panda Xiong       Create
+ ******************************************************************************/
+BOOL DRV_I2CM_WriteByte
+(
+    IN       UINT8       vI2cAddr,
+    IN       UINT8       vOffset,
+    IN       UINT8       vData
+)
+{
+    return DRV_I2CM_WriteBytes(vI2cAddr, vOffset, 1, &vData);
+}
+
+
 /*******************************************************************************
  * FUNCTION NAME:
  *      DRV_I2cM_Detect

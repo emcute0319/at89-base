@@ -38,9 +38,6 @@
 
 #ifndef __C51__
 
- #include <intrins.h>
- #include <absacc.h>
-
  #define CBYTE  ((UINT8  volatile SEG_CODE  *) 0)  /*  8-bit data in  code area */
  #define DBYTE  ((UINT8  volatile SEG_DATA  *) 0)  /*  8-bit data in  data area */
  #define PBYTE  ((UINT8  volatile SEG_PDATA *) 0)  /*  8-bit data in pdata area */

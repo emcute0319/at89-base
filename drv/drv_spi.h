@@ -31,13 +31,13 @@
 
 #if DRV_SPI_SUPPORT
 
- /* default, the SPI SCK pin is active high */
+/* default, the SPI SCK pin is active high */
 #ifdef DRV_SPI_SCK_ACTIVE_LOW
- #define IO_SPI_SCK_ACTIVE     IO_LOW
- #define IO_SPI_SCK_INACTIVE   IO_HIGH
+ #define IO_SPI_SCK_ACTIVE     LOW
+ #define IO_SPI_SCK_INACTIVE   HIGH
 #else
- #define IO_SPI_SCK_ACTIVE     IO_HIGH
- #define IO_SPI_SCK_INACTIVE   IO_LOW
+ #define IO_SPI_SCK_ACTIVE     HIGH
+ #define IO_SPI_SCK_INACTIVE   LOW
 #endif
 
 /******************************************************************************
@@ -56,7 +56,7 @@
  *****************************************************************************/
 #define DRV_SPI_Open()                                                      \
     do {                                                                    \
-        if (DRV_IO_Read(IO_PIN(SPI_CS)) == IO_LOW)                          \
+        if (DRV_IO_Read(IO_PIN(SPI_CS)) == LOW)                             \
         {                                                                   \
             /* SPI has been opened, we should close it first,               \
              *  to force aborting the previous transmitting.                \
@@ -65,7 +65,7 @@
         }                                                                   \
                                                                             \
         /* enable SPI transfer */                                           \
-        DRV_IO_Write(IO_PIN(SPI_CS), IO_LOW);                               \
+        DRV_IO_Write(IO_PIN(SPI_CS), LOW);                                  \
     } while (0)
 
 /******************************************************************************
@@ -85,7 +85,7 @@
 #define DRV_SPI_Close()                                                     \
     do {                                                                    \
         /* Set SPI_CSB as high to deactive the transaxtion */               \
-        DRV_IO_Write(IO_PIN(SPI_CS), IO_HIGH);                              \
+        DRV_IO_Write(IO_PIN(SPI_CS), HIGH);                                 \
     } while (0)
 
 /******************************************************************************
