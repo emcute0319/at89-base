@@ -68,7 +68,7 @@ void DRV_VECTOR_INT0(void) __interrupt(VECTOR_ID_INT0)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_VECTOR_Timer0(void) __interrupt(VECTOR_ID_TIMER0)
+void DRV_VECTOR_Timer0(void) __interrupt_using(VECTOR_ID_TIMER0, REG_GROUP_1)
 {
     DRV_VECTOR_START(TIMER0);
 
