@@ -47,19 +47,20 @@ void DRV_UART_Printf(const char *fmt, ...);
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_UART_Init
+ *      DRV_UART_ReadByte
  * DESCRIPTION:
- *      Uart Init.
+ *      Uart Read Byte.
  * PARAMETERS:
  *      N/A
  * RETURN:
- *      N/A
+ *      -1     : Rx FIFO empty;
+ *      others : The received data;
  * NOTES:
  *      N/A
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-UINT8 DRV_UART_ReadByte(void);
+SINT16 DRV_UART_ReadByte(void);
 
 /******************************************************************************
  * FUNCTION NAME:

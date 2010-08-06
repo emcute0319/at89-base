@@ -37,8 +37,8 @@
 #define _CPU_AT89C2051_
 #define CPU_TYPE                'AT89C2051'
 
-#define DRV_UART_SUPPORT        0       /* UART        */
-#define DRV_WATCHDOG_SUPPORT    0       /* Watchdog    */
+#define DRV_UART_SUPPORT        1       /* UART        */
+#define DRV_WATCHDOG_SUPPORT    1       /* Watchdog    */
 #define DRV_SPI_SUPPORT         0       /* SPI         */
 #define DRV_I2CM_SUPPORT        0       /* I2C Master  */
 

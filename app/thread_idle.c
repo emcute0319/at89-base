@@ -48,8 +48,17 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 
     while (1)
     {
+        static UINT32   vCount = 0;
+
+        vCount++;
+
         /* delay 500ms */
         PT_SLEEP_MS(pt, 500);
+
+        DRV_UART_Printf("\r %s(line%d): Cicle -> %d, System Tick Count -> %d ...",
+                        __FILE__, __LINE__,
+                        vCount,
+                        DRV_CPU_GetSysTick());
     }
 
     PT_END(pt);
