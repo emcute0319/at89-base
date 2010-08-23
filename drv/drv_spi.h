@@ -56,7 +56,7 @@
  *****************************************************************************/
 #define DRV_SPI_Open()                                                      \
     do {                                                                    \
-        if (DRV_IO_Read(IO_PIN(SPI_CS)) == LOW)                             \
+        if (DRV_IO_Read(IO_PIN(SPI_nCS)) == LOW)                            \
         {                                                                   \
             /* SPI has been opened, we should close it first,               \
              *  to force aborting the previous transmitting.                \
@@ -65,7 +65,7 @@
         }                                                                   \
                                                                             \
         /* enable SPI transfer */                                           \
-        DRV_IO_Write(IO_PIN(SPI_CS), LOW);                                  \
+        DRV_IO_Write(IO_PIN(SPI_nCS), LOW);                                 \
     } while (0)
 
 /******************************************************************************
@@ -85,8 +85,26 @@
 #define DRV_SPI_Close()                                                     \
     do {                                                                    \
         /* Set SPI_CSB as high to deactive the transaxtion */               \
-        DRV_IO_Write(IO_PIN(SPI_CS), HIGH);                                 \
+        DRV_IO_Write(IO_PIN(SPI_nCS), HIGH);                                \
     } while (0)
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_SPI_IsSuccess
+ * DESCRIPTION:
+ *      Check this transmitting is successful or not.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      TRUE  : Success;
+ *      FALSE : Fail.
+ * NOTES:
+ *      If SPI_nCS is not low, means this SPI transfering has been interrupted,
+ *       thus, assume this SPI transfering fail.
+ * HISTORY:
+ *      2009.5.26        Panda.Xiong         Create/Update
+ *****************************************************************************/
+#define DRV_SPI_IsSuccess()    (DRV_IO_Read(IO_PIN(SPI_nCS)) == LOW)
 
 /******************************************************************************
  * FUNCTION NAME:

@@ -300,11 +300,11 @@ void DRV_UART_Init(void)
 	 *  Timer1: (mode 1 & 3)
 	        f(osc) = 12MHz
 		        Baudrate    SMOD    TMOD    TH1(TL1)
-		          4800        1     0x20      0XF3
+		          4800        1     0x20      0xF3
 		          2400        0     0x20      0xF3
 		    f(osc) = 11.0592MHz
 		        Baudrate    SMOD    TMOD    TH1(TL1)
-		         19200        1     0x20      0XFD
+		         19200        1     0x20      0xFD
 		          9600        0     0x20      0xFD
 				  4800        0     0x20      0xFA
 				  2400        0     0x20      0xF4
