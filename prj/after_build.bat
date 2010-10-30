@@ -17,7 +17,7 @@
 ::   MA 02111-1307 USA
 ::
 ::  DESCRIPTION:
-::    Genrate released firmware for F33x CPU.
+::    Genrate released firmware for Target CPU.
 ::
 ::  HISTORY:
 ::    2010.2.20     Panda.Xiong       Create
