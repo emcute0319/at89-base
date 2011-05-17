@@ -32,15 +32,14 @@
 #include <stdarg.h>
 #include "drv_uart.h"
 
+
 #define DRV_UART_ENTER_CRITICAL()   do { ES = 0; } while (0)
 #define DRV_UART_EXIT_CRITICAL()    do { ES = 1; } while (0)
 
-typedef void (*PUT_CHAR_FUNC)(UINT8 ch);
-
 /* Global variable define */
-static BOOL     bTxEmpty;
-static UINT8    aRxFIFO[8];
-static UINT8    vRxFIFO_Counter;  /* Rx FIFO counter */
+static volatile BOOL     bTxEmpty;
+static volatile UINT8    aRxFIFO[8];
+static volatile UINT8    vRxFIFO_Counter;  /* Rx FIFO counter */
 
 
 #if 0 /* ( defined(_CPU_AT89C52_) || defined(_CPU_AT89S52_) ) */

@@ -28,12 +28,12 @@
 #include "drv.h"
 
 
+#if DRV_I2CM_SUPPORT
+
 /* =1, send I2C Stop at I2C Master Bus initializing;
  * =0, do not send I2C Stop. (default)
  */
-#define DRV_I2CM_INIT_STOP_SUPPORT          (0 & DRV_I2CM_SUPPORT)
-
-#if DRV_I2CM_SUPPORT
+#define DRV_I2CM_INIT_STOP_SUPPORT          (0)
 
 /* I2C Driver Porting part */
 #if 1
@@ -44,7 +44,6 @@
  *  Thus, the Pull-Up resister on SCL/SDA should be designed to 1K-10K ohm,
  *   recommend to choice 4K-5K ohm !!!
  */
-#define DRV_I2CM_Delay_Us(vUs)      DRV_CPU_DelayUs(vUs)
 #define DRV_I2CM_SET_SCL(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SCL), (vData)); } while (0)
 #define DRV_I2CM_SET_SDA(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SDA), (vData)); } while (0)
 #define DRV_I2CM_GET_SCL()          DRV_IO_Read(IO_PIN(I2CM_SCL))
@@ -176,7 +175,7 @@ static UINT8 _drv_i2cm_ReceiveByte(void)
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2008.12.5     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_ReadBytes
 (
@@ -254,7 +253,7 @@ _error_exit:
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2008.12.5     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_WriteBytes
 (
@@ -318,7 +317,7 @@ _error_exit:
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2008.12.5     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_WriteByte
 (
@@ -343,12 +342,9 @@ BOOL DRV_I2CM_WriteByte
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2009.1.16     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2CM_Detect
-(
-    IN UINT8    vI2cAddr
-)
+BOOL DRV_I2CM_Detect(IN UINT8 vI2cAddr)
 {
     /* send I2C start */
     _drv_i2cm_Start();
@@ -371,10 +367,6 @@ _error_exit:
     return FALSE;
 }
 
-#endif
-
-#endif
-
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -384,19 +376,20 @@ _error_exit:
  * PARAMETERS:
  *      None
  * RETURN:
- *      I2C Host Type.
+ *      None
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.10.15     Panda Xiong       Create
+ *      2009.8.26     Panda Xiong       Create
  ******************************************************************************/
-void DRV_I2CM_Init
-(
-    void
-)
+void DRV_I2CM_Init(void)
 {
-#if DRV_I2CM_INIT_STOP_SUPPORT
+  #if DRV_I2CM_INIT_STOP_SUPPORT
     _drv_i2cm_Init();
-#endif
+  #endif
 }
+
+#endif
+
+#endif
 

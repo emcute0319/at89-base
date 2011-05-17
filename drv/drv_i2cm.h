@@ -29,6 +29,8 @@
 #define __DRV_I2CM_H
 
 
+#if DRV_I2CM_SUPPORT
+
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_I2cM_WriteBytes
@@ -46,7 +48,7 @@
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_WriteBytes
 (
@@ -72,7 +74,7 @@ BOOL DRV_I2CM_WriteBytes
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_ReadBytes
 (
@@ -97,7 +99,7 @@ BOOL DRV_I2CM_ReadBytes
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_WriteByte
 (
@@ -121,7 +123,7 @@ BOOL DRV_I2CM_WriteByte
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.12.5     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
 #define DRV_I2CM_ReadByte(_vI2cAddr, _vOffset, _pData)                     \
     DRV_I2CM_ReadBytes((_vI2cAddr), (_vOffset), 1, (_pData))
@@ -138,12 +140,9 @@ BOOL DRV_I2CM_WriteByte
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2009.1.16     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2CM_Detect
-(
-    IN UINT8    vI2cAddr
-);
+BOOL DRV_I2CM_Detect(IN UINT8 vI2cAddr);
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -153,16 +152,15 @@ BOOL DRV_I2CM_Detect
  * PARAMETERS:
  *      None
  * RETURN:
- *      I2C Host Type.
+ *      None
  * NOTES:
  *      None
  * HISTORY:
- *      V1.00     2008.10.15     Panda Xiong       Create
+ *      2009.8.26     Panda Xiong       Create
  ******************************************************************************/
-void DRV_I2CM_Init
-(
-    void
-);
+void DRV_I2CM_Init(void);
+
+#endif
 
 
 #endif /* __DRV_I2CM_H */

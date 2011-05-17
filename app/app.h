@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   cfg_protothread.h
+ *   app.h
  * DESCRIPTION:
  *   N/A
  * HISTORY:
@@ -25,25 +25,12 @@
  *
 *****************************************************************************/
 
-#include "drv.h"
-#include "app.h"
+#ifndef __APP_H
+#define __APP_H
 
 
-#ifdef DECLARE_PROTOTHREAD
+#include "thread_idle.h"
 
-/* Protothread Definition.
- *
- *   entry     : Thread entry; (if non-exist or unused, set to NULL)
- *   init_func : Thread init function; (if non-exist or unused, set to NULL)
- *   cookie    : Thread cookie; (unsupported yet)
- *   desc      : Thread description;
- *
- *   Note      :
- *      N/A
- */
 
-/*                    entry              init_func       cookie   desc        */
-DECLARE_PROTOTHREAD(thread_Idle_Entry, thread_Idle_Init,   NA,    "Idle Thread")
-
-#endif
+#endif /* __APP_H */
 

@@ -104,9 +104,28 @@
 #define ABS(x)              (((x) >= 0) ? (x) : -(x))
 
 /* bit operation */
-#define SET_BIT(n, b)       do { (n) |= (1 << (b));  } while (0)
-#define CLR_BIT(n, b)       do { (n) &= ~(1 << (b)); } while (0)
-#define READ_BIT(n, b)      (BOOL)((n) >> (b))
+#define SET_BIT(n, b)       do { (n) |= (0x1UL << (b));  } while (0)
+#define CLR_BIT(n, b)       do { (n) &= ~(0x1UL << (b)); } while (0)
+#define READ_BIT(n, b)      ((BOOL)(((n) >> (b)) & 0x1UL))
+#define REVERSE_BIT(n, b)   do { (n) ^= (0x1UL << (b)); } while (0)
+#define WRITE_BIT(n, b, v)  do { (n) = ((n) & ~(0x1UL << (b))) | ((UINT32)(v) << (b)); } while (0)
+
+
+/* Get mask.
+ *
+ * e.g:
+ *   if get 10-bit mask started from bit0, it will return 0x3FF.
+ *   if get 10-bit mask started from bit5, it will return 0x7FE0.
+ *
+ * Note:
+ *   1. the range of (start) : 0 <= start <= 31
+ *      the range of (n)     : 0 <= n <= 31
+ *   2. by default, this will return 32-bit mask, if only need 8-bit or 16-bit mask,
+ *      you should limit the result like this:
+ *         8-bit :  (UINT8)(GET_MASK(0, 5))  --- Start from bit0, occupy 5 bits;
+ *        16-bit : (UINT16)(GET_MASK(3, 7))  --- Start from bit3, occupy 7 bits;
+ */
+#define GET_MASK(start, n)  ((~(0xFFFFFFFFUL << (UINT8)(n))) << (UINT8)(start))
 
 
 /* operate memory as big-endian */

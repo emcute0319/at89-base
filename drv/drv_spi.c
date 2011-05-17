@@ -30,6 +30,17 @@
 
 #if DRV_SPI_SUPPORT
 
+#define DRV_SPI_IO_Read(_io)    DRV_IO_Read(_io)
+
+#define DRV_SPI_IO_Write(_io, _state)                                       \
+    do {                                                                    \
+        DRV_IO_Write((_io), (_state));                                      \
+                                                                            \
+        /* wait until the output IO state is stable */                      \
+        while (DRV_SPI_IO_Read(_io) != (_state))                            \
+        {}                                                                  \
+    } while (0)
+
 #define DRV_SPI_FixReadDutyCycle()                                        \
     do {                                                                  \
         NOP();                                                            \
@@ -130,16 +141,13 @@ void DRV_SPI_WriteBytes
  * PARAMETERS:
  *      N/A
  * RETURN:
- *      return the read data
+ *      The read 1 Byte data.
  * NOTES:
  *      N/A
  * HISTORY:
  *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-UINT8 DRV_SPI_ReadByte
-(
-    void
-)
+UINT8 DRV_SPI_ReadByte(void)
 {
 	UINT8   vData;
 	UINT8   vBitIndex;
@@ -148,13 +156,13 @@ UINT8 DRV_SPI_ReadByte
     for (vBitIndex = 8; vBitIndex != 0; vBitIndex--)
     {
         /* Generate one clock, to tell SPI Slave to send one bit data */
-        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
+        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
         DRV_SPI_FixReadDutyCycle();
-        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
+        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
 
         /* Sample data: MSB first, LSB last */
         vData <<= 1;
-        vData |= DRV_IO_Read(IO_PIN(SPI_MISO));
+        vData |= DRV_SPI_IO_Read(IO_PIN(SPI_MISO));
 	}
 
 	return vData;
@@ -167,7 +175,7 @@ UINT8 DRV_SPI_ReadByte
  * DESCRIPTION:
  *      Write 1 Bytes data, via SPI Bus.
  * PARAMETERS:
- *      vData      : Write data buffer.
+ *      vData : Write data buffer.
  * RETURN:
  *      N/A
  * NOTES:
@@ -175,10 +183,7 @@ UINT8 DRV_SPI_ReadByte
  * HISTORY:
  *      2009.5.26        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_SPI_WriteByte
-(
-    IN       UINT8      vData
-)
+void DRV_SPI_WriteByte(IN UINT8 vData)
 {
 	UINT8   vBitIndex;
 
@@ -186,12 +191,12 @@ void DRV_SPI_WriteByte
     {
         /* Transmitting data, MSB first, LSB last */
         vData = _crol_(vData, 1);
-        DRV_IO_Write(IO_PIN(SPI_MOSI), (vData & 0x1));
+        DRV_SPI_IO_Write(IO_PIN(SPI_MOSI), (vData & 0x1));
 
         /* Generate one clock, to tell SPI Slave one bit data is ready */
-        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
+        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
         DRV_SPI_FixWriteDutyCycle();
-        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
+        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
 	}
 }
 

@@ -37,7 +37,6 @@
 #define OUT                     /* nothing */
 
 typedef bit                     BOOL;       /* Boolean: TRUE/FALSE */
-typedef unsigned char           BYTE;
 typedef unsigned char           UINT8;      /* 8-bit */
 typedef signed   char           SINT8;
 typedef unsigned short          UINT16;     /* 16-bit */
