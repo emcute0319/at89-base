@@ -16,6 +16,7 @@ File 2,1,<..\drv\drv_io.c><drv_io.c>
 File 2,1,<..\drv\drv_uart.c><drv_uart.c>
 File 2,1,<..\drv\drv_spi.c><drv_spi.c>
 File 2,1,<..\drv\drv_i2cm.c><drv_i2cm.c>
+File 2,1,<..\drv\drv_i2cs.c><drv_i2cs.c>
 File 2,1,<..\drv\drv_vector.c><drv_vector.c>
 File 3,1,<..\os\protothread.c><protothread.c>
 File 4,1,<..\app\thread_idle.c><thread_idle.c>

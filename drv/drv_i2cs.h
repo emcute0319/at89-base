@@ -17,81 +17,38 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   drv.c
+ *   drv_i2cs.h
  * DESCRIPTION:
  *   N/A
  * HISTORY:
- *   2010.1.28        panda.xiong         Create/Update
+ *   2011.5.24        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
-#include "drv.h"
+#ifndef __DRV_I2CS_H
+#define __DRV_I2CS_H
 
-
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_Init
- * DESCRIPTION:
- *      Driver Init.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.1.28        panda.xiong         Create/Update
- *****************************************************************************/
-void DRV_Init(void)
-{
-    /* Vector Init */
-    DRV_Vector_Init();
-
-    /* Init IO */
-    DRV_IO_Init();
-
-    /* Init Timer */
-    DRV_TIMER_Init();
-
-#if DRV_UART_SUPPORT
-    /* Init UART */
-    DRV_UART_Init();
-#endif
-
-#if DRV_SPI_SUPPORT
-    /* Init SPI Bus */
-    DRV_SPI_Init();
-#endif
-
-#if DRV_I2CM_SUPPORT
-    /* Init I2C Master Bus */
-    DRV_I2CM_Init();
-#endif
 
 #if DRV_I2CS_SUPPORT
-    /* Init I2C Slave Bus */
-    DRV_I2CS_Init();
-#endif
-}
-
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_FixupInit
+ *      DRV_I2CS_Init
  * DESCRIPTION:
- *      FixUp Init.
+ *      I2C Slave Init.
  * PARAMETERS:
  *      N/A
  * RETURN:
  *      N/A
  * NOTES:
- *      This is a post init after system initialized done.
+ *      N/A
  * HISTORY:
- *      2009.9.23        Panda.Xiong         Create/Update
+ *      2011.5.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_FixupInit(void)
-{
-    /* Enable Watchdog */
-    DRV_WATCHDOG_Enable();
-}
+void DRV_I2CS_Init(void);
+
+#endif
+
+
+#endif /* __DRV_I2CS_H */
 

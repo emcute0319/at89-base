@@ -34,28 +34,6 @@
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_VECTOR_INT0
- * DESCRIPTION:
- *      External INT0 ISR.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.1.27        panda.xiong         Create/Update
- *****************************************************************************/
-void DRV_VECTOR_INT0(void) __interrupt(VECTOR_ID_INT0)
-{
-    DRV_VECTOR_START(INT0);
-    /* Add porting code here */
-    DRV_VECTOR_END(INT0);
-}
-
-
-/******************************************************************************
- * FUNCTION NAME:
  *      DRV_VECTOR_Timer0
  * DESCRIPTION:
  *      Timer0 ISR.
@@ -82,28 +60,6 @@ void DRV_VECTOR_Timer0(void) __interrupt_using(VECTOR_ID_TIMER0, REG_GROUP_1)
     DRV_CPU_UpdateSysTick();
 
     DRV_VECTOR_END(TIMER0);
-}
-
-
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_VECTOR_INT1
- * DESCRIPTION:
- *      External INT1 ISR.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2010.1.27        panda.xiong         Create/Update
- *****************************************************************************/
-void DRV_VECTOR_INT1(void) __interrupt(VECTOR_ID_INT1)
-{
-    DRV_VECTOR_START(INT1);
-    /* Add porting code here */
-    DRV_VECTOR_END(INT1);
 }
 
 

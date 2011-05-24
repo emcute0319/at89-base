@@ -34,7 +34,9 @@
 #include <stdarg.h>
 
 
-#define CONST	    SEG_CODE
+#define COMBINE(a, b)   a##b
+
+#define CONST	        SEG_CODE
 
 #ifndef __C51__
 
