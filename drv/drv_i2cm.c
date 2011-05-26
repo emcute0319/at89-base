@@ -67,7 +67,7 @@ static BOOL _drv_i2cm_SendByte(UINT8 vData)
     {
         DRV_I2CM_SET_SCL(0);
 
-        vData = _crol_(vData, 1);
+        _CROL(vData, 1);
         DRV_I2CM_SET_SDA(vData & 0x1);
 
         DRV_I2CM_SET_SCL(1);

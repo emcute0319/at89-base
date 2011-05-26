@@ -91,12 +91,6 @@
 #define TLn                         _TR(DRV_I2CS_ISR_TimerId)
 #define TFn                         _TR(DRV_I2CS_ISR_TimerId)
 
-#define _interrupt_                 \
-    __interrupt_using(DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId())
-
-#define DECLEAR_BIT(name, x, n)     sbit name = x ^ n
-
-
 
 /******************************************************************************
  *  Common Part:
@@ -106,13 +100,13 @@
 #define DRV_I2CS_TIMEOUT_INTERVAL   (25)    /* ms */
 
 static SEG_BDATA volatile UINT8  vI2cAddr = 0x00;
-DECLEAR_BIT(bMasterRead, vI2cAddr, 0);
-DECLEAR_BIT(bA2Selected, vI2cAddr, 1);
+SBIT(bMasterRead, vI2cAddr, 0);
+SBIT(bA2Selected, vI2cAddr, 1);
 
 static SEG_BDATA volatile UINT8  vI2cStatus = 0x01;
-DECLEAR_BIT(bI2cStart,   vI2cStatus, 0);
-DECLEAR_BIT(bI2cStop,    vI2cStatus, 1);
-DECLEAR_BIT(bI2cTimeout, vI2cStatus, 2);
+SBIT(bI2cStart,   vI2cStatus, 0);
+SBIT(bI2cStop,    vI2cStatus, 1);
+SBIT(bI2cTimeout, vI2cStatus, 2);
 
 /* Timer Relelated */
 /* I2C Slave Timer Reload Value:
