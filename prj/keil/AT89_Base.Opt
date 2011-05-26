@@ -16,25 +16,25 @@ GRPOPT 2,(drv),0,0,0
 GRPOPT 3,(os),0,0,0
 GRPOPT 4,(app),0,0,0
 
-OPTFFF 1,1,1,0,0,0,0,0,<..\startup\main.c><main.c> 
-OPTFFF 2,2,2,0,0,0,0,0,<..\drv\startup.S><startup.S> 
-OPTFFF 2,3,1,0,0,0,0,0,<..\drv\drv.c><drv.c> 
-OPTFFF 2,4,1,352321536,0,0,0,0,<..\drv\drv_cpu.c><drv_cpu.c> 
-OPTFFF 2,5,1,872415232,0,0,0,0,<..\drv\drv_io.c><drv_io.c> 
-OPTFFF 2,6,1,0,0,0,0,0,<..\drv\drv_uart.c><drv_uart.c> 
-OPTFFF 2,7,1,0,0,0,0,0,<..\drv\drv_spi.c><drv_spi.c> 
-OPTFFF 2,8,1,0,0,0,0,0,<..\drv\drv_i2cm.c><drv_i2cm.c> 
-OPTFFF 2,9,1,0,0,0,0,0,<..\drv\drv_i2cs.c><drv_i2cs.c> 
-OPTFFF 2,10,1,0,0,0,0,0,<..\drv\drv_vector.c><drv_vector.c> 
-OPTFFF 3,11,1,0,0,0,0,0,<..\os\protothread.c><protothread.c> 
-OPTFFF 4,12,1,0,0,0,0,0,<..\app\thread_idle.c><thread_idle.c> 
+OPTFFF 1,1,1,0,0,0,0,0,<..\..\startup\main.c><main.c> 
+OPTFFF 2,2,2,0,0,0,0,0,<..\..\drv\startup.S><startup.S> 
+OPTFFF 2,3,1,0,0,0,0,0,<..\..\drv\drv.c><drv.c> 
+OPTFFF 2,4,1,352321536,0,0,0,0,<..\..\drv\drv_cpu.c><drv_cpu.c> 
+OPTFFF 2,5,1,872415232,0,0,0,0,<..\..\drv\drv_io.c><drv_io.c> 
+OPTFFF 2,6,1,0,0,0,0,0,<..\..\drv\drv_uart.c><drv_uart.c> 
+OPTFFF 2,7,1,0,0,0,0,0,<..\..\drv\drv_spi.c><drv_spi.c> 
+OPTFFF 2,8,1,0,0,0,0,0,<..\..\drv\drv_i2cm.c><drv_i2cm.c> 
+OPTFFF 2,9,1,0,0,0,0,0,<..\..\drv\drv_i2cs.c><drv_i2cs.c> 
+OPTFFF 2,10,1,0,0,0,0,0,<..\..\drv\drv_vector.c><drv_vector.c> 
+OPTFFF 3,11,1,0,0,0,0,0,<..\..\os\protothread.c><protothread.c> 
+OPTFFF 4,12,1,0,0,0,0,0,<..\..\app\thread_idle.c><thread_idle.c> 
 
 
 TARGOPT 1, (AT89_Base)
  CLK51=12000000
   OPTTT 1,1,1,0
   OPTHX 0,65535,0,0,0
-  OPTLX 120,65,8,<..\build\obj\>
+  OPTLX 120,65,8,<..\..\build\obj\>
   OPTOX 16
   OPTLT 1,1,1,1,1,1,1,1,1,0,1,1
   OPTXL 1,1,1,1,1,1,1,1,0
