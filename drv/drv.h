@@ -29,10 +29,6 @@
 #define __DRV_H
 
 
-#ifndef __C51__
- #error "Only support Keil C51 Compiler yet!"
-#endif
-
 #include "cfg_hw_def.h"
 #include "typedef.h"
 #include "reg_def_at89.h"
