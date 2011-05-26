@@ -108,7 +108,7 @@ DECLARE_IO_PIN(LED_DATA_f,    _IO_PORT(1), _IO_BIT(7), IO_OUTPUT,  1,      19,  
 DECLARE_IO_PIN(UART_RXD,      _IO_PORT(3), _IO_BIT(0), IO_INPUT,   1,       2,  "UART RXD Pin")
 DECLARE_IO_PIN(UART_TXD,      _IO_PORT(3), _IO_BIT(1), IO_OUTPUT,  1,       3,  "UART TXD Pin")
 DECLARE_IO_PIN(SPI_MISO,      _IO_PORT(3), _IO_BIT(2), IO_INPUT,   1,       8,  "MAX187 CS Pin: =0, select MAX187; =1, deselect MAX187.")
-DECLARE_IO_PIN(SPI_nCS,       _IO_PORT(3), _IO_BIT(3), IO_OUTPUT,  1,       9,  "MAX518 Serial Data Output Pin")
+DECLARE_IO_PIN(SPI_CS,        _IO_PORT(3), _IO_BIT(3), IO_OUTPUT,  1,       9,  "MAX518 Serial Data Output Pin")
 DECLARE_IO_PIN(LED_SEL_1,     _IO_PORT(3), _IO_BIT(4), IO_OUTPUT,  1,       6,  "LED Select 1: =0, select this LED; =1, deselect this LED.")
 DECLARE_IO_PIN(LED_SEL_0,     _IO_PORT(3), _IO_BIT(5), IO_OUTPUT,  1,       7,  "LED Select 0: =0, select this LED; =1, deselect this LED.")
 DECLARE_IO_PIN(SPI_MOSI,      _IO_PORT(3), _IO_BIT(6), IO_OUTPUT,  1,      NA,  "Unused Pin")

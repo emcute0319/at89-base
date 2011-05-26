@@ -34,8 +34,8 @@
 #endif
 
 #include "cfg_hw_def.h"
-#include "reg_def_at89.h"
 #include "typedef.h"
+#include "reg_def_at89.h"
 #include <intrins.h>
 #include <absacc.h>
 
