@@ -94,7 +94,7 @@
  *     ---------   . p
  *         d
  */
-#define IO_PORT_LED_DATA_OUT  _IO_PORT(1)       /* LED Data Output port */
+#define IO_PORT_LED_DATA_OUT  IO_PORT(1)       /* LED Data Output port */
 DECLARE_IO_PIN(LED_DATA_c,    _IO_PORT(1), _IO_BIT(0), IO_OUTPUT,  1,      12,  "LED Data Output: c: =0, Light; =1, Dark.")
 DECLARE_IO_PIN(LED_DATA_p,    _IO_PORT(1), _IO_BIT(1), IO_OUTPUT,  1,      13,  "LED Data Output: p: =0, Light; =1, Dark.")
 DECLARE_IO_PIN(LED_DATA_e,    _IO_PORT(1), _IO_BIT(2), IO_OUTPUT,  1,      14,  "LED Data Output: e: =0, Light; =1, Dark.")

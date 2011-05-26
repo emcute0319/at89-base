@@ -39,8 +39,8 @@
 
 #else
 
-extern SEG_CODE unsigned char __fw_sig[];
-#define GET_FW_SIG_STRING()     (__fw_sig)
+extern const unsigned char SEG_CODE __fw_sig[];
+#define GET_FW_SIG_STRING()         (__fw_sig)
 
 #endif
 

@@ -76,8 +76,8 @@ static void drv_uart_WriteByte(IN UINT8 vByte)
     else
     {
         /* wait for uart sent out data */
-    	while (!bTxEmpty)
-    	{}
+        while (!bTxEmpty)
+        {}
 
         bTxEmpty = FALSE;
     }
@@ -166,10 +166,10 @@ void DRV_UART_Printf(const char *format, ...)
             drv_uart_WriteByte(fch);
         }
 
-		/* skip '%' character */
+        /* skip '%' character */
         switch (fch = *format++)
         {
-            static SEG_CODE char aHex[] = "0123456789ABCDEF";
+            static const char SEG_CODE aHex[] = "0123456789ABCDEF";
             unsigned int    vDiv, vData;
             unsigned char   vRadix;
 
@@ -213,10 +213,10 @@ void DRV_UART_Printf(const char *format, ...)
             {
                 char    *p_str = va_arg(ptr, char *);
 
-				while ((fch = *p_str++) != '\0')
-				{
+                while ((fch = *p_str++) != '\0')
+                {
                     drv_uart_WriteByte(fch);
-				}
+                }
                 break;
             }
 
@@ -249,10 +249,10 @@ void DRV_UART_Printf(const char *format, ...)
 void DRV_UART_Init(void)
 {
     /* init internal variable */
-	bTxEmpty  = TRUE;
+    bTxEmpty  = TRUE;
 
-	/*
-	    The baudrate function using timer0 & timer1 is:
+    /*
+        The baudrate function using timer0 & timer1 is:
 
      *  In mode 1:
         baudrate  =  f(osc) / 12
@@ -267,7 +267,7 @@ void DRV_UART_Init(void)
         baudrate  =  ------------ * -------- * ( -------------------- )
                          32            12         2^(K) - (TH1, TL1)
 
-    	In this formula:
+        In this formula:
           If T1 is in mode 0,     K = 13;
           If T1 is in mode 1 & 3, K = 16;
           If T1 is in mode 2,     K =  8(usually use).
@@ -279,52 +279,52 @@ void DRV_UART_Init(void)
     */
 
 
-	/*
-	    The baudrate function using timer2 is:
+    /*
+        The baudrate function using timer2 is:
 
-		                            f(osc)
-		baudrate  =  -----------------------------------
-	                   32 * (65536 - (RCAP2H, RCAP2L))
+                                    f(osc)
+        baudrate  =  -----------------------------------
+                       32 * (65536 - (RCAP2H, RCAP2L))
 
-		So:
-		                                     f(osc)
-		(RCAP2H, RCAP2L)  =  65536  -  -----------------
-		                                 32 * baudrate
-	*/
+        So:
+                                             f(osc)
+        (RCAP2H, RCAP2L)  =  65536  -  -----------------
+                                         32 * baudrate
+    */
 
 
-	/*
-	    Below are some usually used baudrate & initial values: (SCON = 0x50)
+    /*
+        Below are some usually used baudrate & initial values: (SCON = 0x50)
 
-	 *  Timer1: (mode 1 & 3)
-	        f(osc) = 12MHz
-		        Baudrate    SMOD    TMOD    TH1(TL1)
-		          4800        1     0x20      0xF3
-		          2400        0     0x20      0xF3
-		    f(osc) = 11.0592MHz
-		        Baudrate    SMOD    TMOD    TH1(TL1)
-		         19200        1     0x20      0xFD
-		          9600        0     0x20      0xFD
-				  4800        0     0x20      0xFA
-				  2400        0     0x20      0xF4
+     *  Timer1: (mode 1 & 3)
+            f(osc) = 12MHz
+                Baudrate    SMOD    TMOD    TH1(TL1)
+                  4800        1     0x20      0xF3
+                  2400        0     0x20      0xF3
+            f(osc) = 11.0592MHz
+                Baudrate    SMOD    TMOD    TH1(TL1)
+                 19200        1     0x20      0xFD
+                  9600        0     0x20      0xFD
+                  4800        0     0x20      0xFA
+                  2400        0     0x20      0xF4
 
-	 *  Timer2: (T2CON = 0x34)
-			f(osc) = 12MHz
-			    Baudrate    RCAP2H,RCAP2L(TH2,TL2)   T2MOD(only AT89C52/AT89S52)
-				  38400       0xFF, 0xF6              0x00(error = 2.34%)
-				  19200       0xFF, 0xEC              0x00(error = 2.34%)
-				   9600       0xFF, 0xD9              0x00(error = 0.16%)
-				   4800       0xFF, 0xB2              0x00(error = 0.16%)
-	        f(osc) = 11.0592MHz
-			    Baudrate    RCAP2H,RCAP2L(TH2,TL2)   T2MOD(only AT89C52/AT89S52)
-			     115200       0xFF, 0xFD              0x00
-				  57600       0xFF, 0xFA              0x00
-				  38400       0xFF, 0xF7              0x00
-				  19200       0xFF, 0xEE              0x00
-				   9600       0xFF, 0xDC              0x00
-				   4800       0xFF, 0xB8              0x00
-				   2400       0xFF, 0x70              0x00
-	*/
+     *  Timer2: (T2CON = 0x34)
+            f(osc) = 12MHz
+                Baudrate    RCAP2H,RCAP2L(TH2,TL2)   T2MOD(only AT89C52/AT89S52)
+                  38400       0xFF, 0xF6              0x00(error = 2.34%)
+                  19200       0xFF, 0xEC              0x00(error = 2.34%)
+                   9600       0xFF, 0xD9              0x00(error = 0.16%)
+                   4800       0xFF, 0xB2              0x00(error = 0.16%)
+            f(osc) = 11.0592MHz
+                Baudrate    RCAP2H,RCAP2L(TH2,TL2)   T2MOD(only AT89C52/AT89S52)
+                 115200       0xFF, 0xFD              0x00
+                  57600       0xFF, 0xFA              0x00
+                  38400       0xFF, 0xF7              0x00
+                  19200       0xFF, 0xEE              0x00
+                   9600       0xFF, 0xDC              0x00
+                   4800       0xFF, 0xB8              0x00
+                   2400       0xFF, 0x70              0x00
+    */
 
 #if defined(UART_Baudrate_Generated_By_T2)
 
@@ -376,18 +376,18 @@ void DRV_UART_Init(void)
   #elif (UART_BAUDRATE_VAL == 19200UL)
     RCAP2H = TH2 = 0xFF;
     RCAP2L = TL2 = 0xEC;
-	#warning "The Error Rate of BaudRate is 2.34%, over maximum Error Rate 2%!"
+    #warning "The Error Rate of BaudRate is 2.34%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 38400UL)
     RCAP2H = TH2 = 0xFF;
     RCAP2L = TL2 = 0xF6;
-	#warning "The Error Rate of BaudRate is 2.34%, over maximum Error Rate 2%!"
+    #warning "The Error Rate of BaudRate is 2.34%, over maximum Error Rate 2%!"
   #else
     #error "Unsupported UART Baudrate!"
   #endif
 
 
  #else
-	#error "Unknown/Unsupported CPU frequency!"
+    #error "Unknown/Unsupported CPU frequency!"
  #endif
 
 
@@ -396,7 +396,7 @@ void DRV_UART_Init(void)
 
 
 
-	TMOD   = 0x20;
+    TMOD   = 0x20;
     SCON   = 0x50;
 
 
@@ -404,31 +404,31 @@ void DRV_UART_Init(void)
 
 
   #if (UART_BAUDRATE_VAL == 300UL)
-	TH1 = TL1 = 0xA0;
+    TH1 = TL1 = 0xA0;
   #elif (UART_BAUDRATE_VAL == 600UL)
-	TH1 = TL1 = 0xD0;
+    TH1 = TL1 = 0xD0;
   #elif (UART_BAUDRATE_VAL == 1200UL)
-	TH1 = TL1 = 0xE8;
+    TH1 = TL1 = 0xE8;
   #elif (UART_BAUDRATE_VAL == 2400UL)
-	TH1 = TL1 = 0xF4;
+    TH1 = TL1 = 0xF4;
   #elif (UART_BAUDRATE_VAL == 4800UL)
-	TH1 = TL1 = 0xFA;
+    TH1 = TL1 = 0xFA;
   #elif (UART_BAUDRATE_VAL == 9600UL)
-	TH1 = TL1 = 0xFD;
+    TH1 = TL1 = 0xFD;
   #elif (UART_BAUDRATE_VAL == 19200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFD;
+    TH1 = TL1 = 0xFD;
   #elif (UART_BAUDRATE_VAL == 38400UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFE;
-	#warning "The Error Rate of BaudRate is -33.33%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFE;
+    #warning "The Error Rate of BaudRate is -33.33%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 57600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
+    TH1 = TL1 = 0xFF;
   #elif (UART_BAUDRATE_VAL == 115200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
-	#warning "The Error Rate of BaudRate is -100.00%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFF;
+    #warning "The Error Rate of BaudRate is -100.00%, over maximum Error Rate 2%!"
   #else
      #error "Unsupported UART Baudrate!"
   #endif
@@ -438,36 +438,36 @@ void DRV_UART_Init(void)
 
 
   #if (UART_BAUDRATE_VAL == 300UL)
-	TH1 = TL1 = 0x98;
+    TH1 = TL1 = 0x98;
   #elif (UART_BAUDRATE_VAL == 600UL)
-	TH1 = TL1 = 0xCC;
+    TH1 = TL1 = 0xCC;
   #elif (UART_BAUDRATE_VAL == 1200UL)
-	TH1 = TL1 = 0xE6;
+    TH1 = TL1 = 0xE6;
   #elif (UART_BAUDRATE_VAL == 2400UL)
-	TH1 = TL1 = 0xF3;
+    TH1 = TL1 = 0xF3;
   #elif (UART_BAUDRATE_VAL == 4800UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xF3;
+    TH1 = TL1 = 0xF3;
   #elif (UART_BAUDRATE_VAL == 9600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xF9;
-	#warning "The Error Rate of BaudRate is -7.52%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xF9;
+    #warning "The Error Rate of BaudRate is -7.52%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 19200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFD;
-	#warning "The Error Rate of BaudRate is -7.84%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFD;
+    #warning "The Error Rate of BaudRate is -7.84%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 38400UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFE;
-	#warning "The Error Rate of BaudRate is -23.08%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFE;
+    #warning "The Error Rate of BaudRate is -23.08%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 57600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
-	#warning "The Error Rate of BaudRate is 7.69%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFF;
+    #warning "The Error Rate of BaudRate is 7.69%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 115200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
-	#warning "The Error Rate of BaudRate is -84.62%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFF;
+    #warning "The Error Rate of BaudRate is -84.62%, over maximum Error Rate 2%!"
   #else
      #error "Unsupported UART Baudrate!"
   #endif
@@ -476,28 +476,28 @@ void DRV_UART_Init(void)
  #elif (CPU_Crystal_Frequency == 22118400UL)
 
   #if (UART_BAUDRATE_VAL == 300UL)
-	TH1 = TL1 = 0x40;
+    TH1 = TL1 = 0x40;
   #elif (UART_BAUDRATE_VAL == 600UL)
-	TH1 = TL1 = 0xA0;
+    TH1 = TL1 = 0xA0;
   #elif (UART_BAUDRATE_VAL == 1200UL)
-	TH1 = TL1 = 0xD0;
+    TH1 = TL1 = 0xD0;
   #elif (UART_BAUDRATE_VAL == 2400UL)
-	TH1 = TL1 = 0xE8;
+    TH1 = TL1 = 0xE8;
   #elif (UART_BAUDRATE_VAL == 4800UL)
-	TH1 = TL1 = 0xF4;
+    TH1 = TL1 = 0xF4;
   #elif (UART_BAUDRATE_VAL == 9600UL)
-	TH1 = TL1 = 0xFA;
+    TH1 = TL1 = 0xFA;
   #elif (UART_BAUDRATE_VAL == 19200UL)
-	TH1 = TL1 = 0xFD;
+    TH1 = TL1 = 0xFD;
   #elif (UART_BAUDRATE_VAL == 38400UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFD;
+    TH1 = TL1 = 0xFD;
   #elif (UART_BAUDRATE_VAL == 57600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFE;
+    TH1 = TL1 = 0xFE;
   #elif (UART_BAUDRATE_VAL == 115200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
+    TH1 = TL1 = 0xFF;
   #else
      #error "Unsupported UART Baudrate!"
   #endif
@@ -507,34 +507,34 @@ void DRV_UART_Init(void)
 
 
   #if (UART_BAUDRATE_VAL == 300UL)
-	TH1 = TL1 = 0x30;
+    TH1 = TL1 = 0x30;
   #elif (UART_BAUDRATE_VAL == 600UL)
-	TH1 = TL1 = 0x98;
+    TH1 = TL1 = 0x98;
   #elif (UART_BAUDRATE_VAL == 1200UL)
-	TH1 = TL1 = 0xCC;
+    TH1 = TL1 = 0xCC;
   #elif (UART_BAUDRATE_VAL == 2400UL)
-	TH1 = TL1 = 0xE6;
+    TH1 = TL1 = 0xE6;
   #elif (UART_BAUDRATE_VAL == 4800UL)
-	TH1 = TL1 = 0xF3;
+    TH1 = TL1 = 0xF3;
   #elif (UART_BAUDRATE_VAL == 9600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xF3;
+    TH1 = TL1 = 0xF3;
   #elif (UART_BAUDRATE_VAL == 19200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xF9;
-	#warning "The Error Rate of BaudRate is -7.52%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xF9;
+    #warning "The Error Rate of BaudRate is -7.52%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 38400UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFD;
-	#warning "The Error Rate of BaudRate is -7.84%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFD;
+    #warning "The Error Rate of BaudRate is -7.84%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 57600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFE;
-	#warning "The Error Rate of BaudRate is 7.69%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFE;
+    #warning "The Error Rate of BaudRate is 7.69%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 115200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
-	#warning "The Error Rate of BaudRate is 7.69%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFF;
+    #warning "The Error Rate of BaudRate is 7.69%, over maximum Error Rate 2%!"
   #else
      #error "Unsupported UART Baudrate!"
   #endif
@@ -542,42 +542,42 @@ void DRV_UART_Init(void)
  #elif (CPU_Crystal_Frequency == 33000000UL)
 
   #if (UART_BAUDRATE_VAL == 300UL)
-	#error "Baudrate is too low!"
+    #error "Baudrate is too low!"
   #elif (UART_BAUDRATE_VAL == 600UL)
-	TH1 = TL1 = 0x71;
+    TH1 = TL1 = 0x71;
   #elif (UART_BAUDRATE_VAL == 1200UL)
-	TH1 = TL1 = 0xB8;
+    TH1 = TL1 = 0xB8;
   #elif (UART_BAUDRATE_VAL == 2400UL)
-	TH1 = TL1 = 0xDC;
+    TH1 = TL1 = 0xDC;
   #elif (UART_BAUDRATE_VAL == 4800UL)
-	TH1 = TL1 = 0xEE;
+    TH1 = TL1 = 0xEE;
   #elif (UART_BAUDRATE_VAL == 9600UL)
-	TH1 = TL1 = 0xF7;
+    TH1 = TL1 = 0xF7;
   #elif (UART_BAUDRATE_VAL == 19200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xF7;
+    TH1 = TL1 = 0xF7;
   #elif (UART_BAUDRATE_VAL == 38400UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFC;
-	#warning "The Error Rate of BaudRate is 10.59%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFC;
+    #warning "The Error Rate of BaudRate is 10.59%, over maximum Error Rate 2%!"
   #elif (UART_BAUDRATE_VAL == 57600UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFD;
+    TH1 = TL1 = 0xFD;
   #elif (UART_BAUDRATE_VAL == 115200UL)
     SET_BIT(PCON, 7);
-	TH1 = TL1 = 0xFF;
-	#warning "The Error Rate of BaudRate is 32.87%, over maximum Error Rate 2%!"
+    TH1 = TL1 = 0xFF;
+    #warning "The Error Rate of BaudRate is 32.87%, over maximum Error Rate 2%!"
   #else
      #error "Unsupported UART Baudrate!"
   #endif
 
 
  #else
-	#error "Unknown/Unsupported CPU frequency!"
+    #error "Unknown/Unsupported CPU frequency!"
  #endif
 
 
-	TR1    = 1;
+    TR1    = 1;
 
 
 
@@ -586,7 +586,7 @@ void DRV_UART_Init(void)
 #endif
 
 
-	ES     = 1;
+    ES     = 1;
 }
 
 
@@ -607,25 +607,26 @@ void DRV_UART_Init(void)
 void DRV_UART_ISR(void)
 {
     /* uart TX flag */
-	if (TI)
-	{
-		TI = 0;
+    if (TI)
+    {
+        TI = 0;
 
-		/* Indicate that the UART Tx is empty */
-		bTxEmpty = TRUE;
-	}
+        /* Indicate that the UART Tx is empty */
+        bTxEmpty = TRUE;
+    }
 
     /* uart RX flag */
     if (RI)
-	{
-		/* Get the data from uart, and stored into FIFO buffer */
-		if (vRxFIFO_Counter < COUNT_OF(aRxFIFO))
-		{
-			aRxFIFO[vRxFIFO_Counter++] = SBUF;
-		}
+    {
+        /* Get the data from uart, and stored into FIFO buffer */
+        if (vRxFIFO_Counter < COUNT_OF(aRxFIFO))
+        {
+            aRxFIFO[vRxFIFO_Counter] = SBUF;
+            vRxFIFO_Counter++;
+        }
 
-		RI = 0;
-	}
+        RI = 0;
+    }
 }
 
 #endif

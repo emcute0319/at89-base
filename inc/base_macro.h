@@ -36,30 +36,10 @@
 
 #define COMBINE(a, b)   a##b
 
-#define CONST	        SEG_CODE
+#define CONST	        const SEG_CODE
 
-#ifndef __C51__
-
- #define CBYTE  ((UINT8  volatile SEG_CODE  *) 0)  /*  8-bit data in  code area */
- #define DBYTE  ((UINT8  volatile SEG_DATA  *) 0)  /*  8-bit data in  data area */
- #define PBYTE  ((UINT8  volatile SEG_PDATA *) 0)  /*  8-bit data in pdata area */
- #define XBYTE  ((UINT8  volatile SEG_XDATA *) 0)  /*  8-bit data in xdata area */
-
- #define CWORD  ((UINT16 volatile SEG_CODE  *) 0)  /* 16-bit data in  code area */
- #define DWORD  ((UINT16 volatile SEG_DATA  *) 0)  /* 16-bit data in  data area */
- #define PWORD  ((UINT16 volatile SEG_PDATA *) 0)  /* 16-bit data in pdata area */
- #define XWORD  ((UINT16 volatile SEG_XDATA *) 0)  /* 16-bit data in xdata area */
-
-#endif
-
-#define CDWORD ((UINT32 volatile SEG_CODE  *) 0)   /* 32-bit data in  code area */
-#define DDWORD ((UINT32 volatile SEG_DATA  *) 0)   /* 32-bit data in  data area */
-#define PDWORD ((UINT32 volatile SEG_PDATA *) 0)   /* 32-bit data in pdata area */
-#define XDWORD ((UINT32 volatile SEG_XDATA *) 0)   /* 32-bit data in xdata area */
-
-
-#define KB(x)               ((x)*1024)
-#define MB(x)               ((x)*1024*1024)
+#define KB(x)           ((x)*1024)
+#define MB(x)           ((x)*1024*1024)
 
 
 /* Calculate the total element of an array.
@@ -69,7 +49,7 @@
  *  To get the total element of (array), just use COUNT_OF(array).
  *   acturally, the total element in this sample is 100.
  */
-#define COUNT_OF(n)         (SINT32)(sizeof(n) / sizeof((n)[0]))
+#define COUNT_OF(n)     (SINT32)(sizeof(n) / sizeof((n)[0]))
 
 /* calculate the Byte Offset of member in struct.
  *

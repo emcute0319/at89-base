@@ -29,15 +29,17 @@
 #define __DRV_IO_H
 
 
-#define _IO_PORT(_name)         (P##_name)
+#define PORT_BASE               0x80    /* P0 */
+#define _IO_PORT(_name)         (PORT_BASE + (_name) * 8)
 #define _IO_BIT(_x)             (_x)
-#define IO_PIN(_name)           IO_PIN_##_name
+#define IO_PORT(_name)          COMBINE(P, _name)
+#define IO_PIN(_name)           COMBINE(IO_PIN_, _name)
 
 typedef UINT8   DRV_IO_PIN_T;
 
 /* GPIO pin definition */
 #define DECLARE_IO_PIN(_name,_port,_bit,_mode,_init_val,_pin_no,_desc)  \
-                                            sbit IO_PIN(_name) = _port^_bit;
+                                            SBIT(IO_PIN(_name), _port, _bit);
 #include "cfg_hw_def.h"
 #undef DECLARE_IO_PIN
 

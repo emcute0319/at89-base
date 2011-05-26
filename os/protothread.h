@@ -46,8 +46,8 @@ typedef struct pt_sem   PT_SCB;
         PT_WAIT_WHILE(pt, (DRV_WATCHDOG_Kick(), DRV_CPU_GetSysTick() < end_tick));  \
     } while (0)
 
-typedef PT_HANDLE (SEG_CODE *PT_FUNC)(PT_TCB *pt);
-typedef void (SEG_CODE *PT_INIT_FUNC)(void);
+typedef PT_HANDLE (FUNC_SEG_CODE *PT_FUNC)(PT_TCB *pt);
+typedef void (FUNC_SEG_CODE *PT_INIT_FUNC)(void);
 
 
 /******************************************************************************

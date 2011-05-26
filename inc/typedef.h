@@ -29,32 +29,32 @@
 #define __TYPEDEF_H
 
 
-#include <compiler_defs.h>
+#include "compiler_porting.h"
 
 
 /* these parameters are defined only for easy code reading */
-#define IN                      /* nothing */
-#define OUT                     /* nothing */
+#define IN                  /* nothing */
+#define OUT                 /* nothing */
 
-typedef bit                     BOOL;       /* Boolean: TRUE/FALSE */
-typedef unsigned char           UINT8;      /* 8-bit */
-typedef signed   char           SINT8;
-typedef unsigned short          UINT16;     /* 16-bit */
-typedef signed   short          SINT16;
-typedef unsigned long           UINT32;     /* 32-bit */
-typedef signed   long           SINT32;
+typedef bit     BOOL;       /* Boolean: TRUE/FALSE */
+typedef U8      UINT8;      /*  8-bit */
+typedef S8      SINT8;
+typedef U16     UINT16;     /* 16-bit */
+typedef S16     SINT16;
+typedef U32     UINT32;     /* 32-bit */
+typedef S32     SINT32;
 
-#define TRUE                    1
-#define FALSE                   0
+#define TRUE    1
+#define FALSE   0
 
-#define HIGH                    1
-#define LOW                     0
+#define HIGH    1
+#define LOW     0
 
 /* NULL pointer */
-#define NULL                    ((void *)0)
+#define NULL    ((void *)0)
 
 
-#include <base_macro.h>
+#include "base_macro.h"
 
 
 #endif /* __TYPEDEF_H */

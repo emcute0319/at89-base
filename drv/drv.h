@@ -32,8 +32,6 @@
 #include "cfg_hw_def.h"
 #include "typedef.h"
 #include "reg_def_at89.h"
-#include <intrins.h>
-#include <absacc.h>
 
 #include "version.h"
 #include "drv_cpu.h"
