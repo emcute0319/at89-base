@@ -57,13 +57,6 @@
 #define REG_GROUP_3         3           /* register group 3 */
 #define REG_GROUP_DEFAULT   REG_GROUP_0 /* register group 0 */
 
-/* __interrupt_using() will cause system unstable at incorrect usage.
- * thus, it should be used as fewer as possiable.
- * recommand to use __interrupt().
- */
-#define __interrupt(_int_id)                    interrupt _int_id
-#define __interrupt_using(_int_id, _reg_group)  interrupt _int_id using _reg_group
-
 
 /******************************************************************************
  * FUNCTION NAME:

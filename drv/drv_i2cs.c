@@ -293,7 +293,7 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
  * HISTORY:
  *      2011.5.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_I2CS_ISR(void) _interrupt_
+INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId())
 {
     static BOOL     bReceiveOffset = FALSE;
     static UINT8    vOffset        = 0x00;

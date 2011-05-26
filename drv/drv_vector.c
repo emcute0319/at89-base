@@ -46,7 +46,7 @@
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_VECTOR_Timer0(void) __interrupt_using(VECTOR_ID_TIMER0, REG_GROUP_1)
+INTERRUPT_USING(DRV_VECTOR_Timer0, VECTOR_ID_TIMER0, REG_GROUP_1)
 {
     DRV_VECTOR_START(TIMER0);
 
@@ -80,7 +80,7 @@ void DRV_VECTOR_Timer0(void) __interrupt_using(VECTOR_ID_TIMER0, REG_GROUP_1)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_VECTOR_Timer1(void) __interrupt(VECTOR_ID_TIMER1)
+INTERRUPT(DRV_VECTOR_Timer1, VECTOR_ID_TIMER1)
 {
     DRV_VECTOR_START(TIMER1);
     /* Add porting code here */
@@ -103,7 +103,7 @@ void DRV_VECTOR_Timer1(void) __interrupt(VECTOR_ID_TIMER1)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_VECTOR_UART(void) __interrupt(VECTOR_ID_UART0)
+INTERRUPT(DRV_VECTOR_UART, VECTOR_ID_UART0)
 {
     DRV_VECTOR_START(UART0);
     DRV_UART_ISR();
@@ -129,7 +129,7 @@ void DRV_VECTOR_UART(void) __interrupt(VECTOR_ID_UART0)
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_VECTOR_Timer2(void) __interrupt(VECTOR_ID_TIMER2)
+INTERRUPT(DRV_VECTOR_Timer2, VECTOR_ID_TIMER2)
 {
     DRV_VECTOR_START(TIMER2);
     /* Add porting code here */
