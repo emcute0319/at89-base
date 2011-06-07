@@ -55,10 +55,17 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
         /* delay 500ms */
         PT_SLEEP_MS(pt, 500);
 
+      #if DRV_UART_SUPPORT
         DRV_UART_Printf("\r %s(line%d): Cicle -> %d, System Tick Count -> %d ...",
                         __FILE__, __LINE__,
                         vCount,
                         DRV_CPU_GetSysTick());
+      #endif
+
+      #if DRV_LED_SUPPORT
+        DRV_LED_SetLedData(0, FALSE, (vCount>>0)&0xF);
+        DRV_LED_SetLedData(1, FALSE, (vCount>>8)&0xF);
+      #endif
     }
 
     PT_END(pt);
