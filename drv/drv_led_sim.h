@@ -19,67 +19,33 @@
  * FILE NAME:
  *   drv_led.h
  * DESCRIPTION:
- *   N/A
+ *   Simulated LED Dynamic Display Driver.
  * HISTORY:
  *   2011.6.7        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
-#ifndef __DRV_LED_H
-#define __DRV_LED_H
+#ifndef __DRV_LED_SIM_H
+#define __DRV_LED_SIM_H
 
 
-#if DRV_LED_SUPPORT
+#if DRV_LED_Sim_SUPPORT
 
-/******************************************************************************
- *  Porting Part:
- ******************************************************************************/
-
-#define DRV_LED_TOTAL_LEDs          (2)     /* Total LED Number */
-
-/* LED Type:
- *   0 -- Common cathode;
- *   1 -- Common anode;
- */
-#define DRV_LED_TYPE                (0)
-
-
-/******************************************************************************
- *  Common Part:
- ******************************************************************************/
-
-#if (DRV_LED_TOTAL_LEDs <= 8)
- typedef UINT8  DRV_LED_NUM_T;
-#elif (DRV_LED_TOTAL_LEDs <= 16)
- typedef UINT16 DRV_LED_NUM_T;
+#ifdef _DRV_LED_SIM_INTERNAL_
+ #define _DRV_LED_SIM_EXTERNAL_     /* empty */
 #else
- typedef UINT32 DRV_LED_NUM_T;
+ #define _DRV_LED_SIM_EXTERNAL_     extern
 #endif
 
-#define _EMPTY                      (0xFF)
-
-#if (DRV_LED_TYPE == 0)
- #define _LED_CODE(_v)              (_v)
-#elif (DRV_LED_TYPE == 1)
- #define _LED_CODE(_v)              (~(_v))
-#else
- #error "Unsupported LED Type!"
-#endif
-
-#define _LED_CODE_DARK              _LED_CODE(0x00)
-
-#include "drv_led_sim.h"
+_DRV_LED_SIM_EXTERNAL_ volatile UINT8 aLedDisBuf[DRV_LED_TOTAL_LEDs];
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_LED_SetLedData
+ *      DRV_LED_Sim_SetData
  * DESCRIPTION:
- *      Set LED Display Data.
+ *      Set Simulated LED Display Data.
  * PARAMETERS:
  *      _n : LED Number;
- *      _p : LED point display;
- *            =TRUE,  Light LED point;
- *            =FALSE, Dark  LED point;
  *      _v : LED Display data;
  * RETURN:
  *      N/A
@@ -88,18 +54,13 @@
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_LED_SetLedData
-(
-    IN DRV_LED_NUM_T    vLedNum,
-    IN BOOL             bDisPoint,
-    IN UINT8            vDisData
-);
+#define DRV_LED_Sim_SetData(_n, _v) do { aLedDisBuf[(_n)] = (_v); } while (0)
 
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_LED_Init
  * DESCRIPTION:
- *      LED Init.
+ *      Simulated LED Init.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -109,10 +70,26 @@ void DRV_LED_SetLedData
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_LED_Init(void);
+void DRV_LED_Sim_Init(void);
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_LED_Sim_ISR
+ * DESCRIPTION:
+ *      Simulated LED Interrupt Service Routine Entry.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.6.7        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_LED_Sim_ISR(void);
 
 #endif
 
 
-#endif /* __DRV_LED_H */
+#endif /* __DRV_LED_SIM_H */
 

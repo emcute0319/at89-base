@@ -59,8 +59,8 @@ INTERRUPT_USING(DRV_VECTOR_Timer0, VECTOR_ID_TIMER0, REG_GROUP_1)
     /* update System Tick */
     DRV_CPU_UpdateSysTick();
 
-  #if DRV_LED_SUPPORT
-    DRV_LED_ISR();  /* LED dynamic display ISR */
+  #if DRV_LED_Sim_SUPPORT
+    DRV_LED_Sim_ISR();  /* Simulated LED dynamic display ISR */
   #endif
 
     DRV_VECTOR_END(TIMER0);

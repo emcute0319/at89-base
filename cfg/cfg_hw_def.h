@@ -45,6 +45,7 @@
 #define DRV_I2CM_SUPPORT        0       /* I2C Master  */
 #define DRV_I2CS_SUPPORT        0       /* I2C Slave   */
 #define DRV_LED_SUPPORT         0       /* LED Driver  */
+ #define DRV_LED_Sim_SUPPORT    (0 && DRV_LED_SUPPORT)  /* Simulated LED Driver */
 
 
 /* CPU Clock */
