@@ -19,7 +19,9 @@ File 2,1,<..\drv\drv_i2cm.c><drv_i2cm.c>
 File 2,1,<..\drv\drv_i2cs.c><drv_i2cs.c>
 File 2,1,<..\drv\drv_led.c><drv_led.c>
 File 2,1,<..\drv\drv_led_sim.c><drv_led_sim.c>
+File 2,1,<..\drv\drv_led_max7219.c><drv_led_max7219.c>
 File 2,1,<..\drv\drv_vector.c><drv_vector.c>
+File 2,1,<..\drv\drv_temp_ds18b20.c><drv_temp_ds18b20.c>
 File 3,1,<..\os\protothread.c><protothread.c>
 File 4,1,<..\app\thread_idle.c><thread_idle.c>
 
