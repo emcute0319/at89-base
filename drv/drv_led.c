@@ -33,6 +33,10 @@
  *  Common Part:
  ******************************************************************************/
 
+#if (DRV_LED_Sim_SUPPORT && DRV_LED_MAX7219_SUPPORT)
+ #error "Only one LED Driver can be enabled!"
+#endif
+
 static struct
 {
     UINT8   vCh;
@@ -67,19 +71,6 @@ static struct
     { _EMPTY, _LED_CODE_DARK  },  /* Dark LED */
 };
 
-  #if DRV_LED_Sim_SUPPORT
-   #define _SET_DATA(_n, _v)    DRV_LED_Sim_SetData(_n, _v)
-  #elif DRV_LED_MAX7219_SUPPORT
-   #define _SET_DATA(_n, _v)    DRV_LED_MAX7219_SetData(_n, _v)
-  #endif
-
-  /* attach point display */
-  #if (DRV_LED_TYPE == 0)
-   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) |  ((DRV_LED_NUM_T)(_b) << 7))
-  #elif (DRV_LED_TYPE == 1)
-   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) & ~((DRV_LED_NUM_T)(_b) << 7))
-  #endif
-
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_LED_SetLedData
@@ -105,6 +96,19 @@ void DRV_LED_SetLedData
     IN UINT8            vDisData
 )
 {
+  #if DRV_LED_Sim_SUPPORT
+   #define _SET_DATA(_n, _v)    DRV_LED_Sim_SetData(_n, _v)
+  #elif DRV_LED_MAX7219_SUPPORT
+   #define _SET_DATA(_n, _v)    DRV_LED_MAX7219_SetData(_n, _v)
+  #endif
+
+  /* attach point display */
+  #if (DRV_LED_TYPE == 0)
+   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) |  ((DRV_LED_NUM_T)(_b) << 7))
+  #elif (DRV_LED_TYPE == 1)
+   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) & ~((DRV_LED_NUM_T)(_b) << 7))
+  #endif
+
     UINT8   vLoop;
 
     /* set display data */

@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   drv_led.c
+ *   drv_led_sim.c
  * DESCRIPTION:
  *   Simulated LED Dynamic Display Driver.
  * HISTORY:

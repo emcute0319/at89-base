@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   drv_led.h
+ *   drv_led_sim.h
  * DESCRIPTION:
  *   Simulated LED Dynamic Display Driver.
  * HISTORY:
@@ -58,7 +58,7 @@ _DRV_LED_SIM_EXTERNAL_ volatile UINT8 aLedDisBuf[DRV_LED_TOTAL_LEDs];
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_LED_Init
+ *      DRV_LED_Sim_Init
  * DESCRIPTION:
  *      Simulated LED Init.
  * PARAMETERS:
