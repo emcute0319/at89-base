@@ -106,16 +106,8 @@ static void drv_led_Sim_Refresh(void)
  *****************************************************************************/
 void DRV_LED_Sim_Init(void)
 {
-    UINT8   vLoop;
-
     /* Select none LED at power-on */
     DRV_LED_SIM_SEL_LED(_EMPTY);
-
-    /* Dark all LEDs at power-on */
-    for (vLoop = 0; vLoop < COUNT_OF(aLedDisBuf); vLoop++)
-    {
-        aLedDisBuf[vLoop] = _LED_CODE_DARK;
-    }
 
     /* Enable LED Dynamic Display */
     bDisplayEnabled = TRUE;
@@ -142,7 +134,7 @@ void DRV_LED_Sim_ISR(void)
     {
         static UINT8    vCounter = 0;
 
-        if (vCounter++ >= DRV_LED_SIM_REFRESH_DELAY)
+        if (vCounter++ >= DRV_LED_SIM_REFRESH_DELAY/DRV_TIMER_SysTimerTick)
         {
             vCounter = 0;
 

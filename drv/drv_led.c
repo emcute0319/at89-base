@@ -25,17 +25,25 @@
  *
 *****************************************************************************/
 
+#define _DRV_LED_INTERNAL_
 #include "drv.h"
 
 #if DRV_LED_SUPPORT
 
-/******************************************************************************
- *  Common Part:
- ******************************************************************************/
-
 #if (DRV_LED_Sim_SUPPORT && DRV_LED_MAX7219_SUPPORT)
  #error "Only one LED Driver can be enabled!"
 #endif
+
+
+#if (DRV_LED_TYPE == 0)
+ #define _LED_CODE(_v)              (_v)
+#elif (DRV_LED_TYPE == 1)
+ #define _LED_CODE(_v)              (~(_v))
+#else
+ #error "Unsupported LED Type!"
+#endif
+
+#define _LED_CODE_DARK              _LED_CODE(0x00)
 
 static struct
 {
@@ -71,6 +79,20 @@ static struct
     { _EMPTY, _LED_CODE_DARK  },  /* Dark LED */
 };
 
+
+#if DRV_LED_Sim_SUPPORT
+ #define _SET_DATA(_n, _v)          DRV_LED_Sim_SetData((_n), (_v))
+#elif DRV_LED_MAX7219_SUPPORT
+ #define _SET_DATA(_n, _v)          DRV_LED_MAX7219_SetData((_n), (_v))
+#endif
+#if DRV_LED_Blink_SUPPORT
+ static volatile UINT8  aLedDataBuf[DRV_LED_TOTAL_LEDs];
+ #define DRV_LED_SET_DATA(_n, _v)   do { aLedDataBuf[(_n)] = (_v); } while (0)
+#else
+ #define DRV_LED_SET_DATA(_n, _v)   _SET_DATA((_n), (_v))
+#endif
+
+
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_LED_SetLedData
@@ -91,22 +113,16 @@ static struct
  *****************************************************************************/
 void DRV_LED_SetLedData
 (
-    IN DRV_LED_NUM_T    vLedNum,
-    IN BOOL             bDisPoint,
-    IN UINT8            vDisData
+    IN UINT8    vLedNum,
+    IN BOOL     bDisPoint,
+    IN UINT8    vDisData
 )
 {
-  #if DRV_LED_Sim_SUPPORT
-   #define _SET_DATA(_n, _v)    DRV_LED_Sim_SetData(_n, _v)
-  #elif DRV_LED_MAX7219_SUPPORT
-   #define _SET_DATA(_n, _v)    DRV_LED_MAX7219_SetData(_n, _v)
-  #endif
-
   /* attach point display */
   #if (DRV_LED_TYPE == 0)
-   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) |  ((DRV_LED_NUM_T)(_b) << 7))
+   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) |  ((UINT8)(_b) << 7))
   #elif (DRV_LED_TYPE == 1)
-   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) & ~((DRV_LED_NUM_T)(_b) << 7))
+   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) & ~((UINT8)(_b) << 7))
   #endif
 
     UINT8   vLoop;
@@ -116,15 +132,16 @@ void DRV_LED_SetLedData
     {
         if (aLedCode[vLoop].vCh == vDisData)
         {
-            _SET_DATA(vLedNum,
-                      _LED_ATTACH_P(vLedNum, bDisPoint, aLedCode[vLoop].vCode));
+            DRV_LED_SET_DATA(vLedNum,
+                             _LED_ATTACH_P(vLedNum, bDisPoint, aLedCode[vLoop].vCode));
             return;
         }
     }
     if (vLoop >= COUNT_OF(aLedCode))
     {
         /* Invalid data, dark this LED */
-        _SET_DATA(vLedNum, _LED_ATTACH_P(vLedNum, bDisPoint, _LED_CODE_DARK));
+        DRV_LED_SET_DATA(vLedNum,
+                         _LED_ATTACH_P(vLedNum, bDisPoint, _LED_CODE_DARK));
     }
 }
 
@@ -145,12 +162,79 @@ void DRV_LED_SetLedData
  *****************************************************************************/
 void DRV_LED_Init(void)
 {
+    UINT8    vLoop;
+
+  #if DRV_LED_Blink_SUPPORT
+    /* No blink at power-on */
+    vLedBlinkState = 0;
+
+    /* Init LED buffer to all dark at power-on */
+    for (vLoop = 0; vLoop < COUNT_OF(aLedDataBuf); vLoop++)
+    {
+        aLedDataBuf[vLoop] = _LED_CODE_DARK;
+    }
+  #endif
+
+    /* Dark all LEDs at power-on */
+    for (vLoop = 0; vLoop < DRV_LED_TOTAL_LEDs; vLoop++)
+    {
+        _SET_DATA(vLoop, _LED_CODE_DARK);
+    }
+
   #if DRV_LED_Sim_SUPPORT
     DRV_LED_Sim_Init();
   #endif
 
   #if DRV_LED_MAX7219_SUPPORT
     DRV_LED_MAX7219_Init();
+  #endif
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_LED_ISR
+ * DESCRIPTION:
+ *      LED Interrupt Service Routine Entry.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.6.7        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_LED_ISR(void)
+{
+  #if DRV_LED_Blink_SUPPORT
+    static UINT8    vCounter = 0;
+
+    if (vCounter++ >= DRV_LED_BLINK_DELAY/DRV_TIMER_SysTimerTick)
+    {
+        static BOOL bDark = FALSE;
+        UINT8       vLoop;
+
+        vCounter = 0;
+
+        /* Time to Blink LED */
+        for (vLoop = 0; vLoop < COUNT_OF(aLedDataBuf); vLoop++)
+        {
+            if (bDark && READ_BIT(vLedBlinkState, vLoop))
+            {
+                _SET_DATA(vLoop, _LED_CODE_DARK);
+            }
+            else
+            {
+                _SET_DATA(vLoop, aLedDataBuf[vLoop]);
+            }
+        }
+        bDark = !bDark;
+    }
+  #endif
+
+  #if DRV_LED_Sim_SUPPORT
+    DRV_LED_Sim_ISR();
   #endif
 }
 

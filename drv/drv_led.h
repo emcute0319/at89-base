@@ -43,33 +43,59 @@
  */
 #define DRV_LED_TYPE                (0)
 
+#define DRV_LED_BLINK_DELAY         (500)   /* ms, Blink Delay time */
 
 /******************************************************************************
  *  Common Part:
  ******************************************************************************/
 
-#if (DRV_LED_TOTAL_LEDs <= 8)
- typedef UINT8  DRV_LED_NUM_T;
-#elif (DRV_LED_TOTAL_LEDs <= 16)
- typedef UINT16 DRV_LED_NUM_T;
+#ifdef _DRV_LED_INTERNAL_
+ #define _DRV_LED_EXTERNAL_         /* empty */
 #else
- typedef UINT32 DRV_LED_NUM_T;
+ #define _DRV_LED_EXTERNAL_         extern
+#endif
+
+#if (DRV_LED_TOTAL_LEDs <= 8)
+ typedef UINT8  DRV_LED_BITMAP_T;
+#elif (DRV_LED_TOTAL_LEDs <= 16)
+ typedef UINT16 DRV_LED_BITMAP_T;
+#else
+ typedef UINT32 DRV_LED_BITMAP_T;
 #endif
 
 #define _EMPTY                      (0xFF)
 
-#if (DRV_LED_TYPE == 0)
- #define _LED_CODE(_v)              (_v)
-#elif (DRV_LED_TYPE == 1)
- #define _LED_CODE(_v)              (~(_v))
-#else
- #error "Unsupported LED Type!"
-#endif
-
-#define _LED_CODE_DARK              _LED_CODE(0x00)
-
 #include "drv_led_sim.h"
 #include "drv_led_max7219.h"
+
+
+#if DRV_LED_Blink_SUPPORT
+
+_DRV_LED_EXTERNAL_ volatile DRV_LED_BITMAP_T    vLedBlinkState;
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_LED_SetLedBlinkState
+ * DESCRIPTION:
+ *      Set LED Blink State.
+ * PARAMETERS:
+ *      _blink : LED Blink State;
+ *               =TRUE,  Blink LED;
+ *               =FALSE, Not blink LED;
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.6.7        Panda.Xiong         Create/Update
+ *****************************************************************************/
+#define DRV_LED_SetLedBlinkState(_n, _blink)                                \
+    do {                                                                    \
+        if (_blink) SET_BIT(vLedBlinkState, (_n));                          \
+        else        CLR_BIT(vLedBlinkState, (_n));                          \
+    } while (0)
+
+#endif
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -91,9 +117,9 @@
  *****************************************************************************/
 void DRV_LED_SetLedData
 (
-    IN DRV_LED_NUM_T    vLedNum,
-    IN BOOL             bDisPoint,
-    IN UINT8            vDisData
+    IN UINT8    vLedNum,
+    IN BOOL     bDisPoint,
+    IN UINT8    vDisData
 );
 
 /******************************************************************************
@@ -111,6 +137,22 @@ void DRV_LED_SetLedData
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
 void DRV_LED_Init(void);
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_LED_ISR
+ * DESCRIPTION:
+ *      LED Interrupt Service Routine Entry.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.6.7        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_LED_ISR(void);
 
 #endif
 

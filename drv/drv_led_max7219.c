@@ -149,8 +149,8 @@ static void drv_led_max7219_WriteReg(IN UINT8 vRegNo, IN UINT8 vData)
  *****************************************************************************/
 void DRV_LED_MAX7219_SetData
 (
-    IN DRV_LED_NUM_T    vLedNum,
-    IN UINT8            vDisData
+    IN UINT8    vLedNum,
+    IN UINT8    vDisData
 )
 {
     drv_led_max7219_WriteReg(_Dig_Addr(vLedNum), MAX7219_TRAN_CODE(vDisData));
@@ -173,14 +173,6 @@ void DRV_LED_MAX7219_SetData
  *****************************************************************************/
 void DRV_LED_MAX7219_Init(void)
 {
-    UINT8   vLoop;
-
-    /* Dark all LEDs at power-on */
-    for (vLoop = 0; vLoop < DRV_LED_TOTAL_LEDs; vLoop++)
-    {
-        drv_led_max7219_WriteReg(_Dig_Addr(vLoop), _LED_CODE_DARK);
-    }
-
     /* Set to Normal Mode */
     drv_led_max7219_WriteReg(MAX7219_ADDR_DisplayTest, MAX7219_DisplayMode_Normal);
     drv_led_max7219_WriteReg(MAX7219_ADDR_Shutdown,    MAX7219_ShutdownMode_Normal);
