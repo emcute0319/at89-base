@@ -17,71 +17,28 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   drv_led.h
+ *   drv_led_max7219.h
  * DESCRIPTION:
- *   N/A
+ *   MAX7219 LED Display Driver.
  * HISTORY:
  *   2011.6.7        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
-#ifndef __DRV_LED_H
-#define __DRV_LED_H
+#ifndef __DRV_LED_MAX7219_H
+#define __DRV_LED_MAX7219_H
 
 
-#if DRV_LED_SUPPORT
-
-/******************************************************************************
- *  Porting Part:
- ******************************************************************************/
-
-#define DRV_LED_TOTAL_LEDs          (2)     /* Total LED Number */
-
-/* LED Type:
- *   0 -- Common cathode;
- *   1 -- Common anode;
- */
-#define DRV_LED_TYPE                (0)
-
-
-/******************************************************************************
- *  Common Part:
- ******************************************************************************/
-
-#if (DRV_LED_TOTAL_LEDs <= 8)
- typedef UINT8  DRV_LED_NUM_T;
-#elif (DRV_LED_TOTAL_LEDs <= 16)
- typedef UINT16 DRV_LED_NUM_T;
-#else
- typedef UINT32 DRV_LED_NUM_T;
-#endif
-
-#define _EMPTY                      (0xFF)
-
-#if (DRV_LED_TYPE == 0)
- #define _LED_CODE(_v)              (_v)
-#elif (DRV_LED_TYPE == 1)
- #define _LED_CODE(_v)              (~(_v))
-#else
- #error "Unsupported LED Type!"
-#endif
-
-#define _LED_CODE_DARK              _LED_CODE(0x00)
-
-#include "drv_led_sim.h"
-#include "drv_led_max7219.h"
+#if DRV_LED_MAX7219_SUPPORT
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_LED_SetLedData
+ *      DRV_LED_MAX7219_SetData
  * DESCRIPTION:
- *      Set LED Display Data.
+ *      Set MAX7219 LED Display Data.
  * PARAMETERS:
- *      _n : LED Number;
- *      _p : LED point display;
- *            =TRUE,  Light LED point;
- *            =FALSE, Dark  LED point;
- *      _v : LED Display data;
+ *      vLedNum  : LED Number;
+ *      vDisData : LED Display data;
  * RETURN:
  *      N/A
  * NOTES:
@@ -89,18 +46,17 @@
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_LED_SetLedData
+void DRV_LED_MAX7219_SetData
 (
     IN DRV_LED_NUM_T    vLedNum,
-    IN BOOL             bDisPoint,
     IN UINT8            vDisData
 );
 
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_LED_Init
+ *      DRV_LED_MAX7219_Init
  * DESCRIPTION:
- *      LED Init.
+ *      MAX7219 LED Init.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -110,10 +66,10 @@ void DRV_LED_SetLedData
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_LED_Init(void);
+void DRV_LED_MAX7219_Init(void);
 
 #endif
 
 
-#endif /* __DRV_LED_H */
+#endif /* __DRV_LED_MAX7219_H */
 

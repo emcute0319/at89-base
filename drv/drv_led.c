@@ -148,6 +148,10 @@ void DRV_LED_Init(void)
   #if DRV_LED_Sim_SUPPORT
     DRV_LED_Sim_Init();
   #endif
+
+  #if DRV_LED_MAX7219_SUPPORT
+    DRV_LED_MAX7219_Init();
+  #endif
 }
 
 #endif
