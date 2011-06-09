@@ -32,49 +32,49 @@
 
 #define DRV_SPI_IO_Read(_io)    DRV_IO_Read(_io)
 
-#define DRV_SPI_IO_Write(_io, _state)                                       \
-    do {                                                                    \
-        DRV_IO_Write((_io), (_state));                                      \
-                                                                            \
-        /* wait until the output IO state is stable */                      \
-        while (DRV_SPI_IO_Read(_io) != (_state))                            \
-        {}                                                                  \
+#define DRV_SPI_IO_Write(_io, _state)                                   \
+    do {                                                                \
+        DRV_IO_Write((_io), (_state));                                  \
+                                                                        \
+        /* wait until the output IO state is stable */                  \
+        while (DRV_SPI_IO_Read(_io) != (_state))                        \
+        {}                                                              \
     } while (0)
 
-#define DRV_SPI_FixReadDutyCycle()                                        \
-    do {                                                                  \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
+#define DRV_SPI_FixReadDutyCycle()                                      \
+    do {                                                                \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
     } while (0)
 
-#define DRV_SPI_FixWriteDutyCycle()                                       \
-    do {                                                                  \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
-        NOP();                                                            \
+#define DRV_SPI_FixWriteDutyCycle()                                     \
+    do {                                                                \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
+        NOP();                                                          \
     } while (0)
 
 /******************************************************************************
