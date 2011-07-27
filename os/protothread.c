@@ -42,8 +42,8 @@ static struct
 
 
 /* thread TCB heap */
-#define THREAD_MAX_NO    COUNT_OF(thread_list)
-static PT_TCB   thread_tcb[THREAD_MAX_NO];
+#define THREAD_MAX_NO   COUNT_OF(thread_list)
+static PT_TCB           thread_tcb[THREAD_MAX_NO];
 
 /******************************************************************************
  * FUNCTION NAME:

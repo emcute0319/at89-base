@@ -53,7 +53,7 @@
                                             }                                       \
                                         } while (0)
 
-#define DRV_LED_SIM_REFRESH_DELAY       (2)     /* ms */
+#define DRV_LED_SIM_REFRESH_DELAY       (2)     /* ms, maximum 255ms */
 
 
 /******************************************************************************
@@ -132,11 +132,13 @@ void DRV_LED_Sim_ISR(void)
 {
     if (bDisplayEnabled)
     {
-        static UINT8    vCounter = 0;
+        #define _REFRESH_MAX_COUNT  (DRV_LED_SIM_REFRESH_DELAY/DRV_TIMER_SysTimerTick)
 
-        if (vCounter++ >= DRV_LED_SIM_REFRESH_DELAY/DRV_TIMER_SysTimerTick)
+        static UINT8    vRefreshCounter = 0;
+
+        if (vRefreshCounter++ >= _REFRESH_MAX_COUNT)
         {
-            vCounter = 0;
+            vRefreshCounter = 0;
 
             /* Time to refresh LED */
             drv_led_Sim_Refresh();

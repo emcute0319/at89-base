@@ -94,8 +94,8 @@
  *****************************************************************************/
 void DRV_SPI_ReadBytes
 (
-    IN  UINT8   vByteLen,
-    OUT UINT8  *pBuf
+    IN  UINT8           vByteLen,
+    OUT UINT8 SEG_DATA *pBuf
 )
 {
     while (vByteLen--)
@@ -122,8 +122,8 @@ void DRV_SPI_ReadBytes
  *****************************************************************************/
 void DRV_SPI_WriteBytes
 (
-    IN       UINT8      vByteLen,
-    IN const UINT8     *pBuf
+    IN       UINT8           vByteLen,
+    IN const UINT8 SEG_DATA *pBuf
 )
 {
     while (vByteLen--)

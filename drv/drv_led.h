@@ -35,24 +35,24 @@
  *  Porting Part:
  ******************************************************************************/
 
-#define DRV_LED_TOTAL_LEDs          (2)     /* Total LED Number */
+#define DRV_LED_TOTAL_LEDs      (2)     /* Total LED Number */
 
 /* LED Type:
  *   0 -- Common cathode;
  *   1 -- Common anode;
  */
-#define DRV_LED_TYPE                (0)
+#define DRV_LED_TYPE            (0)
 
-#define DRV_LED_BLINK_DELAY         (500)   /* ms, Blink Delay time */
+#define DRV_LED_BLINK_DELAY     (500)   /* ms, Blink Delay time */
 
 /******************************************************************************
  *  Common Part:
  ******************************************************************************/
 
 #ifdef _DRV_LED_INTERNAL_
- #define _DRV_LED_EXTERNAL_         /* empty */
+ #define _DRV_LED_EXTERNAL_     /* empty */
 #else
- #define _DRV_LED_EXTERNAL_         extern
+ #define _DRV_LED_EXTERNAL_     extern
 #endif
 
 #if (DRV_LED_TOTAL_LEDs <= 8)
@@ -63,7 +63,7 @@
  typedef UINT32 DRV_LED_BITMAP_T;
 #endif
 
-#define _EMPTY                      (0xFF)
+#define _EMPTY                  (0xFF)
 
 #include "drv_led_sim.h"
 #include "drv_led_max7219.h"
@@ -91,8 +91,7 @@ _DRV_LED_EXTERNAL_ volatile DRV_LED_BITMAP_T    vLedBlinkState;
  *****************************************************************************/
 #define DRV_LED_SetLedBlinkState(_n, _blink)                                \
     do {                                                                    \
-        if (_blink) SET_BIT(vLedBlinkState, (_n));                          \
-        else        CLR_BIT(vLedBlinkState, (_n));                          \
+        WRITE_BIT(vLedBlinkState, (_n), (_blink));                          \
     } while (0)
 
 #endif

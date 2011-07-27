@@ -19,7 +19,9 @@
  * FILE NAME:
  *   drv_i2cs.c
  * DESCRIPTION:
- *   Currently, only support MCS-51 MCU under Keil compiler environment.
+ *   1. Currently, only support MCS-51 MCU under Keil compiler environment.
+ *   2. The SDA line must on the Ext. Interrupt,
+ *        which is used by this I2C Slave driver.
  * HISTORY:
  *   2011.5.24        Panda.Xiong         Create/Update
  *
@@ -74,7 +76,7 @@
 #define ISR_IntId(n)                COMBINE(VECTOR_ID_INT, n)
 #define ISR_ClearFlag(n)            do { COMBINE(IE,n) = 0; } while (0)
 #define ISR_Disable(n)              do { COMBINE(EX,n) = 0; } while (0)
-#define ISR_Enable(n)               do { ISR_ClearFlag(); COMBINE(EX,n) = 1; } while (0)
+#define ISR_Enable(n)               do { ISR_ClearFlag(n); COMBINE(EX,n) = 1; } while (0)
 #define DRV_I2CS_ISR_GetIntId()     ISR_IntId(DRV_I2CS_ISR_ExtIntId)
 #define DRV_I2CS_ISR_GetRegBankId() ISR_RegBankId(DRV_I2CS_ISR_RegBankId)
 #define DRV_I2CS_ISR_ClearFlag()    ISR_ClearFlag(DRV_I2CS_ISR_ExtIntId)
@@ -124,10 +126,10 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
 #define TLn_VAL                 ((DRV_I2CS_TIMER_RELOAD_VAL >> 0) & 0xFF)
 #define DRV_I2CS_TimerStart()   do { TRn = 1; } while(0)
 #define DRV_I2CS_TimerStop()    do {                                    \
-                                    TLn = TLn_VAL;                      \
-                                    THn = THn_VAL;                      \
                                     TRn = 0;                            \
                                     TFn = 0;                            \
+                                    TLn = TLn_VAL;                      \
+                                    THn = THn_VAL;                      \
                                 } while(0)
 #define DRV_I2CS_IsTimeout()    (TFn)
 
@@ -202,7 +204,7 @@ static UINT8 drv_i2cs_ReceiveByte(void)
                 return vData;
             }
 
-            if (TF1)
+            if (DRV_I2CS_IsTimeout())
             {
                 bI2cTimeout = TRUE;
                 break;
@@ -225,7 +227,7 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
     for (vLoop = 8; vLoop != 0; vLoop--)
     {
         /* Transmitting data, MSB first, LSB last */
-        vData = _crol_(vData, 1);
+        _CROL(vData, 1);
         DRV_I2CS_SET_SDA((BOOL)(vData & 0x1));
 
         WAIT_SCL_L2H;

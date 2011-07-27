@@ -120,9 +120,9 @@ void DRV_LED_SetLedData
 {
   /* attach point display */
   #if (DRV_LED_TYPE == 0)
-   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) |  ((UINT8)(_b) << 7))
+   #define _LED_ATTACH_P(_b, _v)    ((_v) |  ((UINT8)(_b) << 7))
   #elif (DRV_LED_TYPE == 1)
-   #define _LED_ATTACH_P(_n, _b, _v)  ((_v) & ~((UINT8)(_b) << 7))
+   #define _LED_ATTACH_P(_b, _v)    ((_v) & ~((UINT8)(_b) << 7))
   #endif
 
     UINT8   vLoop;
@@ -133,7 +133,7 @@ void DRV_LED_SetLedData
         if (aLedCode[vLoop].vCh == vDisData)
         {
             DRV_LED_SET_DATA(vLedNum,
-                             _LED_ATTACH_P(vLedNum, bDisPoint, aLedCode[vLoop].vCode));
+                             _LED_ATTACH_P(bDisPoint, aLedCode[vLoop].vCode));
             return;
         }
     }
@@ -141,7 +141,7 @@ void DRV_LED_SetLedData
     {
         /* Invalid data, dark this LED */
         DRV_LED_SET_DATA(vLedNum,
-                         _LED_ATTACH_P(vLedNum, bDisPoint, _LED_CODE_DARK));
+                         _LED_ATTACH_P(bDisPoint, _LED_CODE_DARK));
     }
 }
 
@@ -208,14 +208,23 @@ void DRV_LED_Init(void)
 void DRV_LED_ISR(void)
 {
   #if DRV_LED_Blink_SUPPORT
-    static UINT8    vCounter = 0;
+    #define _BLINK_MAX_COUNT    (DRV_LED_BLINK_DELAY/DRV_TIMER_SysTimerTick)
+    #if (_BLINK_MAX_COUNT <= 255)
+     typedef UINT8  BLINK_COUNTER_T;
+    #elif (_BLINK_MAX_COUNT <= 65535)
+     typedef UINT16 BLINK_COUNTER_T;
+    #else
+     typedef UINT32 BLINK_COUNTER_T;
+    #endif
 
-    if (vCounter++ >= DRV_LED_BLINK_DELAY/DRV_TIMER_SysTimerTick)
+    static BLINK_COUNTER_T  vBlinkCounter = 0;
+
+    if (vBlinkCounter++ >= _BLINK_MAX_COUNT)
     {
         static BOOL bDark = FALSE;
         UINT8       vLoop;
 
-        vCounter = 0;
+        vBlinkCounter = 0;
 
         /* Time to Blink LED */
         for (vLoop = 0; vLoop < COUNT_OF(aLedDataBuf); vLoop++)

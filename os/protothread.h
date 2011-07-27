@@ -29,11 +29,12 @@
 #define __PROTOTHREAD_H
 
 
+#include "typedef.h"
 #include "pt-sem.h"
 
-typedef char            PT_HANDLE;
-typedef struct pt       PT_TCB;
-typedef struct pt_sem   PT_SCB;
+typedef char                    PT_HANDLE;
+typedef struct pt     SEG_DATA  PT_TCB;
+typedef struct pt_sem SEG_DATA  PT_SCB;
 
 #include "cfg_protothread.h"
 

@@ -27,14 +27,14 @@ File 4,1,<..\app\thread_idle.c><thread_idle.c>
 
 
 Options 1,0,0  // Target 'AT89_Base'
- Device (AT89C51)
+ Device (AT89C2051)
  Vendor (Atmel)
- Cpu (IRAM(0-0x7F) IROM(0-0xFFF) CLOCK(24000000))
+ Cpu (IRAM(0-0x7F) IROM(0-0x7FF) CLOCK(24000000))
  FlashUt ()
  StupF ("LIB\STARTUP.A51" ("Standard 8051 Startup Code"))
  FlashDR ()
- DevID (2976)
- Rgf (REGX51.H)
+ DevID (2984)
+ Rgf (REG2051.H)
  Mem ()
  C ()
  A ()
@@ -48,8 +48,8 @@ Options 1,0,0  // Target 'AT89_Base'
  EnvBin ()
  EnvInc ()
  EnvLib ()
- EnvReg (ÿAtmel\)
- OrgReg (ÿAtmel\)
+ EnvReg (Atmel\)
+ OrgReg (Atmel\)
  TgStat=16
  OutDir (..\build\obj\)
  OutName (AT89_Base)
@@ -71,10 +71,10 @@ Options 1,0,0  // Target 'AT89_Base'
  SVCSID <>
  MODEL5=0
  RTOS5=0
- ROMSZ5=1
+ ROMSZ5=0
  DHOLD5=0
  XHOLD5=0
- T51FL=98385
+ T51FL=98384
  XT51FL=0
  CBANKS5=0
  XBANKS5=0
@@ -82,7 +82,7 @@ Options 1,0,0  // Target 'AT89_Base'
  RXB51 { 0,0,0,0,0,0,0,0,0 }
  OCM51 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
  OCR51 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
- IRO51 { 1,0,0,0,0,0,16,0,0 }
+ IRO51 { 1,0,0,0,0,0,8,0,0 }
  IRA51 { 0,0,0,0,0,128,0,0,0 }
  XRA51 { 0,0,0,0,0,0,0,0,0 }
  XRA512 { 0,0,0,0,0,0,0,0,0 }
@@ -132,11 +132,11 @@ Options 1,0,0  // Target 'AT89_Base'
  LX51BIS ()
  LX51DAS ()
  LX51IDS ()
-  OPTDL (S8051.DLL)()(DP51.DLL)(-p51)(S8051.DLL)()(TP51.DLL)(-p51)
+  OPTDL (S8051.DLL)()(DP51.DLL)(-px051)(S8051.DLL)()(TP51.DLL)(-px051)
   OPTDBG 179197,-1,()()()()()()()()()() ()()()()
  FLASH1 { 1,0,0,0,0,0,0,0,255,255,255,255,0,0,0,0,0,0,0,0 }
  FLASH2 ()
- FLASH3 ("" ())
+ FLASH3 ()
  FLASH4 ()
 EndOpt
 
