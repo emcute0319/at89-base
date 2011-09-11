@@ -163,7 +163,7 @@ static UINT8 _drv_i2cm_ReceiveByte(void)
  * FUNCTION NAME:
  *      DRV_I2cM_ReadBytes
  * DESCRIPTION:
- *      Random read one or more bytes.
+ *      Random read one or more bytes data.
  * PARAMETERS:
  *      vI2cAddr   : I2C slave chip address.
  *      vOffset    : Read start offset.
@@ -175,7 +175,7 @@ static UINT8 _drv_i2cm_ReceiveByte(void)
  * NOTES:
  *      None
  * HISTORY:
- *      2008.12.5     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_ReadBytes
 (
@@ -240,11 +240,10 @@ _error_exit:
  * FUNCTION NAME:
  *      DRV_I2cM_WriteBytes
  * DESCRIPTION:
- *      Random write one or more bytes.
+ *      Random write one or more bytes data.
  * PARAMETERS:
  *      vI2cAddr    : I2C slave chip address.
- *      vOffsetLen  : offset buffer length to be send.
- *      aOffsetBuf  : offset buffer.
+ *      vOffset     : write start offset.
  *      aDataBuf    : data length to be write.
  *      data_buf    : data buffer.
  * RETURN:
@@ -253,7 +252,7 @@ _error_exit:
  * NOTES:
  *      None
  * HISTORY:
- *      2008.12.5     Panda Xiong       Create
+ *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
 BOOL DRV_I2CM_WriteBytes
 (
@@ -302,41 +301,13 @@ _error_exit:
 }
 
 
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_I2cM_WriteByte
- * DESCRIPTION:
- *      Random write one or more bytes.
- * PARAMETERS:
- *      vI2cAddr : I2C slave chip address.
- *      vOffset  : offset buffer length to be send.
- *      vData    : data buffer.
- * RETURN:
- *      TRUE   : write success.
- *      FALSE  : write fail.
- * NOTES:
- *      None
- * HISTORY:
- *      2008.12.5     Panda Xiong       Create
- ******************************************************************************/
-BOOL DRV_I2CM_WriteByte
-(
-    IN       UINT8       vI2cAddr,
-    IN       UINT8       vOffset,
-    IN       UINT8       vData
-)
-{
-    return DRV_I2CM_WriteBytes(vI2cAddr, vOffset, 1, &vData);
-}
-
-
 /*******************************************************************************
  * FUNCTION NAME:
- *      DRV_I2cM_Detect
+ *      DRV_I2CM_Probe
  * DESCRIPTION:
- *      I2C detect chip.
+ *      Probe I2C slave chip.
  * PARAMETERS:
- *      vI2cAddr : I2C chip address.
+ *      vI2cAddr : I2C slave chip address.
  * RETURN:
  *      None
  * NOTES:
@@ -344,7 +315,7 @@ BOOL DRV_I2CM_WriteByte
  * HISTORY:
  *      2009.1.16     Panda Xiong       Create
  ******************************************************************************/
-BOOL DRV_I2CM_Detect(IN UINT8 vI2cAddr)
+BOOL DRV_I2CM_Probe(IN UINT8 vI2cAddr)
 {
     /* send I2C start */
     _drv_i2cm_Start();
