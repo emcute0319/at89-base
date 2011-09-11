@@ -45,6 +45,7 @@
 #include "drv_i2cm.h"
 #include "drv_i2cs.h"
 #include "drv_led.h"
+#include "drv_temp.h"
 
 
 /******************************************************************************

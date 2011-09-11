@@ -17,81 +17,44 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   thread_idle.c
+ *   drv_temp.h
  * DESCRIPTION:
  *   N/A
  * HISTORY:
- *   2010.4.6        PANDA         Create/Update
+ *   2011.9.11        panda.xiong         Create/Update
  *
 *****************************************************************************/
 
-#include "protothread.h"
+#ifndef __DRV_TEMP_H
+#define __DRV_TEMP_H
 
+
+#if DRV_TEMP_SUPPORT
 
 /******************************************************************************
  * FUNCTION NAME:
- *      thread_Idle_Entry
+ *      DRV_Temp_GetTemp
  * DESCRIPTION:
- *      Idle Thread Entry.
+ *      Get Temperature.
  * PARAMETERS:
  *      N/A
  * RETURN:
- *      PT_HANDLE
+ *      The read temperature:
+ *       Bit[15]   : =0, read temperature success;
+ *                   =1, read temperature fail;
+ *       Bit[14:0] : The read temperature;
  * NOTES:
  *      N/A
  * HISTORY:
- *      2010.3.24        Panda.Xiong         Create/Update
+ *      2011.9.11        panda.xiong         Create/Update
  *****************************************************************************/
-PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
-{
-    PT_BEGIN(pt);
-
-    while (1)
-    {
-        static UINT32   vCount = 0;
-
-        vCount++;
-
-        /* delay 500ms */
-        PT_SLEEP_MS(pt, 500);
-
-      #if DRV_UART_SUPPORT
-        DRV_UART_Printf("\r %s(line%d): Cicle -> %d, System Tick Count -> %d ...",
-                        __FILE__, __LINE__,
-                        vCount,
-                        DRV_CPU_GetSysTick());
-      #endif
-
-      #if DRV_UART_SUPPORT && DRV_TEMP_SUPPORT
-      {
-        SINT16  vTemp    = DRV_Temp_GetTemp();
-        BOOL    bSuccess = READ_BIT(vTemp, 15);
-
-        WRITE_BIT(vTemp, 15, bSuccess);
-        if (!bSuccess)
-        {
-            DRV_UART_Printf("\r %s(line%d): Current Temperature: %d (degree) ...",
-                            __FILE__, __LINE__,
-                            vTemp);
-        }
-      }
-      #endif
-
-      #if DRV_LED_SUPPORT
-        DRV_LED_SetLedData(0, FALSE, (vCount>>0)&0xF);
-        DRV_LED_SetLedData(1, FALSE, (vCount>>8)&0xF);
-      #endif
-    }
-
-    PT_END(pt);
-}
-
+UINT16 DRV_Temp_GetTemp(void);
 
 /******************************************************************************
  * FUNCTION NAME:
- *      thread_Idle_Init
+ *      DRV_Temp_Init
  * DESCRIPTION:
- *      N/A
+ *      Init temperature driver.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -99,10 +62,13 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
  * NOTES:
  *      N/A
  * HISTORY:
- *      2010.4.6        PANDA         Create/Update
+ *      2011.9.11        panda.xiong         Create/Update
  *****************************************************************************/
-void thread_Idle_Init(void)
-{
-    /* do nothing */
-}
+void DRV_Temp_Init(void);
+
+#endif
+
+
+#endif /* __DRV_TEMP_H */
+
 
