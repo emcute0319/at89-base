@@ -37,9 +37,9 @@
 
 
 #ifdef _VERSION_INTERNAL_
- __root __flash UINT8 _fw_sig[] @ FW_SIG_OFFSET = "CPU:"CPU_TYPE" FW:"FW_VERSION;
+ __root CONST UINT8 _fw_sig[] @ FW_SIG_OFFSET = "CPU:"CPU_TYPE" FW:"FW_VERSION;
 #else
- extern UINT8 __flash _fw_sig[];
+ extern CONST UINT8 _fw_sig[];
  #define GET_FW_SIG_STRING()    (_fw_sig)
 #endif
 

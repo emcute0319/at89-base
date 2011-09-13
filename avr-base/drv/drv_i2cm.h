@@ -51,10 +51,10 @@
  ******************************************************************************/
 BOOL DRV_I2CM_ReadBytes
 (
-    IN  UINT8           vI2cAddr,
-    IN  UINT8           vOffset,
-    IN  UINT8           vDataLen,
-    OUT UINT8 SEG_DATA *aDataBuf
+    IN  UINT8   vI2cAddr,
+    IN  UINT8   vOffset,
+    IN  UINT8   vDataLen,
+    OUT UINT8  *aDataBuf
 );
 
 /******************************************************************************
@@ -97,10 +97,10 @@ BOOL DRV_I2CM_ReadBytes
  ******************************************************************************/
 BOOL DRV_I2CM_WriteBytes
 (
-    IN       UINT8           vI2cAddr,
-    IN       UINT8           vOffset,
-    IN       UINT8           vDataLen,
-    IN const UINT8 SEG_DATA *aDataBuf
+    IN       UINT8  vI2cAddr,
+    IN       UINT8  vOffset,
+    IN       UINT8  vDataLen,
+    IN const UINT8 *aDataBuf
 );
 
 /******************************************************************************

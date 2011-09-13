@@ -126,7 +126,7 @@ void DRV_UART_Printf(const char *format, ...)
         /* skip '%' character */
         switch (fch = *format++)
         {
-            static const __flash char aHex[] = "0123456789ABCDEF";
+            static CONST char aHex[] = "0123456789ABCDEF";
             unsigned int    vDiv, vData;
             unsigned char   vRadix;
 
@@ -215,14 +215,13 @@ void DRV_UART_Init(void)
      * And, UBRR = --------------- - 1
      *              16 * Baudrate
      */
-
-    const UINT16 tmp = (UINT16)((CPU_CORE_CLOCK)/(16.)/UART_BAUDRATE_VAL) - 1;
+    #define UBRR_VAL    ((UINT16)((CPU_CORE_CLOCK)/(16.)/UART_BAUDRATE_VAL) - 1)
 
     UCSRB = 0x00;       /* disable while setting baud rate */
     UCSRA = 0x00;
     UCSRC = 0x86;
-    UBRRH = (UINT8)(tmp >> 8);
-    UBRRL = (UINT8)(tmp & 0xFF);
+    UBRRH = (UINT8)(UBRR_VAL >> 8);
+    UBRRL = (UINT8)(UBRR_VAL & 0xFF);
     UCSRB = 0x98;       /* use interrupt */
 }
 
