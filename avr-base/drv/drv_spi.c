@@ -190,7 +190,7 @@ void DRV_SPI_WriteByte(IN UINT8 vData)
     for (vBitIndex = 8; vBitIndex != 0; vBitIndex--)
     {
         /* Transmitting data, MSB first, LSB last */
-        _CROL(vData, 1);
+        __crol(vData, 1);
         DRV_SPI_IO_Write(IO_PIN(SPI_MOSI), (vData & 0x1));
 
         /* Generate one clock, to tell SPI Slave one bit data is ready */
