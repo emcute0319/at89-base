@@ -72,8 +72,6 @@ static void _system_Start(void)
     /* Fixup Init */
     DRV_FixupInit();
 
-    DRV_UART_Printf("\n\r System Init Done ...");
-
     /* Globally enable Interrupt */
     DRV_INT_GlobalEnableInterrupt();
 

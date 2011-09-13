@@ -83,7 +83,7 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
  * HISTORY:
  *      2010.1.26        PANDA         Create/Update
  *****************************************************************************/
-#define DRV_CPU_DelayUs(us)     __delay_cycles((unsigned long)(us) * CPU_F)
+#define DRV_CPU_DelayUs(us)     __delay_cycles((float)(us) * ((float)CPU_CORE_CLOCK / 1000000UL))
 
 /******************************************************************************
  * FUNCTION NAME:

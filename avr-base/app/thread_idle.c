@@ -52,12 +52,8 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 
         vCount++;
 
-        /* delay 500ms */
-        PT_SLEEP_MS(pt, 500);
-
       #if DRV_UART_SUPPORT
-        DRV_UART_Printf("\r %s(line%d): Cicle -> %d, System Tick Count -> %d ...",
-                        __FILE__, __LINE__,
+        DRV_UART_Printf("\r Cicle -> %d, System Tick Count -> %d ...",
                         vCount,
                         DRV_CPU_GetSysTick());
       #endif
@@ -81,6 +77,10 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
         DRV_LED_SetLedData(0, FALSE, (vCount>>0)&0xF);
         DRV_LED_SetLedData(1, FALSE, (vCount>>8)&0xF);
       #endif
+
+        /* delay 500ms */
+        /* TODO: PT_SLEEP_MS(pt, 500); */
+        DRV_CPU_DelayUs(500000);
     }
 
     PT_END(pt);

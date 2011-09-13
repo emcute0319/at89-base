@@ -50,9 +50,9 @@
 
 
 /* CPU Clock */
-#define CPU_Crystal_Frequency   8000000UL   /* Hz */
-#define CPU_Prescale            1
-#define CPU_CORE_CLOCK          (CPU_Crystal_Frequency / CPU_Prescale)
+#define CPU_Crystal_Frequency       8000000UL   /* Hz */
+#define CPU_Prescale                1
+#define CPU_CORE_CLOCK              (CPU_Crystal_Frequency / CPU_Prescale)
 
 
 /* UART */
