@@ -67,6 +67,9 @@
 #endif
 
 
+#define CONST	        const SEG_CODE
+
+
 /* macros defined in absacc.h (Keil C51) */
 #define CBYTE  ((UINT8  volatile SEG_CODE  *) 0)  /*  8-bit data in  code area */
 #define DBYTE  ((UINT8  volatile SEG_DATA  *) 0)  /*  8-bit data in  data area */

@@ -36,8 +36,6 @@
 
 #define COMBINE(a, b)   a##b
 
-#define CONST	        const SEG_CODE
-
 #define KB(x)           ((x)*1024)
 #define MB(x)           ((x)*1024*1024)
 
