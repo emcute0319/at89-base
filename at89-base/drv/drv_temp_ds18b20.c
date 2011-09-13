@@ -194,7 +194,7 @@ UINT16 DRV_Temp_DS18B20_GetTemp(void)
         return 0x8000;
     }
 
-    /* Read the Alarm min/max gate from DS18B20 */
+    /* Read the last converted temperature value from DS18B20 */
     _ds18b20_Reset();
     _ds18b20_WriteByte(DS18B20_CMD_SkipROM);
     _ds18b20_WriteByte(DS18B20_CMD_ReadScratchpad);
