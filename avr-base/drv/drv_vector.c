@@ -46,7 +46,7 @@
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-#pragma vector=VECTOR_ID(TIMER0_OVF)
+#pragma vector=_VECTOR(TIMER0_OVF)
 __interrupt void DRV_VECTOR_T0_Overflow(void)
 {
     DRV_VECTOR_START(TIMER0);

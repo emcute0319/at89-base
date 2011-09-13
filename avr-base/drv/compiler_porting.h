@@ -38,7 +38,12 @@
 #include <assert.h>
 
 
+/* Converts a bit number into a byte value */
+#define _BV(bit)        (1 << (bit))
+
 #define CONST	        const __flash
+
+#define _VECTOR(x)      COMBINE(x, _vect)
 
 #define __nop()         __no_operation()
 #define __crol(v, n)    do {                                            \

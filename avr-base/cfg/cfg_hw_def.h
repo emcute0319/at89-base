@@ -34,7 +34,7 @@
 #define CPU_TYPE                "ATmega16"
 
 /* CPU Driver */
-#define DRV_UART_SUPPORT        0       /* UART        */
+#define DRV_UART_SUPPORT        1       /* UART        */
 #define DRV_WATCHDOG_SUPPORT    0       /* Watchdog    */
 
 /* Simulated/Miscellaneous Driver */
@@ -57,7 +57,7 @@
 
 /* UART */
 #if DRV_UART_SUPPORT
- #define UART_BAUDRATE_VAL      4800UL  /* bps */
+ #define UART_BAUDRATE_VAL      19200UL  /* bps */
 #endif
 
 

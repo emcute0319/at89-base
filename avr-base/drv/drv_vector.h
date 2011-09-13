@@ -29,8 +29,6 @@
 #define __DRV_VECTOR_H
 
 
-#define VECTOR_ID(x)    COMBINE(x, _vect)
-
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_Vector_Init

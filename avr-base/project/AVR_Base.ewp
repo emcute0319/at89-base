@@ -1859,7 +1859,7 @@
         </option>
         <option>
           <name>GenerateExtraOutput</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>XExtraOutOverride</name>
@@ -1867,7 +1867,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>AVR_Base.bin</state>
+          <state>AVR_Base.a90</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
