@@ -41,7 +41,9 @@
 /* Converts a bit number into a byte value */
 #define _BV(bit)        (1 << (bit))
 
-#define CONST	        const __flash
+#define CONST_FLASH     const __flash
+#define CONST_EEPROM    const __eeprom
+#define CONST           CONST_FLASH
 
 #define _VECTOR(x)      COMBINE(x, _vect)
 
