@@ -412,6 +412,7 @@
           <state>..\drv</state>
           <state>..\inc</state>
           <state>..\os</state>
+          <state>..\build\tmp\</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -1392,6 +1393,7 @@
           <state>..\drv</state>
           <state>..\inc</state>
           <state>..\os</state>
+          <state>..\build\tmp</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
