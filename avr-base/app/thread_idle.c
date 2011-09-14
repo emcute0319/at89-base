@@ -46,7 +46,7 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 {
     PT_BEGIN(pt);
 
-    while (1)
+    for (;;)
     {
         static UINT32   vElapsedTime = 0;
 

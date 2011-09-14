@@ -300,7 +300,7 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
     DRV_I2CS_TimerStart();
 
     /* Handle the I2C accessing */
-    while (1)
+    for (;;)
     {
         /* I2C Stop/Timeout */
         if (DRV_I2CS_IsI2cStop() || DRV_I2CS_IsI2cTimeout())

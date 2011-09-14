@@ -61,7 +61,7 @@ static PT_TCB           thread_tcb[THREAD_MAX_NO];
  *****************************************************************************/
 void PT_Start(void)
 {
-    while (1)
+    for (;;)
     {
         UINT8   i;
 

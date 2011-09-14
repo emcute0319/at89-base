@@ -94,7 +94,7 @@ static void _system_Start(void)
  * HISTORY:
  *      2009.4.10        Panda.Xiong         Create/Update
  *****************************************************************************/
-void main(void)
+__C_task void main(void)
 {
     /* init system */
 	_system_Init();
