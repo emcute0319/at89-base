@@ -40,8 +40,8 @@ typedef unsigned char           BOOL;       /* Boolean: TRUE/FALSE */
 typedef unsigned char           BYTE;
 typedef unsigned char           UINT8;      /*  8-bit */
 typedef signed   char           SINT8;
-typedef unsigned short          UINT16;     /* 16-bit */
-typedef signed   short          SINT16;
+typedef unsigned int            UINT16;     /* 16-bit */
+typedef signed   int            SINT16;
 typedef unsigned long           UINT32;     /* 32-bit */
 typedef signed   long           SINT32;
 typedef unsigned long long      UINT64;     /* 64-bit */

@@ -387,11 +387,11 @@
         </option>
         <option>
           <name>IExtraOptions</name>
-          <state></state>
+          <state>--string_literals_in_flash</state>
         </option>
         <option>
           <name>IExtraOptionsCheck</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCMultibyteSupport</name>
@@ -1368,11 +1368,11 @@
         </option>
         <option>
           <name>IExtraOptions</name>
-          <state></state>
+          <state>--string_literals_in_flash</state>
         </option>
         <option>
           <name>IExtraOptionsCheck</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCMultibyteSupport</name>

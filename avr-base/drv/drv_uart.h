@@ -35,15 +35,17 @@
  * DESCRIPTION:
  *      Print string to UART.
  * PARAMETERS:
- *      fmt : String to be written.
+ *      format : Formatted string to be written.
  * RETURN:
  *      N/A
  * NOTES:
- *      N/A
+ *      The %s may be abnormal in some formatted string,
+ *       so, it's strongly recommanded to be used in a separate line.
+ *      The root cause is unknown yet!!!
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_UART_Printf(const char *fmt, ...);
+void DRV_UART_Printf(char CONST *fmt, ...);
 
 /******************************************************************************
  * FUNCTION NAME:

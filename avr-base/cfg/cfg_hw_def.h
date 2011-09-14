@@ -30,7 +30,7 @@
 
 
 /* Target CPU Definition */
-//#define __ATmega16__
+/*#define __ATmega16__*/
 #define CPU_TYPE                "ATmega16"
 
 /* CPU Driver */

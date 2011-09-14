@@ -97,11 +97,13 @@ SINT16 DRV_UART_ReadByte(void)
  * RETURN:
  *      N/A
  * NOTES:
- *      N/A
+ *      The %s may be abnormal in some formatted string,
+ *       so, it's strongly recommanded to be used in a separate line.
+ *      The root cause is unknown yet!!!
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-void DRV_UART_Printf(const char *format, ...)
+void DRV_UART_Printf(char CONST *format, ...)
 {
     va_list   ptr;
     char      fch;       /* get format value */
@@ -168,7 +170,7 @@ void DRV_UART_Printf(const char *format, ...)
 
             case 's':
             {
-                char    *p_str = va_arg(ptr, char *);
+                char CONST *p_str = (char CONST *)va_arg(ptr, char CONST *);
 
                 while ((fch = *p_str++) != '\0')
                 {

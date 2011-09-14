@@ -48,13 +48,14 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 
     while (1)
     {
-        static UINT32   vCount = 0;
-
-        vCount++;
+        static UINT32   vElapsedTime = 0;
 
       #if DRV_UART_SUPPORT
-        DRV_UART_Printf("\r Cicle -> %d, System Tick Count -> %d ...",
-                        vCount,
+        DRV_UART_Printf("\r%s : ", _fw_sig);
+        DRV_UART_Printf("Elapsed Time -> %d:%d:%d   System Tick Count -> %d",
+                        (UINT16)(vElapsedTime/3600),
+                        (UINT16)(vElapsedTime/60%60),
+                        (UINT16)(vElapsedTime%60),
                         DRV_CPU_GetSysTick());
       #endif
 
@@ -80,7 +81,9 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 
         /* delay 500ms */
         /* TODO: PT_SLEEP_MS(pt, 500); */
-        DRV_CPU_DelayUs(500000);
+        DRV_CPU_DelayUs(1000000);
+
+        vElapsedTime++;
     }
 
     PT_END(pt);
