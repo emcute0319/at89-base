@@ -51,7 +51,7 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
         static UINT32   vElapsedTime = 0;
 
       #if DRV_UART_SUPPORT
-        DRV_UART_Printf("\r%s : ", _fw_sig);
+        DRV_UART_Printf("\r%s : ", GET_FW_SIG_STRING());
         DRV_UART_Printf("Elapsed Time -> %d:%d:%d   System Tick Count -> %d",
                         (UINT16)(vElapsedTime/3600),
                         (UINT16)(vElapsedTime/60%60),
