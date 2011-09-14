@@ -45,10 +45,15 @@
 #define CONST_EEPROM    const __eeprom
 #define CONST           CONST_FLASH
 
-#define _VECTOR(x)      COMBINE(x, _vect)
+/* interrupt definition */
+#define _PPTOSTR_(x)                    #x
+#define _PPARAM_(vec)                   _PPTOSTR_(vector=vec##_vect)
+#define INTERRUPT(name, vector)         _Pragma(_PPARAM_(vector)) __interrupt void name(void)
+#define INTERRUPT_PROTO(name, vector)   INTERRUPT(name, vector)
 
-#define __nop()         __no_operation()
-#define __crol(v, n)    do {                                            \
+
+#define NOP()           __no_operation()
+#define CROL(v, n)      do {                                            \
                             UINT8   i = (n);                            \
                                                                         \
                             while (i--)                                 \
@@ -56,7 +61,7 @@
                                 (v) = ((v) << 1) | READ_BIT((v), 7);    \
                             }                                           \
                         } while (0)
-#define __cror(v, n)    do {                                            \
+#define CROR(v, n)      do {                                            \
                             UINT8   i = (n);                            \
                                                                         \
                             while (i--)                                 \

@@ -29,6 +29,8 @@
 #define __DRV_VECTOR_H
 
 
+INTERRUPT_PROTO(DRV_VECTOR_T0_Overflow, TIMER0_OVF);
+
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_Vector_Init

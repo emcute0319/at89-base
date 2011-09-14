@@ -227,7 +227,7 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
     for (vLoop = 8; vLoop != 0; vLoop--)
     {
         /* Transmitting data, MSB first, LSB last */
-        __crol(vData, 1);
+        CROL(vData, 1);
         DRV_I2CS_SET_SDA((BOOL)(vData & 0x1));
 
         WAIT_SCL_L2H;
