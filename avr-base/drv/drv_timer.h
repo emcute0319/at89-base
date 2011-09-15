@@ -32,24 +32,20 @@
 #define DRV_TIMER_SysTimerTick          1       /* ms */
 
 /* System Timer (Timer 0) Reload Value:
- *   -->  count up
- *   -->  periodic mode, 16-bit Reload
- *   -->  prescale: 1
+ *   -->  CTC mode
+ *   -->  periodic mode, 8-bit Reload
+ *   -->  prescale: 64
  *   -->  source clock: system clock
  */
 #define DRV_TIMER_SYSTIMER_RELOAD_VAL   \
-            (65536UL - (DRV_TIMER_SysTimerTick * CPU_CORE_CLOCK /1 /1000))
-#if (DRV_TIMER_SYSTIMER_RELOAD_VAL <= 0)
+            (((CPU_CORE_CLOCK *10 /1000 /64 /DRV_TIMER_SysTimerTick ) +5) /10 -1)
+#if ( (DRV_TIMER_SYSTIMER_RELOAD_VAL > 0xFF) || (DRV_TIMER_SYSTIMER_RELOAD_VAL <= 0) )
   #error "Unsupported System Timer Initial Value for current System Clock!"
 #endif
 
 
 /* Reload System Timer Init Value */
-#define DRV_TIMER_SysTimerReload()                                      \
-    do {                                                                \
-        TL0 = (DRV_TIMER_SYSTIMER_RELOAD_VAL >> 0) & 0xFF;              \
-        TH0 = (DRV_TIMER_SYSTIMER_RELOAD_VAL >> 8) & 0xFF;              \
-    } while (0)
+#define DRV_TIMER_SysTimerReload()      /* do nothing */
 
 /* clear Sysem Timer timeout flag */
 #define DRV_TIMER_ClearSysTimerFlag()   /* do nothing */
@@ -57,26 +53,25 @@
 /* Enable/Disable System Timer */
 #define DRV_TIMER_SysTimer_Enable()                                     \
     do {                                                                \
-        /* 16-Bit Reload */                                             \
-        TMOD &= ~0x0F;                                                  \
-        TMOD |= 0x01;                                                   \
-                                                                        \
         /* load System Timer Init value */                              \
+        OCR0 = DRV_TIMER_SYSTIMER_RELOAD_VAL;                           \
         DRV_TIMER_SysTimerReload();                                     \
                                                                         \
-        /* Clear Timer 0 interrupt flag,                                \
+        /* Clear TC0 interrupt flag,                                    \
          * to prevent generating an un-wanted interrupt.                \
          */                                                             \
         DRV_TIMER_ClearSysTimerFlag();                                  \
                                                                         \
-        TR0 = 1;    /* start Timer 0 */                                 \
-        PT0 = 0;    /* force Timer 0 interrupt to low priority */       \
-        ET0 = 1;    /* enable Timer 0 interrupt */                      \
+        /* config TC0 to expected state */                              \
+        TCCR0 = 0x0B;                                                   \
+                                                                        \
+        /* enable TC0 interrupt */                                      \
+        TIMSK_OCIE0 = 1;                                                \
     } while (0)
 #define DRV_TIMER_SysTimer_Disable()                                    \
     do {                                                                \
-        TR0 = 0;    /* stop Timer 0 */                                  \
-        ET0 = 0;    /* disable Timer 0 interrupt */                     \
+        /* disable TC0 interrupt */                                     \
+        TIMSK_OCIE0 = 0;                                                \
     } while (0)
 
 
@@ -99,7 +94,7 @@
 #define DRV_TIMER_Init()                                                \
     do {                                                                \
         /* enable System Timer */                                       \
-        /* TODO: DRV_TIMER_SysTimer_Enable();*/                         \
+        DRV_TIMER_SysTimer_Enable();                                    \
     } while (0)
 
 

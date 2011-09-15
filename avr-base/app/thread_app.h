@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   cfg_protothread.h
+ *   thread_app.h
  * DESCRIPTION:
  *   N/A
  * HISTORY:
@@ -25,26 +25,42 @@
  *
 *****************************************************************************/
 
-#include "drv.h"
-#include "app.h"
+#ifndef __THREAD_APP_H
+#define __THREAD_APP_H
 
 
-#ifdef DECLARE_PROTOTHREAD
-
-/* Protothread Definition.
- *
- *   entry     : Thread entry; (if non-exist or unused, set to NULL)
- *   init_func : Thread init function; (if non-exist or unused, set to NULL)
- *   cookie    : Thread cookie; (unsupported yet)
- *   desc      : Thread description;
- *
- *   Note      :
+/******************************************************************************
+ * FUNCTION NAME:
+ *      thread_App_Entry
+ * DESCRIPTION:
+ *      App Thread Entry.
+ * PARAMETERS:
  *      N/A
- */
+ * RETURN:
+ *      PT_HANDLE
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.3.24        Panda.Xiong         Create/Update
+ *****************************************************************************/
+PT_HANDLE thread_App_Entry(PT_TCB *pt);
 
-/*                    entry              init_func       cookie   desc        */
-DECLARE_PROTOTHREAD(thread_Idle_Entry, thread_Idle_Init,   NA,    "Idle Thread")
-DECLARE_PROTOTHREAD(thread_App_Entry,  thread_App_Init,    NA,    "App Thread")
+/******************************************************************************
+ * FUNCTION NAME:
+ *      thread_App_Init
+ * DESCRIPTION:
+ *      N/A
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.4.6        PANDA         Create/Update
+ *****************************************************************************/
+void thread_App_Init(void);
 
-#endif
+
+#endif /* __THREAD_APP_H */
 

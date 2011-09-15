@@ -29,7 +29,7 @@
 #define __DRV_VECTOR_H
 
 
-INTERRUPT_PROTO(DRV_VECTOR_T0_Overflow, TIMER0_OVF);
+INTERRUPT_PROTO(DRV_VECTOR_T0_Overflow, TIMER0_COMP);
 
 /******************************************************************************
  * FUNCTION NAME:

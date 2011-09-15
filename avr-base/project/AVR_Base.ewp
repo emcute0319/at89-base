@@ -1969,6 +1969,9 @@
   <group>
     <name>app</name>
     <file>
+      <name>$PROJ_DIR$\..\app\thread_app.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\app\thread_idle.c</name>
     </file>
   </group>

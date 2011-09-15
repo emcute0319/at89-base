@@ -30,6 +30,7 @@
 
 
 #include "thread_idle.h"
+#include "thread_app.h"
 
 
 #endif /* __APP_H */

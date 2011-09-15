@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   thread_idle.c
+ *   thread_app.c
  * DESCRIPTION:
  *   N/A
  * HISTORY:
@@ -30,9 +30,9 @@
 
 /******************************************************************************
  * FUNCTION NAME:
- *      thread_Idle_Entry
+ *      thread_App_Entry
  * DESCRIPTION:
- *      Idle Thread Entry.
+ *      App Thread Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -42,7 +42,7 @@
  * HISTORY:
  *      2010.3.24        Panda.Xiong         Create/Update
  *****************************************************************************/
-PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
+PT_HANDLE thread_App_Entry(PT_TCB *pt)
 {
     PT_BEGIN(pt);
 
@@ -51,7 +51,7 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
         static UINT32   vElapsedTime = 0;
 
       #if DRV_UART_SUPPORT
-        DRV_UART_Printf("\n\r thread_Idle_Entry: Elapsed Time -> %d:%d:%d ...",
+        DRV_UART_Printf("\n\r thread_App_Entry: Elapsed Time -> %d:%d:%d ...",
                         (UINT16)(vElapsedTime/3600),
                         (UINT16)(vElapsedTime/60%60),
                         (UINT16)(vElapsedTime%60));
@@ -89,7 +89,7 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
 
 /******************************************************************************
  * FUNCTION NAME:
- *      thread_Idle_Init
+ *      thread_App_Init
  * DESCRIPTION:
  *      N/A
  * PARAMETERS:
@@ -101,7 +101,7 @@ PT_HANDLE thread_Idle_Entry(PT_TCB *pt)
  * HISTORY:
  *      2010.4.6        PANDA         Create/Update
  *****************************************************************************/
-void thread_Idle_Init(void)
+void thread_App_Init(void)
 {
     /* do nothing */
 }

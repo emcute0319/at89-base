@@ -46,12 +46,12 @@
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
-INTERRUPT(DRV_VECTOR_T0_Overflow, TIMER0_OVF)
+INTERRUPT(DRV_VECTOR_T0_Overflow, TIMER0_COMP)
 {
     DRV_VECTOR_START(TIMER0);
 
     /* Reload System Timer Value */
-    /* TODO: DRV_TIMER_SysTimerReload(); */
+    DRV_TIMER_SysTimerReload();
 
     /* Clear System Timer Interrupt Flag */
     DRV_TIMER_ClearSysTimerFlag();
