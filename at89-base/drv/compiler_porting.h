@@ -41,22 +41,8 @@
 
 #elif defined __ICC8051__
 
-#define _CROL(v, n)     do {                                            \
-                            UINT8   i = (n);                            \
-                                                                        \
-                            while (i--)                                 \
-                            {                                           \
-                                (v) = ((v) << 1) | READ_BIT((v), 7);    \
-                            }                                           \
-                        } while (0)
-#define _CROR(v, n)     do {                                            \
-                            UINT8   i = (n);                            \
-                                                                        \
-                            while (i--)                                 \
-                            {                                           \
-                                (v) = ((v) >> 1) | READ_BIT((v), 0);    \
-                            }                                           \
-                        } while (0)
+#define CROL(v, n)      do { (v) = (((v) << (n)) | ((v) >> (8*sizeof(v)-(n)))); } while (0)
+#define CROR(v, n)      do { (v) = (((v) >> (n)) | ((v) << (8*sizeof(v)-(n)))); } while (0)
 
 #define FUNC_SEG_CODE   /* empty */
 
