@@ -53,22 +53,8 @@
 
 
 #define NOP()           __no_operation()
-#define CROL(v, n)      do {                                            \
-                            UINT8   i = (n);                            \
-                                                                        \
-                            while (i--)                                 \
-                            {                                           \
-                                (v) = ((v) << 1) | READ_BIT((v), 7);    \
-                            }                                           \
-                        } while (0)
-#define CROR(v, n)      do {                                            \
-                            UINT8   i = (n);                            \
-                                                                        \
-                            while (i--)                                 \
-                            {                                           \
-                                (v) = ((v) >> 1) | READ_BIT((v), 0);    \
-                            }                                           \
-                        } while (0)
+#define CROL(v, n)      do { (v) = (((v) << (n)) | ((v) >> (8*sizeof(v)-(n)))); } while (0)
+#define CROR(v, n)      do { (v) = (((v) >> (n)) | ((v) << (8*sizeof(v)-(n)))); } while (0)
 
 
 #endif /* __COMPILER_PORTING_H */

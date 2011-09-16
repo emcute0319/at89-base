@@ -29,9 +29,10 @@
 #define __DRV_IO_H
 
 
+/* the real IO definition is in this auto-generated file */
 #define DECLARE_IO_PORT(...)            /* empty */
 #define DECLARE_IO_PIN(...)             /* empty */
-#include "cfg_hw_def.h"
+#include "cfg_io_def.h"
 #undef DECLARE_IO_PORT
 #undef DECLARE_IO_PIN
 

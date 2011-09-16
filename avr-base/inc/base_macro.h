@@ -85,11 +85,11 @@
 #define ABS(x)              (((x) >= 0) ? (x) : -(x))
 
 /* bit operation */
-#define SET_BIT(n, b)       do { (n) |= (0x1UL << (b));  } while (0)
-#define CLR_BIT(n, b)       do { (n) &= ~(0x1UL << (b)); } while (0)
-#define READ_BIT(n, b)      ((BOOL)(((n) >> (b)) & 0x1UL))
-#define REVERSE_BIT(n, b)   do { (n) ^= (0x1UL << (b)); } while (0)
-#define WRITE_BIT(n, b, v)  do { (n) = ((n) & ~(0x1UL << (b))) | ((UINT32)(v) << (b)); } while (0)
+#define SET_BIT(n, b)       do { (n) |= (0x1 << (b));  } while (0)
+#define CLR_BIT(n, b)       do { (n) &= ~(0x1 << (b)); } while (0)
+#define READ_BIT(n, b)      ((BOOL)(((n) >> (b)) & 0x1))
+#define REVERSE_BIT(n, b)   do { (n) ^= (0x1 << (b)); } while (0)
+#define WRITE_BIT(n, b, v)  do { (n) = ((n) & ~(0x1 << (b))) | ((UINT32)(v) << (b)); } while (0)
 
 
 /* Get mask.
@@ -161,10 +161,10 @@
 #define SWAP_16(x)     (UINT16)(  (((UINT16)(x) >> 8) & 0x00FF)                 \
                                 | (((UINT16)(x) << 8) & 0xFF00))
 
-#define SWAP_32(x)     (  (((UINT32)(x) >> 24) & 0x000000FF)                    \
-                        | (((UINT32)(x) >>  8) & 0x0000FF00)                    \
-                        | (((UINT32)(x) <<  8) & 0x00FF0000)                    \
-                        | (((UINT32)(x) << 24) & 0xFF000000))
+#define SWAP_32(x)     (  (((UINT32)(x) >> 24) & 0x000000FFUL)                  \
+                        | (((UINT32)(x) >>  8) & 0x0000FF00UL)                  \
+                        | (((UINT32)(x) <<  8) & 0x00FF0000UL)                  \
+                        | (((UINT32)(x) << 24) & 0xFF000000UL))
 
 
 #endif /* __BASE_MACRO_H */

@@ -34,7 +34,7 @@
 
 #define DRV_SPI_IO_Write(_io, _state)                                   \
     do {                                                                \
-        DRV_IO_Write((_io), (_state));                                  \
+        DRV_IO_Write(_io, (_state));                                    \
                                                                         \
         /* wait until the output IO state is stable */                  \
         while (DRV_SPI_IO_Read(_io) != (_state))                        \
@@ -94,8 +94,8 @@
  *****************************************************************************/
 void DRV_SPI_ReadBytes
 (
-    IN  UINT8           vByteLen,
-    OUT UINT8 SEG_DATA *pBuf
+    IN  UINT8   vByteLen,
+    OUT UINT8  *pBuf
 )
 {
     while (vByteLen--)

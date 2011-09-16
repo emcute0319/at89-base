@@ -64,9 +64,6 @@
 
 #ifdef DECLARE_IO_PIN
 
-/* the real IO definition is in this auto-generated file */
-#include "cfg_io_def.h"
-
 
 /* IO pin Definition.
  *

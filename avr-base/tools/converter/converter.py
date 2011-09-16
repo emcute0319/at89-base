@@ -114,7 +114,7 @@ for line in fin:
         fout.write('#define %-25s %s\n' % (sPort, init_val))
 
         # define IO pin number
-        sRegName = 'PIN'
+        sRegName = 'PIN_NO'
         sPort = 'IO_PIN_%s_%s' % (name, sRegName)
         fout.write('#define %-25s %s\n' % (sPort, pin))
 
