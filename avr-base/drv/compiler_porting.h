@@ -33,8 +33,6 @@
  #error "Only supported IAR compiler yet!"
 #endif
 
-#define ENABLE_BIT_DEFINITIONS
-
 #include <ioavr.h>
 #include <inavr.h>
 #include <assert.h>
