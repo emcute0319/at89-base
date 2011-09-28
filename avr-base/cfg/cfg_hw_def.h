@@ -50,9 +50,9 @@
 
 
 /* CPU Clock */
-#define CPU_Crystal_Frequency       8000000UL   /* Hz */
-#define CPU_Prescale                1
-#define CPU_CORE_CLOCK              (CPU_Crystal_Frequency / CPU_Prescale)
+#define CPU_Crystal_Frequency   8000000UL   /* Hz */
+#define CPU_Prescale            1
+#define CPU_CORE_CLOCK          (CPU_Crystal_Frequency / CPU_Prescale)
 
 
 /* UART */
@@ -64,7 +64,6 @@
 
 #ifdef DECLARE_IO_PIN
 
-
 /* IO pin Definition.
  *
  *   name      : IO pin name;
@@ -75,7 +74,6 @@
  *   pin_no    : IO hardware pin number;
  *   desc      : IO description;
  */
-
 
 /*
  *         a
@@ -113,6 +111,24 @@ DECLARE_IO_PIN(LED_SEL_1,   _IO(B, 4),   IO_OUTPUT,     1,      6,  "LED Select 
 DECLARE_IO_PIN(LED_SEL_0,   _IO(B, 5),   IO_OUTPUT,     1,      7,  "LED Select 0: =0, select this LED; =1, deselect this LED.")
 DECLARE_IO_PIN(SPI_MOSI,    _IO(B, 6),   IO_OUTPUT,     1,     NA,  "Unused Pin")
 DECLARE_IO_PIN(SPI_SCK,     _IO(B, 7),   IO_OUTPUT,     1,     11,  "MAX518 Serial Clock Pin")
+
+#endif
+
+
+
+#ifdef DECLARE_ADC_CH
+
+/* ADC Channel Definition.
+ *
+ *   name      : ADC channel name;
+ *   pos_ch    : ADC positive channel;
+ *   neg_ch    : ADC negative channel;
+ *   cookie    : ADC channel cookie;
+ *   desc      : ADC channel description;
+ */
+
+/*               name        pos_ch     neg_ch     cookie   desc  */
+DECLARE_ADC_CH(ADC_VCC,    _IO(A, 0),  _IO(A, 0),   NA,     "VCC monitor")
 
 #endif
 

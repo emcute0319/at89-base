@@ -59,11 +59,7 @@ INTERRUPT_PROTO(DRV_VECTOR_T0_Overflow, TIMER0_COMP);
  * HISTORY:
  *      2009.7.2        Panda.Xiong         Create/Update
  *****************************************************************************/
-#define DRV_Vector_Init()                                                   \
-    do {                                                                    \
-        /* remap the vector to the base address of flash */                 \
-        GICR_IVSEL = 0;                                                     \
-    } while (0)
+#define DRV_Vector_Init()           /* do nothing */
 
 
 #endif /* __DRV_VECTOR_H */
