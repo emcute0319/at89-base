@@ -61,8 +61,8 @@
  *****************************************************************************/
 #define DRV_WATCHDOG_Enable()                                               \
     do {                                                                    \
-        WDTCR = DRV_WATCHDOG_Prescale; /* set watchdog prescale */          \
-        WDTCR_WDE = 1;                 /* enable watchdog       */          \
+        /* set watchdog prescale, and enable watchdog */                    \
+        WDTCR = (1<<WDE) | (DRV_WATCHDOG_Prescale<<WDP0);                   \
     } while (0)
 
 /******************************************************************************

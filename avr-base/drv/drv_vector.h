@@ -29,6 +29,20 @@
 #define __DRV_VECTOR_H
 
 
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_VECTOR_T0_Overflow
+ * DESCRIPTION:
+ *      Timer0 overflow ISR.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.1.27        panda.xiong         Create/Update
+ *****************************************************************************/
 INTERRUPT_PROTO(DRV_VECTOR_T0_Overflow, TIMER0_COMP);
 
 /******************************************************************************
