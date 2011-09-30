@@ -127,8 +127,8 @@ DECLARE_IO_PIN(SPI_SCK,     _IO(B, 7),   IO_OUTPUT,     1,     11,  "MAX518 Seri
  *   desc      : ADC channel description;
  */
 
-/*               name        pos_ch     neg_ch     cookie   desc  */
-DECLARE_ADC_CH(ADC_VCC,    _IO(A, 0),  _IO(A, 0),   NA,     "VCC monitor")
+/*               name       cookie                 desc  */
+DECLARE_ADC_CH(ADC_VCC,       NA,                 "VCC monitor")
 
 #endif
 

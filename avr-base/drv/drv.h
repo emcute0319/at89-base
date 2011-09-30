@@ -40,6 +40,7 @@
 #include "drv_timer.h"
 #include "drv_uart.h"
 #include "drv_watchdog.h"
+#include "drv_adc.h"
 #include "drv_spi.h"
 #include "drv_i2cm.h"
 #include "drv_i2cs.h"
