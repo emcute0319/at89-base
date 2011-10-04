@@ -6,6 +6,17 @@
 *******************************************************************************
 '''
 
+
+def _io_port_def(name, fout, sRegName, ss):
+    sPort = 'IO_PORT_%s_%s' % (name, sRegName)
+    fout.write('#define %-25s %s\n' % (sPort, ss))
+
+def _io_pin_def(name, fout, sRegName, ss):
+    sPort = 'IO_PIN_%s_%s' % (name, sRegName)
+    fout.write('#define %-25s %s\n' % (sPort, ss))
+
+
+
 import sys
 import time
 import re
@@ -51,25 +62,10 @@ for line in fin:
 
         fout.write('/* %s */\n' % (name))
 
-        # define IO direction
-        sRegName = 'DDR'
-        sPort = 'IO_PORT_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s%s\n' % (sPort, sRegName, port))
-
-        # define IO output
-        sRegName = 'PORT'
-        sPort = 'IO_PORT_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s%s\n' % (sPort, sRegName, port))
-
-        # define IO input
-        sRegName = 'PIN'
-        sPort = 'IO_PORT_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s%s\n' % (sPort, sRegName, port))
-
-        # define IO description
-        sRegName = 'DESC'
-        sPort = 'IO_PORT_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s "%s"\n' % (sPort, desc))
+        _io_port_def(name, fout, 'DDR',  'DDR%s' % (port))  # define IO Port direction
+        _io_port_def(name, fout, 'PORT', 'PORT%s'% (port))  # define IO Port output
+        _io_port_def(name, fout, 'PIN',  'PIN%s' % (port))  # define IO Port input
+        _io_port_def(name, fout, 'DESC', '"%s"'  % (desc))  # define IO Port description
 
         fout.write('\n')
 
@@ -88,40 +84,13 @@ for line in fin:
 
         fout.write('/* %s */\n' % (name))
 
-        # define IO direction
-        sRegName = 'DDR'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s%s_%s%s%s\n' % (sPort, sRegName, port, sRegName, port, bit))
-
-        # define IO output
-        sRegName = 'PORT'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s%s_%s%s%s\n' % (sPort, sRegName, port, sRegName, port, bit))
-
-        # define IO input
-        sRegName = 'PIN'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s%s_%s%s%s\n' % (sPort, sRegName, port, sRegName, port, bit))
-
-        # define IO mode
-        sRegName = 'MODE'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s\n' % (sPort, mode))
-
-        # define IO initial value
-        sRegName = 'INIT'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s\n' % (sPort, init_val))
-
-        # define IO pin number
-        sRegName = 'PIN_NO'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s %s\n' % (sPort, pin))
-
-        # define IO description
-        sRegName = 'DESC'
-        sPort = 'IO_PIN_%s_%s' % (name, sRegName)
-        fout.write('#define %-25s "%s"\n' % (sPort, desc))
+        _io_pin_def(name, fout, 'DDR',    'DDR%s_DDR%s%s'  % (port, port, bit))  # define IO direction
+        _io_pin_def(name, fout, 'PORT',   'PORT%s_PORT%s%s'% (port, port, bit))  # define IO output
+        _io_pin_def(name, fout, 'PIN',    'PIN%s_PIN%s%s'  % (port, port, bit))  # define IO input
+        _io_pin_def(name, fout, 'MODE',   mode)                                  # define IO mode
+        _io_pin_def(name, fout, 'INIT',   init_val)                              # define IO initial value
+        _io_pin_def(name, fout, 'PIN_NO', pin)                                   # define IO pin number
+        _io_pin_def(name, fout, 'DESC',   '"%s"'  % (desc))                      # define IO description
 
         fout.write('\n')
 
