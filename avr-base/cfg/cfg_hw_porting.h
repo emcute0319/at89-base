@@ -63,12 +63,12 @@ DECLARE_IO_PIN(LED_DATA_d,  _IO(A, 3),   IO_OUTPUT,     1,     15,  "LED Data Ou
 DECLARE_IO_PIN(LED_DATA_g,  _IO(A, 4),   IO_OUTPUT,     1,     16,  "LED Data Output: g: =0, Light; =1, Dark.")
 DECLARE_IO_PIN(LED_DATA_b,  _IO(A, 5),   IO_OUTPUT,     1,     17,  "LED Data Output: b: =0, Light; =1, Dark.")
 DECLARE_IO_PIN(LED_DATA_a,  _IO(A, 6),   IO_OUTPUT,     1,     18,  "LED Data Output: a: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_f,  _IO(A, 7),   IO_OUTPUT,     1,     19,  "LED Data Output: f: =0, Light; =1, Dark.")
+DECLARE_IO_PIN(LED_DATA_f,  _IO(A, 7),   IO_INPUT,     0,     19,  "LED Data Output: f: =0, Light; =1, Dark.")
 
 /* PORT B */
 /*               name        port bit      mode     init_val pin_no  desc  */
-DECLARE_IO_PIN(UART_RXD,    _IO(B, 0),   IO_INPUT,      1,      2,  "UART RXD Pin")
-DECLARE_IO_PIN(UART_TXD,    _IO(B, 1),   IO_OUTPUT,     1,      3,  "UART TXD Pin")
+DECLARE_IO_PIN(LED_SHDN,    _IO(B, 0),   IO_OUTPUT,     0,      2,  "LED Shutdown Output")
+DECLARE_IO_PIN(LED_OUT,     _IO(B, 1),   IO_OUTPUT,     1,      3,  "LED Output")
 DECLARE_IO_PIN(SPI_MISO,    _IO(B, 2),   IO_INPUT,      1,      8,  "MAX187 CS Pin: =0, select MAX187; =1, deselect MAX187.")
 DECLARE_IO_PIN(SPI_CS,      _IO(B, 3),   IO_OUTPUT,     1,      9,  "MAX518 Serial Data Output Pin")
 DECLARE_IO_PIN(LED_SEL_1,   _IO(B, 4),   IO_OUTPUT,     1,      6,  "LED Select 1: =0, select this LED; =1, deselect this LED.")
@@ -92,7 +92,7 @@ DECLARE_IO_PIN(SPI_SCK,     _IO(B, 7),   IO_OUTPUT,     1,     11,  "MAX518 Seri
  */
 
 /*               name       adc_mux                                                               adc_prescale      desc  */
-DECLARE_ADC_CH(ADC_VCC,  ADC_Vref_Internal | ADC_Result_RightAdjust | ADC_MUX_Single_VBG,       ADC_Prescale_128,  "VCC monitor")
+DECLARE_ADC_CH(ADC_IN,  ADC_Vref_Internal | ADC_Result_RightAdjust | ADC_MUX_Single_ADC7,      ADC_Prescale_128,  "VCC monitor")
 
 #endif
 
