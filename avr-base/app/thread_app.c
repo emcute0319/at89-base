@@ -78,30 +78,11 @@ PT_HANDLE thread_App_Entry(PT_TCB *pt)
       #endif
 
       #if DRV_ADC_SUPPORT
-      {
-        SINT16  vAdcSilent, vAdcCombine, vAdcDelta;
-
-        DRV_IO_SetOutput(IO_PIN(LED_SHDN));
-        vAdcSilent = DRV_ADC_Get(ADC_CH(ADC_IN));
-        DRV_IO_SetInput(IO_PIN(LED_SHDN));
-        vAdcCombine = DRV_ADC_Get(ADC_CH(ADC_IN));
-        vAdcDelta = vAdcSilent - vAdcCombine;
-        DRV_UART_Printf(" ADC_Silent=0x%X, ADC_Combine=0x%X, Delta=0x%X",
-                        vAdcSilent, vAdcCombine, vAdcDelta);
-
-        if (vAdcDelta >= 0x50)
-        {
-            DRV_IO_Write(IO_PIN(LED_OUT), HIGH);
-        }
-        else
-        {
-            DRV_IO_Write(IO_PIN(LED_OUT), LOW);
-        }
-      }
+        DRV_UART_Printf(" ADC_VCC:0x%X", DRV_ADC_Get(ADC_CH(ADC_VCC)));
       #endif
 
         /* delay 1000ms */
-        PT_SLEEP_MS(pt, 250);
+        PT_SLEEP_MS(pt, 1000);
 
         vElapsedTime++;
     }

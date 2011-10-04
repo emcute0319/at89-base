@@ -36,7 +36,7 @@
 /* CPU Driver */
 #define DRV_UART_SUPPORT        1       /* UART        */
 #define DRV_WATCHDOG_SUPPORT    0       /* Watchdog    */
-#define DRV_ADC_SUPPORT         1       /* ADC         */
+#define DRV_ADC_SUPPORT         0       /* ADC         */
 
 /* Simulated/Miscellaneous Driver */
 #define DRV_SPI_SUPPORT         0       /* SPI         */
