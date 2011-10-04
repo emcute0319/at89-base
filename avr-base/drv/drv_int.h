@@ -29,13 +29,32 @@
 #define __DRV_INT_H
 
 
-/* enable/disable global interrupt */
+/* enable/disable/lock/unlock global interrupt */
 #define DRV_INT_GlobalEnableInterrupt()     __enable_interrupt()
 #define DRV_INT_GlobalDisableInterrupt()    __disable_interrupt()
-
-/* lock/unlock global interrupt */
 #define DRV_INT_LockGlobalInterrupt()       ((SREG_Bit7)? (SREG_Bit7=0, TRUE) : FALSE)
 #define DRV_INT_UnlockGlobalInterrupt(_s)   do { SREG_Bit7=(_s); } while (0)
+
+/* enable/disable external interrrupt */
+#define DRV_INT_EnableExtInterrupt(n)       do { COMBINE(GICR_INT,n) = 1; } while (0)
+#define DRV_INT_DisableExtInterrupt(n)      do { COMBINE(GICR_INT,n) = 0; } while (0)
+#define DRV_INT_LockExtInterrupt(n)         (COMBINE(GICR_INT,n)? (COMBINE(GICR_INT,n)=0, TRUE) : FALSE)
+#define DRV_INT_UnlockExtInterrupt(n, _s)   do { COMBINE(GICR_INT,n) = (_s); } while (0)
+
+/* external interrupt trigger mode:
+ *
+ * Note:
+ *  1. Before configurating external interrupt trigger mode,
+ *      the corresponding interrupt should be disabled,
+ *      to prevent unwanted interrupt.
+ *  2. Only support INT0/INT1 for ATmega16.
+ *  3. INT2 is always edge trigger mode for ATmega16.
+ */
+#define DRV_INT_SetExtInterruptLowLevelTrigger(n)       do { COMBINE2(MCUCR_ICS,n,1) = 0;  COMBINE2(MCUCR_ICS,n,0) = 0; } while (0)
+#define DRV_INT_SetExtInterruptLevelChangeTrigger(n)    do { COMBINE2(MCUCR_ICS,n,1) = 0;  COMBINE2(MCUCR_ICS,n,0) = 1; } while (0)
+#define DRV_INT_SetExtInterruptNegativeEdgeTrigger(n)   do { if ((n) == 2) {COMBINE(MCUCSR_ISC,n)=0;} else {COMBINE2(MCUCR_ICS,n,1) = 1;  COMBINE2(MCUCR_ICS,n,0) = 0;} } while (0)
+#define DRV_INT_SetExtInterruptPositiveEdgeTrigger(n)   do { if ((n) == 2) {COMBINE(MCUCSR_ISC,n)=1;} else {COMBINE2(MCUCR_ICS,n,1) = 1;  COMBINE2(MCUCR_ICS,n,0) = 1;} } while (0)
+#define DRV_INT_IsExtInterruptOccurred(n)               COMBINE(GIFR_INTF,n)
 
 
 #endif /* __DRV_INT_H */

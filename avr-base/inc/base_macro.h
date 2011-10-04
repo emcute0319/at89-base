@@ -35,7 +35,8 @@
 #include <stdarg.h>
 
 
-#define COMBINE(a, b)   a##b
+#define COMBINE(a, b)       a##b
+#define COMBINE2(a, b, c)   a##b##c
 
 #define KB(x)           ((x)*1024)
 #define MB(x)           ((x)*1024*1024)
