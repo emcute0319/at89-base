@@ -28,15 +28,16 @@
 #include "drv.h"
 
 
+#if DRV_ADC_SUPPORT
+
 /******************************************************************************
  * FUNCTION NAME:
  *      DRV_ADC_Get
  * DESCRIPTION:
  *      Sample ADC Value.
  * PARAMETERS:
- *      vPositive : Positive channel;
- *      vNegative : Negative channel;
- *      vAvgNum   : ADC Average Number, should be less than 62;
+ *      vAdcPrescale : ADC prescale;
+ *      vAdcMux      : ADC Mux;
  * RETURN:
  *      The averaged sampled ADC Value.
  * NOTES:
@@ -44,13 +45,35 @@
  * HISTORY:
  *      2010.3.16        Panda.Xiong         Update
  *****************************************************************************/
-UINT16 DRV_ADC_Get
+SINT16 DRV_ADC_Get
 (
-    IN  UINT8   vPositive,
-    IN  UINT8   vNegative
+    IN  UINT8   vAdcPrescale,
+    IN  UINT8   vAdcMux
 )
 {
-    //
+    SINT16  vResult;
+
+    /* enable ADC, no interrupt */
+    ADCSRA = vAdcPrescale | ADC_Enable;
+
+    /* clear last ADC interrupt flag */
+    ADCSRA_ADIF = 1;
+
+    /* set ADC channel */
+    ADMUX = vAdcMux;
+
+    /* start ADC converting */
+    ADCSRA_ADSC = 1;
+
+    /* waiting for ADC convert done */
+    while (ADCSRA_ADSC == 1)
+    {}
+
+    /* read ADC result, first ADCL, then ADCH */
+    vResult  = ADCL;
+    vResult |= ((SINT16)ADCH << 8);
+
+    return vResult;
 }
 
 
@@ -72,6 +95,7 @@ void DRV_ADC_Init(void)
 {
     /* enable ADC */
     ADCSRA_ADEN = 1;
-
-    //
 }
+
+#endif
+

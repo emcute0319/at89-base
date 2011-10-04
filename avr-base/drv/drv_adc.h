@@ -29,6 +29,11 @@
 #define __DRV_ADC_H
 
 
+#if DRV_ADC_SUPPORT
+
+#define ADC_Enable                      (0x01 << ADEN)  /* enable  ADC */
+#define ADC_Disable                     (0x00 << ADEN)  /* disable ADC */
+
 #define ADC_Vref_External               (0x00 << REFS0) /* AREF, Internal Vref Disabled */
 #define ADC_Vref_AVCC                   (0x01 << REFS0) /* AVCC     */
 #define ADC_Vref_Reserved               (0x02 << REFS0) /* Reserved */
@@ -70,10 +75,26 @@
 #define ADC_MUX_Single_VBG              (0x1E << MUX0)  /* Single Ended Input, V_BG, 1.22V */
 #define ADC_MUX_Single_GND              (0x1F << MUX0)  /* Single Ended Input, GND */
 
-
 #define ADC_Prescale_2                  (0x0 << ADPS0)  /* ADC Prescale: 2   */
 #define ADC_Prescale_4                  (0x2 << ADPS0)  /* ADC Prescale: 4   */
-#define ADC_Prescale_8                  (0x3 << ADPS0)  /* ADC Prescale: 4   */
+#define ADC_Prescale_8                  (0x3 << ADPS0)  /* ADC Prescale: 8   */
+#define ADC_Prescale_16                 (0x4 << ADPS0)  /* ADC Prescale: 16  */
+#define ADC_Prescale_32                 (0x5 << ADPS0)  /* ADC Prescale: 32  */
+#define ADC_Prescale_64                 (0x6 << ADPS0)  /* ADC Prescale: 64  */
+#define ADC_Prescale_128                (0x7 << ADPS0)  /* ADC Prescale: 128 */
+
+
+#define ADC_CH_MUX(x)               COMBINE(ADC_CH_MUX_, x)
+#define ADC_CH_PRESCALE(x)          COMBINE(ADC_CH_PRESCALE_, x)
+#define ADC_CH(x)                   ADC_CH_PRESCALE(x), ADC_CH_MUX(x)
+
+#define DECLARE_ADC_CH(_name, _mux, _prescale, _desc)   ADC_CH_MUX(_name)      = (_mux),        \
+                                                        ADC_CH_PRESCALE(_name) = (_prescale),
+typedef enum
+{
+    #include "cfg_hw_porting.h"
+} ADC_CH_T;
+#undef DECLARE_ADC_CH
 
 
 /******************************************************************************
@@ -82,9 +103,8 @@
  * DESCRIPTION:
  *      Sample ADC Value.
  * PARAMETERS:
- *      vPositive : Positive channel;
- *      vNegative : Negative channel;
- *      vAvgNum   : ADC Average Number, should be less than 62;
+ *      vAdcPrescale : ADC prescale;
+ *      vAdcMux      : ADC Mux;
  * RETURN:
  *      The averaged sampled ADC Value.
  * NOTES:
@@ -92,10 +112,10 @@
  * HISTORY:
  *      2010.3.16        Panda.Xiong         Update
  *****************************************************************************/
-UINT16 DRV_ADC_Get
+SINT16 DRV_ADC_Get
 (
-    IN  UINT8   vPositive,
-    IN  UINT8   vNegative
+    IN  UINT8   vAdcPrescale,
+    IN  UINT8   vAdcMux
 );
 
 /******************************************************************************
@@ -113,6 +133,8 @@ UINT16 DRV_ADC_Get
  *      2011.9.30        Panda.Xiong         Create/Update
  *****************************************************************************/
 void DRV_ADC_Init(void);
+
+#endif
 
 
 #endif /* __DRV_ADC_H */

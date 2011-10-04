@@ -34,5 +34,5 @@ set PROJECT_NAME=%2
 path %COMPILER_BASE%\bin;%PROJECT_DIR%\tools\bin
 
 mkdir %PROJECT_DIR%\build\tmp\
-converter %PROJECT_DIR%\cfg\cfg_hw_def.h %PROJECT_DIR%\build\tmp\cfg_io_def.h
+converter %PROJECT_DIR%\cfg\cfg_hw_porting.h %PROJECT_DIR%\build\tmp\~cfg_io_def.h
 

@@ -77,6 +77,12 @@ PT_HANDLE thread_App_Entry(PT_TCB *pt)
         DRV_LED_SetLedData(1, FALSE, (vCount>>8)&0xF);
       #endif
 
+      #if DRV_ADC_SUPPORT
+      {
+        DRV_UART_Printf(" ADC:%X", DRV_ADC_Get(ADC_CH(ADC_VCC)));
+      }
+      #endif
+
         /* delay 1000ms */
         PT_SLEEP_MS(pt, 1000);
 

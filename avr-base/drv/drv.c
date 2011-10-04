@@ -72,6 +72,11 @@ void DRV_Init(void)
     /* Init I2C Slave Bus */
     DRV_I2CS_Init();
 #endif
+
+#if DRV_ADC_SUPPORT
+    /* Init ADC */
+    DRV_ADC_Init();
+#endif
 }
 
 

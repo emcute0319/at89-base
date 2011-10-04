@@ -32,7 +32,7 @@
 /* the real IO definition is in this auto-generated file */
 #define DECLARE_IO_PORT(...)            /* empty */
 #define DECLARE_IO_PIN(...)             /* empty */
-#include "cfg_io_def.h"
+#include "~cfg_io_def.h"
 #undef DECLARE_IO_PORT
 #undef DECLARE_IO_PIN
 

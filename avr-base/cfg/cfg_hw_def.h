@@ -36,6 +36,7 @@
 /* CPU Driver */
 #define DRV_UART_SUPPORT        1       /* UART        */
 #define DRV_WATCHDOG_SUPPORT    0       /* Watchdog    */
+#define DRV_ADC_SUPPORT         0       /* ADC         */
 
 /* Simulated/Miscellaneous Driver */
 #define DRV_SPI_SUPPORT         0       /* SPI         */
@@ -58,78 +59,6 @@
 /* UART */
 #if DRV_UART_SUPPORT
  #define UART_BAUDRATE_VAL      19200UL  /* bps */
-#endif
-
-
-
-#ifdef DECLARE_IO_PIN
-
-/* IO pin Definition.
- *
- *   name      : IO pin name;
- *   port      : IO port ID;
- *   bit       : IO bit ID of port;
- *   mode      : IO input/output mode;
- *   init_val  : IO initial output value;
- *   pin_no    : IO hardware pin number;
- *   desc      : IO description;
- */
-
-/*
- *         a
- *     ---------
- *    |         |
- *  f |         | b
- *    |    g    |
- *    |---------|
- *    |         |
- *  e |         | c
- *    |         |
- *     ---------   . p
- *         d
- */
-
-/* PORT A */
-DECLARE_IO_PORT(LED_DATA_OUT,   _PORT(A),  "LED Data Output port")
-/*               name        port bit      mode     init_val pin_no  desc  */
-DECLARE_IO_PIN(LED_DATA_c,  _IO(A, 0),   IO_OUTPUT,     1,     12,  "LED Data Output: c: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_p,  _IO(A, 1),   IO_OUTPUT,     1,     13,  "LED Data Output: p: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_e,  _IO(A, 2),   IO_OUTPUT,     1,     14,  "LED Data Output: e: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_d,  _IO(A, 3),   IO_OUTPUT,     1,     15,  "LED Data Output: d: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_g,  _IO(A, 4),   IO_OUTPUT,     1,     16,  "LED Data Output: g: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_b,  _IO(A, 5),   IO_OUTPUT,     1,     17,  "LED Data Output: b: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_a,  _IO(A, 6),   IO_OUTPUT,     1,     18,  "LED Data Output: a: =0, Light; =1, Dark.")
-DECLARE_IO_PIN(LED_DATA_f,  _IO(A, 7),   IO_OUTPUT,     1,     19,  "LED Data Output: f: =0, Light; =1, Dark.")
-
-/* PORT B */
-/*               name        port bit      mode     init_val pin_no  desc  */
-DECLARE_IO_PIN(UART_RXD,    _IO(B, 0),   IO_INPUT,      1,      2,  "UART RXD Pin")
-DECLARE_IO_PIN(UART_TXD,    _IO(B, 1),   IO_OUTPUT,     1,      3,  "UART TXD Pin")
-DECLARE_IO_PIN(SPI_MISO,    _IO(B, 2),   IO_INPUT,      1,      8,  "MAX187 CS Pin: =0, select MAX187; =1, deselect MAX187.")
-DECLARE_IO_PIN(SPI_CS,      _IO(B, 3),   IO_OUTPUT,     1,      9,  "MAX518 Serial Data Output Pin")
-DECLARE_IO_PIN(LED_SEL_1,   _IO(B, 4),   IO_OUTPUT,     1,      6,  "LED Select 1: =0, select this LED; =1, deselect this LED.")
-DECLARE_IO_PIN(LED_SEL_0,   _IO(B, 5),   IO_OUTPUT,     1,      7,  "LED Select 0: =0, select this LED; =1, deselect this LED.")
-DECLARE_IO_PIN(SPI_MOSI,    _IO(B, 6),   IO_OUTPUT,     1,     NA,  "Unused Pin")
-DECLARE_IO_PIN(SPI_SCK,     _IO(B, 7),   IO_OUTPUT,     1,     11,  "MAX518 Serial Clock Pin")
-
-#endif
-
-
-
-#ifdef DECLARE_ADC_CH
-
-/* ADC Channel Definition.
- *
- *   name      : ADC channel name;
- *   pos_ch    : ADC positive channel;
- *   neg_ch    : ADC negative channel;
- *   cookie    : ADC channel cookie;
- *   desc      : ADC channel description;
- */
-
-/*               name       cookie                 desc  */
-DECLARE_ADC_CH(ADC_VCC,       NA,                 "VCC monitor")
-
 #endif
 
 
