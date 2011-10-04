@@ -47,6 +47,7 @@
  *****************************************************************************/
 void DRV_IO_Init(void)
 {
+#define DECLARE_IO_PORT(...)            /* empty */
 #define DECLARE_IO_PIN(_name,_port_bit,_mode,_init_val,_pin_no,_desc)       \
     do                                                                      \
     {                                                                       \
@@ -62,8 +63,9 @@ void DRV_IO_Init(void)
         }                                                                   \
     } while (0);
 
-#include "cfg_hw_def.h"
+#include "cfg_hw_porting.h"
 
+#undef DECLARE_IO_PORT
 #undef DECLARE_IO_PIN
 }
 

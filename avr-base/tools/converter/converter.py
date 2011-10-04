@@ -84,7 +84,7 @@ for line in fin:
 
         fout.write('/* %s */\n' % (name))
 
-        _io_pin_def(name, fout, 'DDR',    'DDR%s_DDR%s%s'  % (port, port, bit))  # define IO direction
+        _io_pin_def(name, fout, 'DDR',    'DDR%s_DD%s%s'   % (port, port, bit))  # define IO direction
         _io_pin_def(name, fout, 'PORT',   'PORT%s_PORT%s%s'% (port, port, bit))  # define IO output
         _io_pin_def(name, fout, 'PIN',    'PIN%s_PIN%s%s'  % (port, port, bit))  # define IO input
         _io_pin_def(name, fout, 'MODE',   mode)                                  # define IO mode

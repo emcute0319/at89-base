@@ -42,8 +42,8 @@
 #define _IO_OUT(_name)                  COMBINE(_name, _PORT)
 #define _IO_DDR(_name)                  COMBINE(_name, _DDR)
 #define _IO_IN(_name)                   COMBINE(_name, _PIN)
-#define _IO_MODE(_name)                 COMBINE(_name, _MODE)
-#define _IO_INIT(_name)                 COMBINE(_name, _INIT)
+#define _IO_MODE(_name)                 IO_PIN(COMBINE(_name, _MODE))
+#define _IO_INIT(_name)                 IO_PIN(COMBINE(_name, _INIT))
 
 #define _PORT_REG(_name, _port)         COMBINE(_name, _port)
 #define _PORT_OUT(_port)                _PORT_REG(PORT, _port)
