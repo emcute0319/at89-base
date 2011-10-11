@@ -179,6 +179,17 @@ void DRV_UART_Printf(char CONST *format, ...)
                 break;
             }
 
+            case 'S':
+            {
+                char *p_str = (char *)va_arg(ptr, char *);
+
+                while ((fch = *p_str++) != '\0')
+                {
+                    drv_uart_WriteByte(fch);
+                }
+                break;
+            }
+
             case 'c':
                 fch = va_arg(ptr, int);
                 /* no break here */
