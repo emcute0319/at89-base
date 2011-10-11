@@ -17,35 +17,50 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   cfg_protothread.h
+ *   thread_cli.h
  * DESCRIPTION:
- *   N/A
+ *   CLI thread.
  * HISTORY:
- *   2010.4.7        Panda.Xiong         Create/Update
+ *   2011.10.11        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
-#include "drv.h"
-#include "app.h"
+#ifndef __THREAD_CLI_H
+#define __THREAD_CLI_H
 
 
-#ifdef DECLARE_PROTOTHREAD
-
-/* Protothread Definition.
- *
- *   entry     : Thread entry; (if non-exist or unused, set to NULL)
- *   init_func : Thread init function; (if non-exist or unused, set to NULL)
- *   cookie    : Thread cookie; (unsupported yet)
- *   desc      : Thread description;
- *
- *   Note      :
+/******************************************************************************
+ * FUNCTION NAME:
+ *      thread_Cli_Entry
+ * DESCRIPTION:
+ *      Cli Thread Entry.
+ * PARAMETERS:
  *      N/A
- */
+ * RETURN:
+ *      PT_HANDLE
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.3.24        Panda.Xiong         Create/Update
+ *****************************************************************************/
+PT_HANDLE thread_Cli_Entry(PT_TCB *pt);
 
-/*                    entry              init_func       cookie   desc        */
-DECLARE_PROTOTHREAD(thread_Idle_Entry, thread_Idle_Init,   NA,    "Idle Thread")
-DECLARE_PROTOTHREAD(thread_App_Entry,  thread_App_Init,    NA,    "App Thread")
-DECLARE_PROTOTHREAD(thread_Cli_Entry,  thread_Cli_Init,    NA,    "CLI Thread")
+/******************************************************************************
+ * FUNCTION NAME:
+ *      thread_Cli_Init
+ * DESCRIPTION:
+ *      N/A
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.4.6        PANDA         Create/Update
+ *****************************************************************************/
+void thread_Cli_Init(void);
 
-#endif
+
+#endif /* __THREAD_CLI_H */
 
