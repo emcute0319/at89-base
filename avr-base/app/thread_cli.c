@@ -49,8 +49,10 @@
 #define VT_KEY_CTRL_U       (0x15)
 #define VT_KEY_CTRL_Z       (0x1A)
 
-#define cli_vt_Printf(...)  DRV_UART_Printf(__VA_ARGS__)
-#define cli_vt_ReadKey()    DRV_UART_ReadByte()
+#define cli_vt_Printf(...)      DRV_UART_Printf(__VA_ARGS__)
+#define cli_vt_ReadKey()        DRV_UART_ReadByte()
+
+#define cli_vt_DisplayPrompt()  cli_vt_Printf("\n\r%s>", CLI_PROMPT)
 
 /* init CLI VT driver */
 static void cli_vt_Init(void)
@@ -59,6 +61,63 @@ static void cli_vt_Init(void)
 /* clear VT screen */
 static void cli_vt_ClearScreen(void)
 {}
+
+/* read command */
+static UINT8 *cli_vt_ReadCommand(void)
+{
+    static UINT8    aCmdBuf[CLI_CMD_BUF_MAX+1];
+    static UINT8    vCmdBufCount = 0;
+    UINT8   vKey;
+
+    /* read key from VT */
+    vKey = cli_vt_ReadKey();
+
+    /* check input key */
+    switch (vKey)
+    {
+        case VT_KEY_CR: /* enter */
+        case VT_KEY_LF:
+            /* received a command */
+            aCmdBuf[++vCmdBufCount] = '\0'; /* end with \0 */
+            vCmdBufCount = 0;
+            return aCmdBuf;
+
+        case VT_KEY_CTRL_Z: /* clear current command line */
+            while (vCmdBufCount != 0)
+            {
+                cli_vt_Printf("\b \b");
+                vCmdBufCount--;
+            }
+            break;
+
+        case VT_KEY_BS:
+            if (vCmdBufCount != 0)
+            {
+                cli_vt_Printf("\b \b");
+                vCmdBufCount--;
+            }
+            break;
+
+        default:
+			if ((vKey < 0x20) || (vKey > 0x7F))
+			{
+                /* this is not a visible charactor */
+			}
+            else
+            {
+                /* if command buffer not full, record it */
+                if (vCmdBufCount < COUNT_OF(aCmdBuf))
+                {
+                    aCmdBuf[++vCmdBufCount] = vKey;
+                    cli_vt_Printf("%c", vKey);
+                }
+            }
+            break;
+    }
+
+    /* not received a command yet */
+    return NULL;
+}
 
 #endif
 
@@ -85,52 +144,21 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
 
     for (;;)
     {
-        static UINT8    aCmdBuf[CLI_CMD_BUF_MAX+1];
-        static UINT8    vCmdBufCount;
-        UINT8   vKey;
-
-        /* display prompt */
-        cli_vt_Printf("\n\r%s>", CLI_PROMPT);
+        UINT8  *pCmd;
 
         /* wait for CLI input key */
         PT_SEM_WAIT(pt, vVT_Rx);
 
-        /* read key from VT */
-        vKey = cli_vt_ReadKey();
+        /* read command */
+        pCmd = cli_vt_ReadCommand();
 
-        /* check input key */
-        switch (vKey)
+        if (pCmd != NULL)
         {
-            case VT_KEY_CTRL_Z: /* clear current command line */
-                while (vCmdBufCount != 0)
-                {
-                    cli_vt_Printf("\b \b");
-                    vCmdBufCount--;
-                }
-                break;
+            /* parse command line */
+            //
 
-            case VT_KEY_BS:
-                if (vCmdBufCount != 0)
-                {
-                    cli_vt_Printf("\b \b");
-                    vCmdBufCount--;
-                }
-                break;
-
-            default:
-    			if ((vKey < 0x20) || (vKey > 0x7F))
-    			{
-                    /* this is not a visible charactor */
-    			}
-                else
-                {
-                    /* if command buffer not full, record it */
-                    if (vCmdBufCount < COUNT_OF(aCmdBuf))
-                    {
-                        aCmdBuf[++vCmdBufCount] = vKey;
-                    }
-                }
-                break;
+            /* display prompt */
+            cli_vt_DisplayPrompt();
         }
     }
 
@@ -158,5 +186,8 @@ void thread_Cli_Init(void)
 
     cli_vt_Init();
     cli_vt_ClearScreen();
+
+    /* display prompt */
+    cli_vt_DisplayPrompt();
 }
 
