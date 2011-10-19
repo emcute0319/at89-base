@@ -50,7 +50,7 @@ PT_HANDLE thread_App_Entry(PT_TCB *pt)
     {
         static UINT32   vElapsedTime = 0;
 
-      #if DRV_UART_SUPPORT
+      #if 0 //DRV_UART_SUPPORT
         DRV_UART_Printf("\n\r thread_App_Entry: Elapsed Time -> %d:%d:%d ...",
                         (UINT16)(vElapsedTime/3600),
                         (UINT16)(vElapsedTime/60%60),

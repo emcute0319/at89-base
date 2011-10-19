@@ -29,6 +29,32 @@
 #include "cli_porting.h"
 
 
+static volatile PT_SCB vVT_Rx;
+static volatile UINT8  vRxData;
+
+#if 1
+
+static SINT8 _strcmp(UINT8 *s1, UINT8 CONST *s2)
+{
+    for (; *s1 == *s2; ++s1, ++s2)
+      if (*s1 == '\0')
+        return 0;
+
+    return ((*s1 < *s2)? -1 : +1);
+}
+
+static UINT8 _strlen(UINT8 CONST *s)
+{
+    UINT8 CONST *sc;
+
+    for (sc = s; *sc != '\0'; ++sc)
+    {}
+
+    return (sc - s);
+}
+
+#endif
+
 #if 1
 
 /* Define key ascii value */
@@ -59,51 +85,43 @@ static struct
 /* read command */
 static UINT8 *cli_vt_ReadCommand(void)
 {
-    SINT16  vReadKey;
+    static UINT8    aCmdBuf[CLI_CMD_BUF_MAX+1];
+    static UINT8    vCmdBufCount = 0;
+    UINT8   vKey = vRxData;
 
-    /* read key from VT */
-    vReadKey = CLI_VT_ReadKey();
-
-    if (vReadKey != -1)
+    /* check input key */
+    switch (vKey)
     {
-        static UINT8    aCmdBuf[CLI_CMD_BUF_MAX+1];
-        static UINT8    vCmdBufCount = 0;
-        UINT8   vKey = (UINT8)vReadKey;
+        case VT_KEY_CR: /* enter */
+        case VT_KEY_LF:
+            /* command received */
+            aCmdBuf[vCmdBufCount] = '\0'; /* end with \0 */
+            vCmdBufCount = 0;
+            return aCmdBuf;
 
-        /* check input key */
-        switch (vKey)
-        {
-            case VT_KEY_CR: /* enter */
-            case VT_KEY_LF:
-                /* command received */
-                aCmdBuf[++vCmdBufCount] = '\0'; /* end with \0 */
-                vCmdBufCount = 0;
-                return aCmdBuf;
+        case VT_KEY_BS:
+            if (vCmdBufCount != 0)
+            {
+                CLI_VT_Printf("\b \b");
+                vCmdBufCount--;
+            }
+            break;
 
-            case VT_KEY_BS:
-                if (vCmdBufCount != 0)
+        default:
+            if ((vKey < 0x20) || (vKey > 0x7F))
+            {
+                /* this is not a visible charactor */
+            }
+            else
+            {
+                /* if command buffer not full, record it */
+                if (vCmdBufCount < COUNT_OF(aCmdBuf))
                 {
-                    CLI_VT_Printf("\b \b");
-                    vCmdBufCount--;
+                    aCmdBuf[vCmdBufCount++] = vKey;
+                    CLI_VT_Printf("%c", vKey);
                 }
-                break;
-
-            default:
-                if ((vKey < 0x20) || (vKey > 0x7F))
-                {
-                    /* this is not a visible charactor */
-                }
-                else
-                {
-                    /* if command buffer not full, record it */
-                    if (vCmdBufCount < COUNT_OF(aCmdBuf))
-                    {
-                        aCmdBuf[++vCmdBufCount] = vKey;
-                        CLI_VT_Printf("%c", vKey);
-                    }
-                }
-                break;
-        }
+            }
+            break;
     }
 
     /* no command received yet */
@@ -148,30 +166,37 @@ static UINT8 cli_vt_ParseCmd(IN OUT UINT8 *ptr, OUT UINT8 *param[])
 static void cli_vt_ShowHelp(void)
 {
     UINT8   vLoop;
+    UINT8   vMaxNameLen;
 
     CLI_VT_Printf("\n\rAvailable Commands :");
 
+    /* calculate the maximum command name length */
+    vMaxNameLen = 0;
     for (vLoop = 0; vLoop < COUNT_OF(aCmdTable); vLoop++)
     {
-        CLI_VT_Printf("\n\r %s : %s",
-                      aCmdTable[vLoop].pName,
-                      aCmdTable[vLoop].pHelp);
+        UINT8   vNameLen = _strlen(aCmdTable[vLoop].pName);
+
+        if (vNameLen > vMaxNameLen)
+        {
+            vMaxNameLen = vNameLen;
+        }
     }
-}
 
-static SINT8 _strcmp(UINT8 *s1, UINT8 CONST *s2)
-{
-    for (; *s1 == *s2; ++s1, ++s2)
-      if (*s1 == '\0')
-        return 0;
+    for (vLoop = 0; vLoop < COUNT_OF(aCmdTable); vLoop++)
+    {
+        SINT8   vFormatLen = vMaxNameLen - _strlen(aCmdTable[vLoop].pName);
 
-    return ((*s1 < *s2)? -1 : +1);
+        CLI_VT_Printf("\n\r %s", aCmdTable[vLoop].pName);
+        while (vFormatLen-- != 0)
+        {
+            CLI_VT_Printf(" ");
+        }
+        CLI_VT_Printf(" -- %s", aCmdTable[vLoop].pHelp);
+    }
 }
 
 #endif
 
-
-static volatile PT_SCB vVT_Rx;
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -191,6 +216,8 @@ INTERRUPT_PROTO(DRV_VECTOR_UART_RX, USART_RXC);
 INTERRUPT(DRV_VECTOR_UART_RX, USART_RXC)
 {
     PT_SEM_SIGNAL(NULL, &vVT_Rx);
+
+    vRxData = CLI_VT_ReadKey();
 }
 
 
@@ -251,7 +278,7 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
                     }
                     if (vLoop == COUNT_OF(aCmdTable))
                     {
-                        CLI_VT_Printf("\n\r Invalid command!");
+                        CLI_VT_Printf("\n\rInvalid command!");
                     }
                 }
             }
