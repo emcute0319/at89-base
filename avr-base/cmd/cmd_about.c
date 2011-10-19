@@ -25,7 +25,7 @@
  *
 *****************************************************************************/
 
-#include "cli_porting.h"
+#include "typedef.h"
 
 
 /******************************************************************************
@@ -43,7 +43,7 @@
  * HISTORY:
  *      2011.10.19        Panda.Xiong         Create/Update
  *****************************************************************************/
-void CMD_About(IN UINT8 vParam, IN UINT8 *aParam[])
+static void CMD_About(IN UINT8 vParam, IN UINT8 *aParam[])
 {
     CLI_VT_Printf("\n\rRun AT %s(%d)", __FILE__, __LINE__);
 }

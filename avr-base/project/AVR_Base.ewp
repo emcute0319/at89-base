@@ -1985,12 +1985,6 @@
     </file>
   </group>
   <group>
-    <name>cmd</name>
-    <file>
-      <name>$PROJ_DIR$\..\cmd\cmd_about.c</name>
-    </file>
-  </group>
-  <group>
     <name>drv</name>
     <file>
       <name>$PROJ_DIR$\..\drv\drv.c</name>

@@ -56,10 +56,6 @@ static struct
 
 #define cli_vt_DisplayPrompt()  CLI_VT_Printf("\n\r%s>", CLI_PROMPT)
 
-/* clear VT screen */
-static void cli_vt_ClearScreen(void)
-{}
-
 /* read command */
 static UINT8 *cli_vt_ReadCommand(void)
 {
@@ -286,9 +282,6 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
 void thread_Cli_Init(void)
 {
     PT_SEM_INIT(&vVT_Rx, 0);
-
-    /* clear screen */
-    cli_vt_ClearScreen();
 
     /* display prompt */
     cli_vt_DisplayPrompt();
