@@ -33,7 +33,7 @@
 
 #define CLI_PROMPT          ""
 #define CLI_CMD_BUF_MAX     80
-#define CLI_MAX_PARAM		32
+#define CLI_MAX_PARAM		16
 
 /* Define key ascii value */
 #define VT_KEY_ESC          (27)
