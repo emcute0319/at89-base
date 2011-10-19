@@ -19,21 +19,17 @@
  * FILE NAME:
  *   thread_cli.c
  * DESCRIPTION:
- *   N/A
+ *   CLI thread, only support VT100.
  * HISTORY:
  *   2011.10.11        Panda.Xiong         Create/Update
  *
 *****************************************************************************/
 
 #include "protothread.h"
-#include "drv.h"
+#include "cli_porting.h"
 
 
 #if 1
-
-#define CLI_PROMPT          ""
-#define CLI_CMD_BUF_MAX     80
-#define CLI_MAX_PARAM		16
 
 /* Define key ascii value */
 #define VT_KEY_ESC          (27)
@@ -51,16 +47,14 @@
 #define VT_KEY_CTRL_U       (0x15)
 #define VT_KEY_CTRL_Z       (0x1A)
 
-#define cli_vt_Printf(...)      DRV_UART_Printf(__VA_ARGS__)
-#define cli_vt_ReadKey()        DRV_UART_ReadByte()
+static struct
+{
+    UINT8 CONST    *pName;
+    void            (*pExec)(IN UINT8 vParam, IN UINT8 *aParam[]);
+    UINT8 CONST    *pHelp;
+} CONST aCmdTable[] = CLI_CMD_LIST;
 
-#define cli_vt_DisplayPrompt()  cli_vt_Printf("\n\r%s>", CLI_PROMPT)
-
-#define DBG_PRT(...)            cli_vt_Printf(__VA_ARGS__)
-
-/* init CLI VT driver */
-static void cli_vt_Init(void)
-{}
+#define cli_vt_DisplayPrompt()  CLI_VT_Printf("\n\r%s>", CLI_PROMPT)
 
 /* clear VT screen */
 static void cli_vt_ClearScreen(void)
@@ -72,7 +66,7 @@ static UINT8 *cli_vt_ReadCommand(void)
     SINT16  vReadKey;
 
     /* read key from VT */
-    vReadKey = cli_vt_ReadKey();
+    vReadKey = CLI_VT_ReadKey();
 
     if (vReadKey != -1)
     {
@@ -85,7 +79,7 @@ static UINT8 *cli_vt_ReadCommand(void)
         {
             case VT_KEY_CR: /* enter */
             case VT_KEY_LF:
-                /* received a command */
+                /* command received */
                 aCmdBuf[++vCmdBufCount] = '\0'; /* end with \0 */
                 vCmdBufCount = 0;
                 return aCmdBuf;
@@ -93,7 +87,7 @@ static UINT8 *cli_vt_ReadCommand(void)
             case VT_KEY_BS:
                 if (vCmdBufCount != 0)
                 {
-                    cli_vt_Printf("\b \b");
+                    CLI_VT_Printf("\b \b");
                     vCmdBufCount--;
                 }
                 break;
@@ -109,14 +103,14 @@ static UINT8 *cli_vt_ReadCommand(void)
                     if (vCmdBufCount < COUNT_OF(aCmdBuf))
                     {
                         aCmdBuf[++vCmdBufCount] = vKey;
-                        cli_vt_Printf("%c", vKey);
+                        CLI_VT_Printf("%c", vKey);
                     }
                 }
                 break;
         }
     }
 
-    /* not received a command yet */
+    /* no command received yet */
     return NULL;
 }
 
@@ -153,6 +147,29 @@ static UINT8 cli_vt_ParseCmd(IN OUT UINT8 *ptr, OUT UINT8 *param[])
     }
 
     return n;
+}
+
+static void cli_vt_ShowHelp(void)
+{
+    UINT8   vLoop;
+
+    CLI_VT_Printf("\n\rAvailable Commands :");
+
+    for (vLoop = 0; vLoop < COUNT_OF(aCmdTable); vLoop++)
+    {
+        CLI_VT_Printf("\n\r %s : %s",
+                      aCmdTable[vLoop].pName,
+                      aCmdTable[vLoop].pHelp);
+    }
+}
+
+static SINT8 _strcmp(UINT8 *s1, UINT8 CONST *s2)
+{
+    for (; *s1 == *s2; ++s1, ++s2)
+      if (*s1 == '\0')
+        return 0;
+
+    return ((*s1 < *s2)? -1 : +1);
 }
 
 #endif
@@ -214,16 +231,33 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
             UINT8   vParam;
             UINT8  *aParam[CLI_MAX_PARAM];
 
-            DBG_PRT("--RxCmd--");
-
             /* parse command line */
             vParam = cli_vt_ParseCmd(pCmd, aParam);
 
             if (vParam != 0)
             {
-                DBG_PRT("--ParseCmd--");
+                UINT8   vLoop;
 
-                /* search & execute command */
+                if (_strcmp(aParam[0], "?") == 0)
+                {
+                    cli_vt_ShowHelp();
+                }
+                else
+                {
+                    /* search & execute command */
+                    for (vLoop = 0; vLoop < COUNT_OF(aCmdTable); vLoop++)
+                    {
+                        if (_strcmp(aParam[0], aCmdTable[vLoop].pName) == 0)
+                        {
+                            aCmdTable[vLoop].pExec(vParam, aParam);
+                            break;
+                        }
+                    }
+                    if (vLoop == COUNT_OF(aCmdTable))
+                    {
+                        CLI_VT_Printf("\n\r Invalid command!");
+                    }
+                }
             }
 
             /* display prompt */
@@ -253,7 +287,7 @@ void thread_Cli_Init(void)
 {
     PT_SEM_INIT(&vVT_Rx, 0);
 
-    cli_vt_Init();
+    /* clear screen */
     cli_vt_ClearScreen();
 
     /* display prompt */

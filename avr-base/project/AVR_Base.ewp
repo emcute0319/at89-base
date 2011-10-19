@@ -22,7 +22,7 @@
         <option>
           <name>Variant Memory</name>
           <version>0</version>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>ExePath</name>
@@ -55,7 +55,7 @@
         </option>
         <option>
           <name>LCEnableBitDefs</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>LCHeapSize</name>
@@ -63,7 +63,7 @@
         </option>
         <option>
           <name>SCCStackSize</name>
-          <state>0x20</state>
+          <state>0x100</state>
         </option>
         <option>
           <name>SCExtCStack</name>
@@ -145,7 +145,7 @@
         </option>
         <option>
           <name>RTLibraryPath</name>
-          <state>$TOOLKIT_DIR$\LIB\CLIB\cl3t-ec_mul-sf.r90</state>
+          <state>$TOOLKIT_DIR$\LIB\CLIB\cl3s-ec_mul-sf.r90</state>
         </option>
         <option>
           <name>Input variant</name>
@@ -408,6 +408,7 @@
         <option>
           <name>newCCIncludePaths</name>
           <state>..\app</state>
+          <state>..\cmd</state>
           <state>..\cfg</state>
           <state>..\drv</state>
           <state>..\inc</state>
@@ -1126,11 +1127,11 @@
         </option>
         <option>
           <name>RTConfigPath</name>
-          <state>$TOOLKIT_DIR$\LIB\DLIB\dlAVR-3t-ec_mul-sf-n.h</state>
+          <state>$TOOLKIT_DIR$\LIB\DLIB\dlAVR-3s-ec_mul-sf-n.h</state>
         </option>
         <option>
           <name>RTLibraryPath</name>
-          <state>$TOOLKIT_DIR$\LIB\DLIB\dlAVR-3t-ec_mul-sf-n.r90</state>
+          <state>$TOOLKIT_DIR$\LIB\DLIB\dlAVR-3s-ec_mul-sf-n.r90</state>
         </option>
         <option>
           <name>Input variant</name>
@@ -1393,6 +1394,7 @@
         <option>
           <name>newCCIncludePaths</name>
           <state>..\app</state>
+          <state>..\cmd</state>
           <state>..\cfg</state>
           <state>..\drv</state>
           <state>..\inc</state>
@@ -1980,6 +1982,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\app\thread_idle.c</name>
+    </file>
+  </group>
+  <group>
+    <name>cmd</name>
+    <file>
+      <name>$PROJ_DIR$\..\cmd\cmd_about.c</name>
     </file>
   </group>
   <group>
