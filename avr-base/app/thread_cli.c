@@ -55,6 +55,8 @@
 
 #define cli_vt_DisplayPrompt()  cli_vt_Printf("\n\r%s>", CLI_PROMPT)
 
+#define DBG_PRT(...)            cli_vt_Printf(__VA_ARGS__)
+
 /* init CLI VT driver */
 static void cli_vt_Init(void)
 {}
@@ -66,54 +68,51 @@ static void cli_vt_ClearScreen(void)
 /* read command */
 static UINT8 *cli_vt_ReadCommand(void)
 {
-    static UINT8    aCmdBuf[CLI_CMD_BUF_MAX+1];
-    static UINT8    vCmdBufCount = 0;
-    UINT8   vKey;
+    SINT16  vReadKey;
 
     /* read key from VT */
-    vKey = cli_vt_ReadKey();
+    vReadKey = cli_vt_ReadKey();
 
-    /* check input key */
-    switch (vKey)
+    if (vReadKey != -1)
     {
-        case VT_KEY_CR: /* enter */
-        case VT_KEY_LF:
-            /* received a command */
-            aCmdBuf[++vCmdBufCount] = '\0'; /* end with \0 */
-            vCmdBufCount = 0;
-            return aCmdBuf;
+        static UINT8    aCmdBuf[CLI_CMD_BUF_MAX+1];
+        static UINT8    vCmdBufCount = 0;
+        UINT8   vKey = (UINT8)vReadKey;
 
-        case VT_KEY_CTRL_Z: /* clear current command line */
-            while (vCmdBufCount != 0)
-            {
-                cli_vt_Printf("\b \b");
-                vCmdBufCount--;
-            }
-            break;
+        /* check input key */
+        switch (vKey)
+        {
+            case VT_KEY_CR: /* enter */
+            case VT_KEY_LF:
+                /* received a command */
+                aCmdBuf[++vCmdBufCount] = '\0'; /* end with \0 */
+                vCmdBufCount = 0;
+                return aCmdBuf;
 
-        case VT_KEY_BS:
-            if (vCmdBufCount != 0)
-            {
-                cli_vt_Printf("\b \b");
-                vCmdBufCount--;
-            }
-            break;
-
-        default:
-			if ((vKey < 0x20) || (vKey > 0x7F))
-			{
-                /* this is not a visible charactor */
-			}
-            else
-            {
-                /* if command buffer not full, record it */
-                if (vCmdBufCount < COUNT_OF(aCmdBuf))
+            case VT_KEY_BS:
+                if (vCmdBufCount != 0)
                 {
-                    aCmdBuf[++vCmdBufCount] = vKey;
-                    cli_vt_Printf("%c", vKey);
+                    cli_vt_Printf("\b \b");
+                    vCmdBufCount--;
                 }
-            }
-            break;
+                break;
+
+            default:
+    			if ((vKey < 0x20) || (vKey > 0x7F))
+    			{
+                    /* this is not a visible charactor */
+    			}
+                else
+                {
+                    /* if command buffer not full, record it */
+                    if (vCmdBufCount < COUNT_OF(aCmdBuf))
+                    {
+                        aCmdBuf[++vCmdBufCount] = vKey;
+                        cli_vt_Printf("%c", vKey);
+                    }
+                }
+                break;
+        }
     }
 
     /* not received a command yet */
@@ -124,6 +123,27 @@ static UINT8 *cli_vt_ReadCommand(void)
 
 
 static volatile PT_SCB vVT_Rx;
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_VECTOR_UART_RX
+ * DESCRIPTION:
+ *      UART Rx ISR.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.10.19        panda.xiong         Create/Update
+ *****************************************************************************/
+INTERRUPT_PROTO(DRV_VECTOR_UART_RX, USART_RXC);
+INTERRUPT(DRV_VECTOR_UART_RX, USART_RXC)
+{
+    PT_SEM_SIGNAL(NULL, &vVT_Rx);
+}
+
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -155,6 +175,8 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
 
         if (pCmd != NULL)
         {
+            DBG_PRT("--RxCmd--");
+
             /* parse command line */
             //
 
