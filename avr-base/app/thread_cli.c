@@ -124,11 +124,6 @@ static UINT8 cli_vt_ParseCmd(IN OUT UINT8 *ptr, OUT UINT8 *param[])
 {
     UINT8   n = 0;
 
-    if (ptr == NULL)
-    {
-        return 0;
-    }
-
     while (*ptr != '\0')
     {
         /* skip spaces */
