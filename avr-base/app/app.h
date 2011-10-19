@@ -31,6 +31,7 @@
 
 #include "thread_idle.h"
 #include "thread_app.h"
+#include "thread_cli.h"
 
 
 #endif /* __APP_H */

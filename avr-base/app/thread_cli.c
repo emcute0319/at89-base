@@ -26,6 +26,7 @@
 *****************************************************************************/
 
 #include "protothread.h"
+#include "drv.h"
 
 
 #if 1
@@ -147,7 +148,7 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
         UINT8  *pCmd;
 
         /* wait for CLI input key */
-        PT_SEM_WAIT(pt, vVT_Rx);
+        PT_SEM_WAIT(pt, &vVT_Rx);
 
         /* read command */
         pCmd = cli_vt_ReadCommand();
@@ -182,7 +183,7 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
  *****************************************************************************/
 void thread_Cli_Init(void)
 {
-    PT_SEM_INIT(vVT_Rx);
+    PT_SEM_INIT(&vVT_Rx, 0);
 
     cli_vt_Init();
     cli_vt_ClearScreen();
