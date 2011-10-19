@@ -33,6 +33,7 @@
 
 #define CLI_PROMPT          ""
 #define CLI_CMD_BUF_MAX     80
+#define CLI_MAX_PARAM		32
 
 /* Define key ascii value */
 #define VT_KEY_ESC          (27)
@@ -98,10 +99,10 @@ static UINT8 *cli_vt_ReadCommand(void)
                 break;
 
             default:
-    			if ((vKey < 0x20) || (vKey > 0x7F))
-    			{
+                if ((vKey < 0x20) || (vKey > 0x7F))
+                {
                     /* this is not a visible charactor */
-    			}
+                }
                 else
                 {
                     /* if command buffer not full, record it */
@@ -117,6 +118,46 @@ static UINT8 *cli_vt_ReadCommand(void)
 
     /* not received a command yet */
     return NULL;
+}
+
+static UINT8 cli_vt_ParseCmd(IN OUT UINT8 *ptr, OUT UINT8 *param[])
+{
+    UINT8   n = 0;
+
+    if (ptr == NULL)
+    {
+        return 0;
+    }
+
+    while (*ptr != '\0')
+    {
+        /* skip spaces */
+        while (*ptr == ' ')
+        {
+            ptr++;
+        }
+
+        if (*ptr == '\0')
+        {
+            return n;
+        }
+
+        param[n++] = ptr;
+        while (*ptr != ' ')
+        {
+            if (*ptr == '\0')
+            {
+                return n;
+            }
+
+            ptr++;
+        }
+
+        /* add end character to this parameter */
+        *ptr++ = '\0';
+    }
+
+    return n;
 }
 
 #endif
@@ -175,10 +216,20 @@ PT_HANDLE thread_Cli_Entry(PT_TCB *pt)
 
         if (pCmd != NULL)
         {
+            UINT8   vParam;
+            UINT8  *aParam[CLI_MAX_PARAM];
+
             DBG_PRT("--RxCmd--");
 
             /* parse command line */
-            //
+            vParam = cli_vt_ParseCmd(pCmd, aParam);
+
+            if (vParam != 0)
+            {
+                DBG_PRT("--ParseCmd--");
+
+                /* search & execute command */
+            }
 
             /* display prompt */
             cli_vt_DisplayPrompt();
