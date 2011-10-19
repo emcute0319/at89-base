@@ -232,10 +232,10 @@ void DRV_UART_Init(void)
 
     UCSRB = 0x00;       /* disable while setting baud rate */
     UCSRA = 0x00;
-    UCSRC = 0x86;
+    UCSRC = _BV(URSEL) | _BV(UCSZ1) | _BV(UCSZ0);   /* 8-bit data formatting */
     UBRRH = (UINT8)(UBRR_VAL >> 8);
     UBRRL = (UINT8)(UBRR_VAL & 0xFF);
-    UCSRB = 0x98;       /* use interrupt */
+    UCSRB = _BV(RXCIE) | _BV(RXEN) | _BV(TXEN); /* use Rx interrupt */
 }
 
 #endif
