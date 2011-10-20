@@ -26,6 +26,18 @@
 *****************************************************************************/
 
 #include "typedef.h"
+#include "version.h"
+
+#define ABOUT_INFORMATION                                                   \
+    "\n\r ***********************"                                          \
+    "\n\r       AVR CodeBase"                                               \
+    "\n\r -----------------------"                                          \
+    "\n\r   Firmware : %s"                                                  \
+    "\n\r   CPU      : %s"                                                  \
+    "\n\r   Frenqucy : %d.%dMHz"                                            \
+    "\n\r ***********************",                                         \
+    GET_FW_VERSION(), GET_CPU_TYPE(),                                       \
+    CPU_CORE_CLOCK/1000000UL, CPU_CORE_CLOCK%1000000UL
 
 
 /******************************************************************************
@@ -45,6 +57,6 @@
  *****************************************************************************/
 static void CMD_About(IN UINT8 vParam, IN UINT8 *aParam[])
 {
-    CLI_VT_Printf("\n\rRun AT %s(%d)", __FILE__, __LINE__);
+    CLI_VT_Printf(ABOUT_INFORMATION);
 }
 

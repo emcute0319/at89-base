@@ -31,16 +31,23 @@
 
 #include "cfg_hw_def.h"
 
-/* Firmware Version, will be embedded into Firmware */
-#define FW_SIG_OFFSET   0x80
-#define FW_VERSION      "v0.0.0.1"
-
-
 #ifdef _VERSION_INTERNAL_
- __root CONST UINT8 _fw_sig[] @ FW_SIG_OFFSET = "CPU:"CPU_TYPE" FW:"FW_VERSION;
+
+/* Firmware Version, will be embedded into Firmware */
+#define CPU_TYPE_OFFSET     0x80
+#define FW_VER_OFFSET       0x90
+#define FW_VERSION          "v0.01"
+
+__root CONST UINT8 _cpu_type[]   @ CPU_TYPE_OFFSET = CPU_TYPE;
+__root CONST UINT8 _fw_version[] @ FW_VER_OFFSET   = FW_VERSION;
+
 #else
- extern CONST UINT8 _fw_sig[];
- #define GET_FW_SIG_STRING()    (_fw_sig)
+
+extern CONST UINT8 _cpu_type[];
+extern CONST UINT8 _fw_version[];
+#define GET_CPU_TYPE()      (_cpu_type)
+#define GET_FW_VERSION()    (_fw_version)
+
 #endif
 
 
