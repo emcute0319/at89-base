@@ -97,9 +97,14 @@ SINT16 DRV_UART_ReadByte(void)
  * RETURN:
  *      N/A
  * NOTES:
- *      The %s may be abnormal in some formatted string,
- *       so, it's strongly recommanded to be used in a separate line.
- *      The root cause is unknown yet!!!
+ *      *) Currently, below formatting are supported:
+ *          %d: only support 16-bit integer;
+ *          %x: hex formatting;
+ *          %X: the same with %x;
+ *          %s: flash string;
+ *          %S: RAM string;
+ *          %c: char;
+ *      *) Length formatting is unsupported yet.
  * HISTORY:
  *      2010.1.27        panda.xiong         Create/Update
  *****************************************************************************/
