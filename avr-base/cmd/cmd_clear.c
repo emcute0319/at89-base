@@ -45,6 +45,7 @@
  *****************************************************************************/
 static void CMD_Clear(IN UINT8 vParam, IN UINT8 *aParam[])
 {
-    CLI_VT_Printf("\n\rRun AT %s(%d)", __FILE__, __LINE__);
+    /* Note: This string is only supported by VT100 */
+    CLI_VT_Printf("\x1B\x5B\x3B\x48\x1B\x5B\x32\x4A");
 }
 
