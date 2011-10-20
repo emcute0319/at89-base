@@ -103,7 +103,6 @@
 
 static SEG_BDATA volatile UINT8  vI2cAddr = 0x00;
 SBIT(bMasterRead, vI2cAddr, 0);
-SBIT(bA2Selected, vI2cAddr, 1);
 
 static SEG_BDATA volatile UINT8  vI2cStatus = 0x01;
 SBIT(bI2cStart,   vI2cStatus, 0);
@@ -250,7 +249,7 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
 }
 
 
-#define DRV_I2CS_IsAddressed()      ((vI2cAddr & 0xFC) == DRV_I2CS_I2C_ADDR)
+#define DRV_I2CS_IsAddressed(v)     ((v) == DRV_I2CS_I2C_ADDR)
 #define DRV_I2CS_IsI2cStop()        (bI2cStop)
 #define DRV_I2CS_IsI2cTimeout()     (bI2cTimeout)
 #define DRV_I2CS_IsStart()          (bI2cStart)
@@ -322,7 +321,7 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
             WAIT_SCL_H2L;
             DRV_I2CS_ReceiveByte(vI2cAddr);
 
-            if (DRV_I2CS_IsAddressed())
+            if (DRV_I2CS_IsAddressed(vI2cAddr))
             {
                 DRV_I2CS_SendAck();
                 vWriteLen = 0;  /* Reset I2C Write Buffer Counter */
