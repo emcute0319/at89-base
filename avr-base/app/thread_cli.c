@@ -310,6 +310,9 @@ void thread_Cli_Init(void)
 {
     PT_SEM_INIT(&vVT_Rx, 0);
 
+    /* show about information */
+    CMD_About(0, NULL);
+
     /* display prompt */
     cli_vt_DisplayPrompt();
 }

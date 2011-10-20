@@ -28,6 +28,7 @@
 #include "typedef.h"
 #include "version.h"
 
+
 #define ABOUT_INFORMATION                                                   \
     "\n\r ***********************"                                          \
     "\n\r       AVR CodeBase"                                               \

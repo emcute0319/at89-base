@@ -17,7 +17,7 @@
  *   MA 02111-1307 USA
  *
  * FILE NAME:
- *   cli_porting.h
+ *   cmd_reboot.c
  * DESCRIPTION:
  *   N/A
  * HISTORY:
@@ -25,33 +25,30 @@
  *
 *****************************************************************************/
 
-#ifndef __CLI_PORTING_H
-#define __CLI_PORTING_H
+#include "typedef.h"
 
 
-#include "drv.h"
-#define CLI_VT_Printf(...)      DRV_UART_Printf(__VA_ARGS__)
-#define CLI_VT_ReadKey()        DRV_UART_ReadByte()
+/******************************************************************************
+ * FUNCTION NAME:
+ *      CMD_Reboot
+ * DESCRIPTION:
+ *      CLI Command: reboot
+ * PARAMETERS:
+ *      vParam    : Parameter counts;
+ *      aParam[]  : Parameter lists;
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.10.19        Panda.Xiong         Create/Update
+ *****************************************************************************/
+static void CMD_Reboot(IN UINT8 vParam, IN UINT8 *aParam[])
+{
+    CLI_VT_Printf("\n\r System Rebooting ...");
 
-
-#define CLI_PROMPT              ""
-#define CLI_CMD_BUF_MAX         80
-#define CLI_MAX_PARAM		    16
-
-
-#include "cmd_about.c"
-#include "cmd_clear.c"
-#include "cmd_reboot.c"
-
-#define CLI_CMD_LIST                                                        \
-{                                                                           \
-    { "about",   CMD_About,   "about (show CLI information)" },             \
-    { "cls",     CMD_Clear,   "cls   (clear screen)"         },             \
-    { "clear",   CMD_Clear,   "clear (clear screen)"         },             \
-    { "reboot",  CMD_Reboot,  "reboot(reboot system)"        },             \
-    { "reset",   CMD_Reboot,  "reset (reboot system)"        },             \
+    /* do nothing, but wait for watchdog timeout, to reset CPU */
+    while (1)
+    {}
 }
-
-
-#endif /* __CLI_PORTING_H */
 
