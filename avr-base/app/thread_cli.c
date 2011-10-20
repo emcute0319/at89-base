@@ -310,7 +310,8 @@ void thread_Cli_Init(void)
 {
     PT_SEM_INIT(&vVT_Rx, 0);
 
-    /* show about information */
+    /* clear screen, and show about information */
+    CMD_Clear(0, NULL);
     CMD_About(0, NULL);
 
     /* display prompt */
