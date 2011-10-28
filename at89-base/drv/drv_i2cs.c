@@ -108,6 +108,12 @@ static SEG_BDATA UINT8  vI2cStatus;
 SBIT(bI2cStart,   vI2cStatus, 0);
 SBIT(bI2cStop,    vI2cStatus, 1);
 SBIT(bI2cTimeout, vI2cStatus, 2);
+#define DRV_I2CS_ClearStartFlag()   do { bI2cStart   = FALSE; } while (0)
+#define DRV_I2CS_ClearStopFlag()    do { bI2cStop    = FALSE; } while (0)
+#define DRV_I2CS_ClearTimeoutFlag() do { bI2cTimeout = FALSE; } while (0)
+#define DRV_I2CS_SetStartFlag()     do { bI2cStart   = TRUE;  } while (0)
+#define DRV_I2CS_SetStopFlag()      do { bI2cStop    = TRUE;  } while (0)
+#define DRV_I2CS_SetTimeoutFlag()   do { bI2cTimeout = TRUE;  } while (0)
 
 /* Timer Relelated */
 /* I2C Slave Timer Reload Value:
@@ -137,26 +143,44 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
                                 } while(0)
 #define DRV_I2CS_IsTimeout()    (TFn)
 
-#define WAIT_SCL_L2H            do {                                    \
+#define WAIT_SCL_L2H(_err_code) do {                                    \
                                     DRV_I2CS_TimerReload();             \
                                     while (DRV_I2CS_GET_SCL() == LOW)   \
                                     {                                   \
                                         if (DRV_I2CS_IsTimeout())       \
                                         {                               \
-                                            bI2cTimeout = TRUE;         \
-                                            break;                      \
+                                            DRV_I2CS_SetTimeoutFlag();  \
+                                            _err_code;                  \
                                         }                               \
                                     }                                   \
                                 } while(0)
 
-#define WAIT_SCL_H2L            do {                                    \
+#define WAIT_SCL_H2L(_err_code) do {                                    \
+                                    BOOL    _SDA = DRV_I2CS_GET_SDA();  \
+                                                                        \
                                     DRV_I2CS_TimerReload();             \
                                     while (DRV_I2CS_GET_SCL() == HIGH)  \
                                     {                                   \
+                                        if (DRV_I2CS_GET_SDA() != _SDA) \
+                                        {                               \
+                                            if (_SDA)                   \
+                                            {                           \
+                                                /* I2C Start */         \
+                                                DRV_I2CS_SetStartFlag();\
+                                            }                           \
+                                            else                        \
+                                            {                           \
+                                                /* I2C Stop */          \
+                                                DRV_I2CS_SetStopFlag(); \
+                                            }                           \
+                                                                        \
+                                            _err_code;                  \
+                                        }                               \
+                                                                        \
                                         if (DRV_I2CS_IsTimeout())       \
                                         {                               \
-                                            bI2cTimeout = TRUE;         \
-                                            break;                      \
+                                            DRV_I2CS_SetTimeoutFlag();  \
+                                            _err_code;                  \
                                         }                               \
                                     }                                   \
                                 } while(0)
@@ -165,9 +189,10 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
                                     /* Release SDA Line */              \
                                     DRV_I2CS_SET_SDA(HIGH);             \
                                                                         \
-                                    bI2cStop    = FALSE;                \
-                                    bI2cTimeout = FALSE;                \
-                                    bI2cStart   = TRUE;                 \
+                                    /* Initial Status: I2C Start */     \
+                                    DRV_I2CS_SetStartFlag();            \
+                                                                        \
+                                    /* I2C timeout Timer init */        \
                                     DRV_I2CS_TimerInit();               \
                                                                         \
                                     /* clear un-wanted interrupt */     \
@@ -176,8 +201,8 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
 
 #define ACK()                   do {                                    \
                                     DRV_I2CS_SET_SDA(LOW);              \
-                                    WAIT_SCL_L2H;                       \
-                                    WAIT_SCL_H2L;                       \
+                                    WAIT_SCL_L2H(break);                \
+                                    WAIT_SCL_H2L(break);                \
                                     DRV_I2CS_SET_SDA(HIGH);             \
                                 } while(0)
 
@@ -189,44 +214,16 @@ static UINT8 drv_i2cs_ReceiveByte(void)
 
     for (vLoop = 8; vLoop != 0; vLoop--)
     {
-        BOOL    vSDA;
-
         /* wait SCL from LOW to HIGH */
-        WAIT_SCL_L2H;
+        WAIT_SCL_L2H(return FALSE);
 
-        vSDA = DRV_I2CS_GET_SDA();
+        /* read one bit data */
+        vData = (vData<<1) | DRV_I2CS_GET_SDA();
 
         /* wait SCL from HIGH to LOW */
-        DRV_I2CS_TimerReload();
-        while (DRV_I2CS_GET_SCL() == HIGH)
-        {
-            if (DRV_I2CS_GET_SDA() != vSDA)
-            {
-                if (vSDA)
-                {
-                    /* I2C Start */
-                    bI2cStart = TRUE;
-                }
-                else
-                {
-                    /* I2C Stop */
-                    bI2cStop = TRUE;
-                }
-
-                return vData;
-            }
-
-            if (DRV_I2CS_IsTimeout())
-            {
-                bI2cTimeout = TRUE;
-                return vData;
-            }
-        }
-
-        vData = (vData<<1) | vSDA;
+        WAIT_SCL_H2L(return FALSE);
     }
 
-    vI2cStatus = 0;
     return vData;
 }
 
@@ -242,21 +239,15 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
         _CROL(vData, 1);
         DRV_I2CS_SET_SDA((BOOL)(vData & 0x1));
 
-        WAIT_SCL_L2H;
-        WAIT_SCL_H2L;
-
-        if (bI2cTimeout)
-        {
-            DRV_I2CS_SET_SDA(HIGH);
-            return FALSE;
-        }
+        WAIT_SCL_L2H(return FALSE);
+        WAIT_SCL_H2L(return FALSE);
     }
 
     /* Check ACK from I2C Master */
     DRV_I2CS_SET_SDA(HIGH);
-    WAIT_SCL_L2H;
+    WAIT_SCL_L2H(return FALSE);
     vAck = !DRV_I2CS_GET_SDA();
-    WAIT_SCL_H2L;
+    WAIT_SCL_H2L(return FALSE);
 
     return vAck;
 }
@@ -266,10 +257,13 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
 #define DRV_I2CS_IsI2cStop()        (bI2cStop)
 #define DRV_I2CS_IsI2cTimeout()     (bI2cTimeout)
 #define DRV_I2CS_IsStart()          (bI2cStart)
-#define DRV_I2CS_ReceiveByte(v)     {                                       \
-                                        (v) = drv_i2cs_ReceiveByte();       \
+#define DRV_I2CS_CheckStatus()      {                                       \
                                         if (vI2cStatus)                     \
                                             continue;                       \
+                                    }
+#define DRV_I2CS_ReceiveByte(v)     {                                       \
+                                        (v) = drv_i2cs_ReceiveByte();       \
+                                        DRV_I2CS_CheckStatus();             \
                                     }
 #define DRV_I2CS_SendByte(v)        drv_i2cs_SendByte(v)
 #define DRV_I2CS_WriteByte(d)       do {                                    \
@@ -307,14 +301,41 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
     static UINT8    vOffset        = 0x00;
     static UINT8    vWriteLen      = 0;
     static UINT8    aWriteBuf[DRV_I2CS_MAX_WRITE_LEN];
-    UINT8           vData;
 
     /* Handle the I2C accessing */
     while (1)
     {
-        /* I2C Timeout */
-        if (DRV_I2CS_IsI2cTimeout())
+        /* I2C Start */
+        if (DRV_I2CS_IsStart())
         {
+            WAIT_SCL_H2L(break);
+
+            /* clear start flag */
+            DRV_I2CS_ClearStartFlag();
+
+            DRV_I2CS_ReceiveByte(vI2cAddr);
+
+            if (!DRV_I2CS_IsAddressed())
+            {
+                /* not addressed, do nothing */
+                break;
+            }
+
+            DRV_I2CS_SendAck();
+
+            /* Reset I2C Write Buffer Counter */
+            vWriteLen = 0;
+
+            /* force to no offset received, after I2C Start */
+            bReceiveOffset = FALSE;
+        }
+
+        /* I2C Timeout */
+        else if (DRV_I2CS_IsI2cTimeout())
+        {
+            /* clear timeout flag */
+            DRV_I2CS_ClearTimeoutFlag();
+
             break;
         }
 
@@ -326,36 +347,24 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
                 DRV_I2CS_WriteFlush(vOffset, aWriteBuf, vWriteLen);
             }
 
+            /* clear stop flag */
+            DRV_I2CS_ClearStopFlag();
+
             break;
-        }
-
-        /* I2C Start */
-        else if (DRV_I2CS_IsStart())
-        {
-            WAIT_SCL_H2L;
-            DRV_I2CS_ReceiveByte(vI2cAddr);
-
-            if (DRV_I2CS_IsAddressed())
-            {
-                DRV_I2CS_SendAck();
-                vWriteLen = 0;  /* Reset I2C Write Buffer Counter */
-            }
-            else
-            {
-                break;
-            }
-
-            /* force to no offset received, after I2C Start */
-            bReceiveOffset = FALSE;
         }
 
         /* I2C Master Read */
         else if (DRV_I2CS_IsMasterRead())
         {
-            vData = DRV_I2CS_ReadByte(vOffset);
+            BOOL    bReceiveAck;
 
-            if (!DRV_I2CS_SendByte(vData))
+            bReceiveAck = DRV_I2CS_SendByte(DRV_I2CS_ReadByte(vOffset));
+            DRV_I2CS_CheckStatus();
+
+            if (!bReceiveAck)
             {
+                UINT8   vData;
+
                 /* if NACK received, force to receive another Byte data,
                  *  this is used to detect I2C Start/Stop.
                  */
@@ -373,6 +382,8 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
         /* I2C Master Write */
         else
         {
+            UINT8   vData;
+
             DRV_I2CS_ReceiveByte(vData);
             DRV_I2CS_SendAck();
 
