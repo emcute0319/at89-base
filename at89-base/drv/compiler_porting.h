@@ -41,8 +41,8 @@
 
 #elif defined __ICC8051__
 
-#define CROL(v, n)      do { (v) = (((v) << (n)) | ((v) >> (8*sizeof(v)-(n)))); } while (0)
-#define CROR(v, n)      do { (v) = (((v) >> (n)) | ((v) << (8*sizeof(v)-(n)))); } while (0)
+#define _CROL(v, n)     do { (v) = (((v) << (n)) | ((v) >> (8*sizeof(v)-(n)))); } while (0)
+#define _CROR(v, n)     do { (v) = (((v) >> (n)) | ((v) << (8*sizeof(v)-(n)))); } while (0)
 
 #define FUNC_SEG_CODE   /* empty */
 

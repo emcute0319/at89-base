@@ -57,7 +57,7 @@
 #define DRV_I2CS_MAX_WRITE_LEN      (4)     /* Byte(s) */
 
 /* I2C Slave Hook API */
-#define DRV_I2CS_ReadByte(o)                (0xAA)
+#define DRV_I2CS_ReadByte(o)                (o)
 #define DRV_I2CS_WriteFlush(o, buf, len)    /* do nothing */
 
 
@@ -101,10 +101,10 @@
 /* I2C Slave Timeout Interval, 25ms defined in SMBus */
 #define DRV_I2CS_TIMEOUT_INTERVAL   (25)    /* ms */
 
-static SEG_BDATA volatile UINT8  vI2cAddr = 0x00;
+static SEG_BDATA UINT8  vI2cAddr;
 SBIT(bMasterRead, vI2cAddr, 0);
 
-static SEG_BDATA volatile UINT8  vI2cStatus = 0x01;
+static SEG_BDATA UINT8  vI2cStatus;
 SBIT(bI2cStart,   vI2cStatus, 0);
 SBIT(bI2cStop,    vI2cStatus, 1);
 SBIT(bI2cTimeout, vI2cStatus, 2);
@@ -123,16 +123,22 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
 #endif
 #define THn_VAL                 ((DRV_I2CS_TIMER_RELOAD_VAL >> 8) & 0xFF)
 #define TLn_VAL                 ((DRV_I2CS_TIMER_RELOAD_VAL >> 0) & 0xFF)
-#define DRV_I2CS_TimerStart()   do { TRn = 1; } while(0)
-#define DRV_I2CS_TimerStop()    do {                                    \
-                                    TRn = 0;                            \
-                                    TFn = 0;                            \
-                                    TLn = TLn_VAL;                      \
-                                    THn = THn_VAL;                      \
+#define TMOD_MASK               (0xF << (DRV_I2CS_ISR_TimerId*4))
+#define TMOD_VAL                (0x1 << (DRV_I2CS_ISR_TimerId*4))
+#define DRV_I2CS_TimerReload()  do {                                        \
+                                    TLn = TLn_VAL;                          \
+                                    THn = THn_VAL;                          \
+                                    TFn = 0;                                \
+                                } while(0)
+#define DRV_I2CS_TimerInit()    do {                                        \
+                                    TMOD = (TMOD & ~TMOD_MASK) | TMOD_VAL;  \
+                                    TRn = 1;                                \
+                                    DRV_I2CS_TimerReload();                 \
                                 } while(0)
 #define DRV_I2CS_IsTimeout()    (TFn)
 
 #define WAIT_SCL_L2H            do {                                    \
+                                    DRV_I2CS_TimerReload();             \
                                     while (DRV_I2CS_GET_SCL() == LOW)   \
                                     {                                   \
                                         if (DRV_I2CS_IsTimeout())       \
@@ -144,6 +150,7 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
                                 } while(0)
 
 #define WAIT_SCL_H2L            do {                                    \
+                                    DRV_I2CS_TimerReload();             \
                                     while (DRV_I2CS_GET_SCL() == HIGH)  \
                                     {                                   \
                                         if (DRV_I2CS_IsTimeout())       \
@@ -158,8 +165,10 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
                                     /* Release SDA Line */              \
                                     DRV_I2CS_SET_SDA(HIGH);             \
                                                                         \
-                                    vI2cStatus = 0x01;                  \
-                                    DRV_I2CS_TimerStop();               \
+                                    bI2cStop    = FALSE;                \
+                                    bI2cTimeout = FALSE;                \
+                                    bI2cStart   = TRUE;                 \
+                                    DRV_I2CS_TimerInit();               \
                                                                         \
                                     /* clear un-wanted interrupt */     \
                                     DRV_I2CS_ISR_ClearFlag();           \
@@ -175,17 +184,21 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
 
 static UINT8 drv_i2cs_ReceiveByte(void)
 {
-    BOOL    vSDA;
     UINT8   vLoop;
     UINT8   vData = 0;
 
     for (vLoop = 8; vLoop != 0; vLoop--)
     {
+        BOOL    vSDA;
+
+        /* wait SCL from LOW to HIGH */
         WAIT_SCL_L2H;
 
-        /* Monitor I2C Start/Stop */
         vSDA = DRV_I2CS_GET_SDA();
-        do
+
+        /* wait SCL from HIGH to LOW */
+        DRV_I2CS_TimerReload();
+        while (DRV_I2CS_GET_SCL() == HIGH)
         {
             if (DRV_I2CS_GET_SDA() != vSDA)
             {
@@ -206,14 +219,14 @@ static UINT8 drv_i2cs_ReceiveByte(void)
             if (DRV_I2CS_IsTimeout())
             {
                 bI2cTimeout = TRUE;
-                break;
+                return vData;
             }
-        } while (DRV_I2CS_GET_SCL());
+        }
 
         vData = (vData<<1) | vSDA;
     }
 
-    vI2cStatus = 0x00;
+    vI2cStatus = 0;
     return vData;
 }
 
@@ -249,7 +262,7 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
 }
 
 
-#define DRV_I2CS_IsAddressed(v)     ((v) == DRV_I2CS_I2C_ADDR)
+#define DRV_I2CS_IsAddressed()      ((vI2cAddr & 0xFE) == DRV_I2CS_I2C_ADDR)
 #define DRV_I2CS_IsI2cStop()        (bI2cStop)
 #define DRV_I2CS_IsI2cTimeout()     (bI2cTimeout)
 #define DRV_I2CS_IsStart()          (bI2cStart)
@@ -296,20 +309,21 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
     static UINT8    aWriteBuf[DRV_I2CS_MAX_WRITE_LEN];
     UINT8           vData;
 
-    DRV_I2CS_TimerStart();
-
     /* Handle the I2C accessing */
     while (1)
     {
-        /* I2C Stop/Timeout */
-        if (DRV_I2CS_IsI2cStop() || DRV_I2CS_IsI2cTimeout())
+        /* I2C Timeout */
+        if (DRV_I2CS_IsI2cTimeout())
         {
-            if (DRV_I2CS_IsI2cStop())
+            break;
+        }
+
+        /* I2C Stop */
+        else if (DRV_I2CS_IsI2cStop())
+        {
+            if (bReceiveOffset)
             {
-                if (bReceiveOffset)
-                {
-                    DRV_I2CS_WriteFlush(vOffset, aWriteBuf, vWriteLen);
-                }
+                DRV_I2CS_WriteFlush(vOffset, aWriteBuf, vWriteLen);
             }
 
             break;
@@ -321,7 +335,7 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
             WAIT_SCL_H2L;
             DRV_I2CS_ReceiveByte(vI2cAddr);
 
-            if (DRV_I2CS_IsAddressed(vI2cAddr))
+            if (DRV_I2CS_IsAddressed())
             {
                 DRV_I2CS_SendAck();
                 vWriteLen = 0;  /* Reset I2C Write Buffer Counter */
@@ -330,6 +344,9 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
             {
                 break;
             }
+
+            /* force to no offset received, after I2C Start */
+            bReceiveOffset = FALSE;
         }
 
         /* I2C Master Read */
@@ -339,6 +356,14 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
 
             if (!DRV_I2CS_SendByte(vData))
             {
+                /* if NACK received, force to receive another Byte data,
+                 *  this is used to detect I2C Start/Stop.
+                 */
+                DRV_I2CS_ReceiveByte(vData);
+
+                /* should never reach here,
+                 *  if reach here, assume I2C connecting is invalid.
+                 */
                 break;
             }
 
@@ -359,6 +384,7 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
             else
             {
                 DRV_I2CS_WriteByte(vData);
+                vOffset++;
             }
         }
     }
@@ -369,6 +395,47 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
 
     /* Reset I2C */
     DRV_I2CS_Reset();
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_I2CS_Disable
+ * DESCRIPTION:
+ *      I2C Slave Disable.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.10.25        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_I2CS_Disable(void)
+{
+    DRV_I2CS_ISR_Disable();
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_I2CS_Enable
+ * DESCRIPTION:
+ *      I2C Slave Enable.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2011.10.25        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_I2CS_Enable(void)
+{
+    DRV_I2CS_ISR_ClearFlag();
+    DRV_I2CS_ISR_Enable();
 }
 
 
