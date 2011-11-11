@@ -104,10 +104,9 @@
 static SEG_BDATA UINT8  vI2cAddr;
 SBIT(bMasterRead, vI2cAddr, 0);
 
-static SEG_BDATA UINT8  vI2cStatus;
-SBIT(bI2cStart,   vI2cStatus, 0);
-SBIT(bI2cStop,    vI2cStatus, 1);
-SBIT(bI2cTimeout, vI2cStatus, 2);
+static BOOL bI2cStart;
+static BOOL bI2cStop;
+static BOOL bI2cTimeout;
 #define DRV_I2CS_ClearStartFlag()   do { bI2cStart   = FALSE; } while (0)
 #define DRV_I2CS_ClearStopFlag()    do { bI2cStop    = FALSE; } while (0)
 #define DRV_I2CS_ClearTimeoutFlag() do { bI2cTimeout = FALSE; } while (0)
@@ -202,7 +201,9 @@ SBIT(bI2cTimeout, vI2cStatus, 2);
 #define ACK()                   do {                                    \
                                     DRV_I2CS_SET_SDA(LOW);              \
                                     WAIT_SCL_L2H(break);                \
+                                    DRV_I2CS_CheckStatus();             \
                                     WAIT_SCL_H2L(break);                \
+                                    DRV_I2CS_CheckStatus();             \
                                     DRV_I2CS_SET_SDA(HIGH);             \
                                 } while(0)
 
@@ -258,7 +259,9 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
 #define DRV_I2CS_IsI2cTimeout()     (bI2cTimeout)
 #define DRV_I2CS_IsStart()          (bI2cStart)
 #define DRV_I2CS_CheckStatus()      {                                       \
-                                        if (vI2cStatus)                     \
+                                        if (bI2cStart                       \
+                                                || bI2cStop                 \
+                                                || bI2cTimeout)             \
                                             continue;                       \
                                     }
 #define DRV_I2CS_ReceiveByte(v)     {                                       \
@@ -273,11 +276,7 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
                                             aWriteBuf[vWriteLen++] = (d);   \
                                         }                                   \
                                     } while (0)
-#define DRV_I2CS_SendAck()          {                                       \
-                                        ACK();                              \
-                                        if (DRV_I2CS_IsI2cTimeout())        \
-                                            continue;                       \
-                                    }
+#define DRV_I2CS_SendAck()          ACK()
 #define DRV_I2CS_IsMasterRead()     (bMasterRead)
 
 
