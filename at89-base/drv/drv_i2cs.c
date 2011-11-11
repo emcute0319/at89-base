@@ -262,7 +262,10 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
                                         if (bI2cStart                       \
                                                 || bI2cStop                 \
                                                 || bI2cTimeout)             \
+                                        {                                   \
+                                            DRV_I2CS_SET_SDA(HIGH);         \
                                             continue;                       \
+                                        }                                   \
                                     }
 #define DRV_I2CS_ReceiveByte(v)     {                                       \
                                         (v) = drv_i2cs_ReceiveByte();       \
