@@ -259,11 +259,15 @@ static BOOL drv_i2cs_SendByte(UINT8 vData)
 #define DRV_I2CS_IsI2cTimeout()     (bI2cTimeout)
 #define DRV_I2CS_IsStart()          (bI2cStart)
 #define DRV_I2CS_CheckStatus()      {                                       \
-                                        if (bI2cStart                       \
-                                                || bI2cStop                 \
-                                                || bI2cTimeout)             \
+                                        if (DRV_I2CS_IsStart()              \
+                                            || DRV_I2CS_IsI2cStop()         \
+                                            || DRV_I2CS_IsI2cTimeout())     \
                                         {                                   \
+                                            /* force release SDA,           \
+                                             *  if a new I2C status is set. \
+                                             */                             \
                                             DRV_I2CS_SET_SDA(HIGH);         \
+                                                                            \
                                             continue;                       \
                                         }                                   \
                                     }
@@ -310,10 +314,11 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
         /* I2C Start */
         if (DRV_I2CS_IsStart())
         {
-            WAIT_SCL_H2L(break);
-
             /* clear start flag */
             DRV_I2CS_ClearStartFlag();
+
+            WAIT_SCL_H2L(break);
+            DRV_I2CS_CheckStatus();
 
             DRV_I2CS_ReceiveByte(vI2cAddr);
 
