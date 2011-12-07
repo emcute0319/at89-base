@@ -134,6 +134,7 @@ static BOOL bI2cTimeout;
                                     TLn = TLn_VAL;                          \
                                     THn = THn_VAL;                          \
                                     TFn = 0;                                \
+                                    DRV_WATCHDOG_Kick();                    \
                                 } while(0)
 #define DRV_I2CS_TimerInit()    do {                                        \
                                     TMOD = (TMOD & ~TMOD_MASK) | TMOD_VAL;  \
