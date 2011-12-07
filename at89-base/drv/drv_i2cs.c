@@ -330,11 +330,14 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
 
             DRV_I2CS_SendAck();
 
-            /* Reset I2C Write Buffer Counter */
-            vWriteLen = 0;
+            if (!DRV_I2CS_IsMasterRead())
+            {
+                /* Reset I2C Write Buffer Counter */
+                vWriteLen = 0;
 
-            /* force to no offset received, after I2C Start */
-            bReceiveOffset = FALSE;
+                /* force to no offset received, after I2C Start */
+                bReceiveOffset = FALSE;
+            }
         }
 
         /* I2C Timeout */
