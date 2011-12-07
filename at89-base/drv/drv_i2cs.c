@@ -124,7 +124,7 @@ static BOOL bI2cTimeout;
 #define DRV_I2CS_TIMER_RELOAD_VAL   \
             (65536UL - (DRV_I2CS_TIMEOUT_INTERVAL * CPU_CORE_CLOCK /1 /1000))
 #if (DRV_I2CS_TIMER_RELOAD_VAL <= 0)
- #error "Unsupported Timer Initial Value for I2C Slave Driver!"
+ #error "Unsupported Timer Initial Value for Simulated I2C Slave Driver!"
 #endif
 #define THn_VAL                 ((DRV_I2CS_TIMER_RELOAD_VAL >> 8) & 0xFF)
 #define TLn_VAL                 ((DRV_I2CS_TIMER_RELOAD_VAL >> 0) & 0xFF)
@@ -435,6 +435,7 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
  *****************************************************************************/
 void DRV_I2CS_Disable(void)
 {
+    /* Disable I2C Slave Interrupt */
     DRV_I2CS_ISR_Disable();
 }
 
@@ -455,7 +456,7 @@ void DRV_I2CS_Disable(void)
  *****************************************************************************/
 void DRV_I2CS_Enable(void)
 {
-    DRV_I2CS_ISR_ClearFlag();
+    /* Enable I2C Slave Interrupt */
     DRV_I2CS_ISR_Enable();
 }
 
@@ -478,9 +479,6 @@ void DRV_I2CS_Init(void)
 {
     /* Reset I2C Slave */
     DRV_I2CS_Reset();
-
-    /* Enable I2C Slave Interrupt */
-    DRV_I2CS_ISR_Enable();
 }
 
 #endif
