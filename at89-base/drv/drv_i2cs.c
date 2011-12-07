@@ -354,7 +354,7 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
         {
             if (bReceiveOffset)
             {
-                DRV_I2CS_WriteFlush(vOffset, aWriteBuf, vWriteLen);
+                DRV_I2CS_WriteFlush(vOffset-vWriteLen, aWriteBuf, vWriteLen);
             }
 
             /* clear stop flag */
