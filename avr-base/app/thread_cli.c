@@ -184,7 +184,7 @@ static void cli_vt_ShowHelp(void)
 
     for (vLoop = 0; vLoop < COUNT_OF(aCmdTable); vLoop++)
     {
-        SINT8   vFormatLen = vMaxNameLen - _strlen(aCmdTable[vLoop].pName);
+        UINT8   vFormatLen = vMaxNameLen - _strlen(aCmdTable[vLoop].pName);
 
         CLI_VT_Printf("\n\r %s", aCmdTable[vLoop].pName);
         while (vFormatLen-- != 0)
