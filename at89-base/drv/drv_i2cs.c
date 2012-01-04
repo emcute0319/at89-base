@@ -142,6 +142,7 @@ static BOOL bI2cTimeout;
                                     DRV_I2CS_TimerReload();                 \
                                 } while(0)
 #define DRV_I2CS_IsTimeout()    (TFn)
+#define DRV_I2CS_SetTimerTimeout() do { TFn = 1; } while (0)
 
 #define WAIT_SCL_L2H(_err_code) do {                                    \
                                     DRV_I2CS_TimerReload();             \
