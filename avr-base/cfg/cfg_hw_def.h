@@ -40,6 +40,7 @@
 
 /* Simulated/Miscellaneous Driver */
 #define DRV_SPI_SUPPORT         0       /* SPI         */
+#define DRV_EPP_SUPPORT         0       /* EPP         */
 #define DRV_I2CM_SUPPORT        0       /* I2C Master  */
 #define DRV_I2CS_SUPPORT        0       /* I2C Slave   */
 #define DRV_LED_SUPPORT         0       /* LED Driver  */
