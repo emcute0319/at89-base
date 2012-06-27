@@ -51,7 +51,7 @@ void DRV_EPP_WriteRegister(IN UINT8 vRegNo, IN UINT8 vData);
  * HISTORY:
  *      2012.2.10        PANDA         Create/Update
  *****************************************************************************/
-UINT8 DRV_EPP_ReadRegister(IN UINT8 vRegNo)
+UINT8 DRV_EPP_ReadRegister(IN UINT8 vRegNo);
 
 
 #endif /* __DRV_EPP_H */

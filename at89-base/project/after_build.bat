@@ -28,7 +28,7 @@
 @echo off
 
 :: All binary tools should put into fixed directory
-path D:\compiler\bin
+path %COMPILER_BASE%\bin
 
 set HEX2BIN=hex2bin
 
