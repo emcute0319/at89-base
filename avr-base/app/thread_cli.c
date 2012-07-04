@@ -110,7 +110,7 @@ static UINT8 *cli_vt_ReadCommand(void)
         default:
             if ((vKey < 0x20) || (vKey > 0x7F))
             {
-                /* this is not a visible charactor */
+                /* this is not a visible character */
             }
             else
             {
