@@ -89,9 +89,9 @@
 #define _TL(n)                      COMBINE(TL, n)
 #define _TF(n)                      COMBINE(TF, n)
 #define TRn                         _TR(DRV_I2CS_ISR_TimerId)
-#define THn                         _TR(DRV_I2CS_ISR_TimerId)
-#define TLn                         _TR(DRV_I2CS_ISR_TimerId)
-#define TFn                         _TR(DRV_I2CS_ISR_TimerId)
+#define THn                         _TH(DRV_I2CS_ISR_TimerId)
+#define TLn                         _TL(DRV_I2CS_ISR_TimerId)
+#define TFn                         _TF(DRV_I2CS_ISR_TimerId)
 
 
 /******************************************************************************
