@@ -144,69 +144,69 @@ static BOOL bI2cTimeout;
 #define DRV_I2CS_IsTimeout()    (TFn)
 #define DRV_I2CS_SetTimerTimeout() do { TFn = 1; } while (0)
 
-#define WAIT_SCL_L2H(_err_code) do {                                    \
-                                    DRV_I2CS_TimerReload();             \
-                                    while (DRV_I2CS_GET_SCL() == LOW)   \
-                                    {                                   \
-                                        if (DRV_I2CS_IsTimeout())       \
-                                        {                               \
-                                            DRV_I2CS_SetTimeoutFlag();  \
-                                            _err_code;                  \
-                                        }                               \
-                                    }                                   \
+#define WAIT_SCL_L2H(_err_code) do {                                        \
+                                    DRV_I2CS_TimerReload();                 \
+                                    while (DRV_I2CS_GET_SCL() == LOW)       \
+                                    {                                       \
+                                        if (DRV_I2CS_IsTimeout())           \
+                                        {                                   \
+                                            DRV_I2CS_SetTimeoutFlag();      \
+                                            _err_code;                      \
+                                        }                                   \
+                                    }                                       \
                                 } while(0)
 
-#define WAIT_SCL_H2L(_err_code) do {                                    \
-                                    BOOL    _SDA = DRV_I2CS_GET_SDA();  \
-                                                                        \
-                                    DRV_I2CS_TimerReload();             \
-                                    while (DRV_I2CS_GET_SCL() == HIGH)  \
-                                    {                                   \
-                                        if (DRV_I2CS_GET_SDA() != _SDA) \
-                                        {                               \
-                                            if (_SDA)                   \
-                                            {                           \
-                                                /* I2C Start */         \
-                                                DRV_I2CS_SetStartFlag();\
-                                            }                           \
-                                            else                        \
-                                            {                           \
-                                                /* I2C Stop */          \
-                                                DRV_I2CS_SetStopFlag(); \
-                                            }                           \
-                                                                        \
-                                            _err_code;                  \
-                                        }                               \
-                                                                        \
-                                        if (DRV_I2CS_IsTimeout())       \
-                                        {                               \
-                                            DRV_I2CS_SetTimeoutFlag();  \
-                                            _err_code;                  \
-                                        }                               \
-                                    }                                   \
+#define WAIT_SCL_H2L(_err_code) do {                                        \
+                                    BOOL    _SDA = DRV_I2CS_GET_SDA();      \
+                                                                            \
+                                    DRV_I2CS_TimerReload();                 \
+                                    while (DRV_I2CS_GET_SCL() == HIGH)      \
+                                    {                                       \
+                                        if (DRV_I2CS_GET_SDA() != _SDA)     \
+                                        {                                   \
+                                            if (_SDA)                       \
+                                            {                               \
+                                                /* I2C Start */             \
+                                                DRV_I2CS_SetStartFlag();    \
+                                            }                               \
+                                            else                            \
+                                            {                               \
+                                                /* I2C Stop */              \
+                                                DRV_I2CS_SetStopFlag();     \
+                                            }                               \
+                                                                            \
+                                            _err_code;                      \
+                                        }                                   \
+                                                                            \
+                                        if (DRV_I2CS_IsTimeout())           \
+                                        {                                   \
+                                            DRV_I2CS_SetTimeoutFlag();      \
+                                            _err_code;                      \
+                                        }                                   \
+                                    }                                       \
                                 } while(0)
 
-#define DRV_I2CS_Reset()        do {                                    \
-                                    /* Release SDA Line */              \
-                                    DRV_I2CS_SET_SDA(HIGH);             \
-                                                                        \
-                                    /* Initial Status: I2C Start */     \
-                                    DRV_I2CS_SetStartFlag();            \
-                                                                        \
-                                    /* I2C timeout Timer init */        \
-                                    DRV_I2CS_TimerInit();               \
-                                                                        \
-                                    /* clear un-wanted interrupt */     \
-                                    DRV_I2CS_ISR_ClearFlag();           \
+#define DRV_I2CS_Reset()        do {                                        \
+                                    /* Release SDA Line */                  \
+                                    DRV_I2CS_SET_SDA(HIGH);                 \
+                                                                            \
+                                    /* Initial Status: I2C Start */         \
+                                    DRV_I2CS_SetStartFlag();                \
+                                                                            \
+                                    /* I2C timeout Timer init */            \
+                                    DRV_I2CS_TimerInit();                   \
+                                                                            \
+                                    /* clear un-wanted interrupt */         \
+                                    DRV_I2CS_ISR_ClearFlag();               \
                                 } while(0)
 
-#define ACK()                   do {                                    \
-                                    DRV_I2CS_SET_SDA(LOW);              \
-                                    WAIT_SCL_L2H(break);                \
-                                    DRV_I2CS_CheckStatus();             \
-                                    WAIT_SCL_H2L(break);                \
-                                    DRV_I2CS_CheckStatus();             \
-                                    DRV_I2CS_SET_SDA(HIGH);             \
+#define ACK()                   do {                                        \
+                                    DRV_I2CS_SET_SDA(LOW);                  \
+                                    WAIT_SCL_L2H(break);                    \
+                                    DRV_I2CS_CheckStatus();                 \
+                                    WAIT_SCL_H2L(break);                    \
+                                    DRV_I2CS_CheckStatus();                 \
+                                    DRV_I2CS_SET_SDA(HIGH);                 \
                                 } while(0)
 
 
@@ -356,7 +356,11 @@ INTERRUPT_USING(DRV_I2CS_ISR, DRV_I2CS_ISR_GetIntId(), DRV_I2CS_ISR_GetRegBankId
         {
             if (bReceiveOffset)
             {
-                DRV_I2CS_WriteFlush(vOffset-vWriteLen, aWriteBuf, vWriteLen);
+                /* Only flush write buffer, while there is data received */
+                if (vWriteLen != 0)
+                {
+                    DRV_I2CS_WriteFlush(vOffset-vWriteLen, aWriteBuf, vWriteLen);
+                }
             }
 
             /* clear stop flag */
