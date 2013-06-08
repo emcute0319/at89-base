@@ -38,18 +38,18 @@
 #define DRV_LED_SIM_SEL_LED(_n)         do {                                        \
                                             if ((_n) == 0)                          \
                                             {                                       \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_1), 0); \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_0), 1); \
+                                                DRV_IO_Write(IO(LED_SEL_1), 0);     \
+                                                DRV_IO_Write(IO(LED_SEL_0), 1);     \
                                             }                                       \
                                             else if ((_n) == 1)                     \
                                             {                                       \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_0), 0); \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_1), 1); \
+                                                DRV_IO_Write(IO(LED_SEL_0), 0);     \
+                                                DRV_IO_Write(IO(LED_SEL_1), 1);     \
                                             }                                       \
                                             else                                    \
                                             {                                       \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_0), 0); \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_1), 0); \
+                                                DRV_IO_Write(IO(LED_SEL_0), 0);     \
+                                                DRV_IO_Write(IO(LED_SEL_1), 0);     \
                                             }                                       \
                                         } while (0)
 

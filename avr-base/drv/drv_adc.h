@@ -86,7 +86,7 @@
 
 #define ADC_CH_MUX(x)               COMBINE(ADC_CH_MUX_, x)
 #define ADC_CH_PRESCALE(x)          COMBINE(ADC_CH_PRESCALE_, x)
-#define ADC_CH(x)                   ADC_CH_PRESCALE(x), ADC_CH_MUX(x)
+#define ADC(x)                      ADC_CH_PRESCALE(x), ADC_CH_MUX(x)
 
 #define DECLARE_ADC_CH(_name, _mux, _prescale, _desc)   ADC_CH_MUX(_name)      = (_mux),        \
                                                         ADC_CH_PRESCALE(_name) = (_prescale),

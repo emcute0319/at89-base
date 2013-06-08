@@ -65,7 +65,7 @@
  *****************************************************************************/
 #define DRV_SPI_Open()                                                      \
     do {                                                                    \
-        if (DRV_IO_Read(IO_PIN(SPI_CS)) == IO_SPI_CS_ACTIVE)                \
+        if (DRV_IO_Read(IO(SPI_CS)) == IO_SPI_CS_ACTIVE)                    \
         {                                                                   \
             /* SPI has been opened, we should close it first,               \
              *  to force aborting the previous transmitting.                \
@@ -74,7 +74,7 @@
         }                                                                   \
                                                                             \
         /* enable SPI transfer */                                           \
-        DRV_IO_Write(IO_PIN(SPI_CS), IO_SPI_CS_ACTIVE);                     \
+        DRV_IO_Write(IO(SPI_CS), IO_SPI_CS_ACTIVE);                         \
     } while (0)
 
 /******************************************************************************
@@ -94,7 +94,7 @@
 #define DRV_SPI_Close()                                                     \
     do {                                                                    \
         /* Set SPI_CS as high to deactive the transaxtion */                \
-        DRV_IO_Write(IO_PIN(SPI_CS), IO_SPI_CS_INACTIVE);                   \
+        DRV_IO_Write(IO(SPI_CS), IO_SPI_CS_INACTIVE);                       \
     } while (0)
 
 /******************************************************************************
@@ -114,7 +114,7 @@
  *      2009.5.26        Panda.Xiong         Create
  *      2011.2.22        Panda.Xiong         Update
  *****************************************************************************/
-#define DRV_SPI_IsSuccess()    (DRV_IO_Read(IO_PIN(SPI_CS)) == IO_SPI_CS_ACTIVE)
+#define DRV_SPI_IsSuccess()    (DRV_IO_Read(IO(SPI_CS)) == IO_SPI_CS_ACTIVE)
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -210,7 +210,7 @@ void DRV_SPI_WriteByte(IN UINT8 vData);
         DRV_SPI_Close();                                                    \
                                                                             \
         /* Make sure the SCK pin is inactive state */                       \
-        DRV_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);                 \
+        DRV_IO_Write(IO(SPI_SCK), IO_SPI_SCK_INACTIVE);                     \
     } while (0)
 
 

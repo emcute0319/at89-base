@@ -156,13 +156,13 @@ UINT8 DRV_SPI_ReadByte(void)
     for (vBitIndex = 8; vBitIndex != 0; vBitIndex--)
     {
         /* Generate one clock, to tell SPI Slave to send one bit data */
-        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
+        DRV_SPI_IO_Write(IO(SPI_SCK), IO_SPI_SCK_ACTIVE);
         DRV_SPI_FixReadDutyCycle();
-        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
+        DRV_SPI_IO_Write(IO(SPI_SCK), IO_SPI_SCK_INACTIVE);
 
         /* Sample data: MSB first, LSB last */
         vData <<= 1;
-        vData |= DRV_SPI_IO_Read(IO_PIN(SPI_MISO));
+        vData |= DRV_SPI_IO_Read(IO(SPI_MISO));
 	}
 
 	return vData;
@@ -191,12 +191,12 @@ void DRV_SPI_WriteByte(IN UINT8 vData)
     {
         /* Transmitting data, MSB first, LSB last */
         CROL(vData, 1);
-        DRV_SPI_IO_Write(IO_PIN(SPI_MOSI), (vData & 0x1));
+        DRV_SPI_IO_Write(IO(SPI_MOSI), (vData & 0x1));
 
         /* Generate one clock, to tell SPI Slave one bit data is ready */
-        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_ACTIVE);
+        DRV_SPI_IO_Write(IO(SPI_SCK), IO_SPI_SCK_ACTIVE);
         DRV_SPI_FixWriteDutyCycle();
-        DRV_SPI_IO_Write(IO_PIN(SPI_SCK), IO_SPI_SCK_INACTIVE);
+        DRV_SPI_IO_Write(IO(SPI_SCK), IO_SPI_SCK_INACTIVE);
 	}
 }
 

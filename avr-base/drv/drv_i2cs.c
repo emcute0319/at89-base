@@ -47,8 +47,8 @@
 #define DRV_I2CS_ISR_TimerId        1   /* I2C Slave uses Timer 1          */
 
 /* I2C Slave IO Definition */
-#define IO_I2C_SDA                  IO_PIN(I2CS_SDA)
-#define IO_I2C_SCL                  IO_PIN(I2CS_SCL)
+#define IO_I2C_SDA                  IO(I2CS_SDA)
+#define IO_I2C_SCL                  IO(I2CS_SCL)
 
 /* I2C Address of I2C Slave */
 #define DRV_I2CS_I2C_ADDR           (0xA0)
@@ -89,9 +89,9 @@
 #define _TL(n)                      COMBINE(TL, n)
 #define _TF(n)                      COMBINE(TF, n)
 #define TRn                         _TR(DRV_I2CS_ISR_TimerId)
-#define THn                         _TR(DRV_I2CS_ISR_TimerId)
-#define TLn                         _TR(DRV_I2CS_ISR_TimerId)
-#define TFn                         _TR(DRV_I2CS_ISR_TimerId)
+#define THn                         _TH(DRV_I2CS_ISR_TimerId)
+#define TLn                         _TL(DRV_I2CS_ISR_TimerId)
+#define TFn                         _TF(DRV_I2CS_ISR_TimerId)
 
 
 /******************************************************************************

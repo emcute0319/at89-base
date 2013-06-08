@@ -34,49 +34,49 @@
 #define DRV_EPP_INACTIVE            HIGH
 
 #define DRV_EPP_Delay_Us(vUs)       DRV_CPU_DelayUs(vUs)
-#define DRV_EPP_SET_nWRITE(vData)   DRV_IO_Write(IO_PIN(EPP_nWRITE), (vData))
-#define DRV_EPP_SET_nDSTRB(vData)   DRV_IO_Write(IO_PIN(EPP_nDSTRB), (vData))
-#define DRV_EPP_SET_nASTRB(vData)   DRV_IO_Write(IO_PIN(EPP_nASTRB), (vData))
-#define DRV_EPP_GET_nWAIT()         DRV_IO_Read(IO_PIN(EPP_nWAIT))
-#define DRV_EPP_SET_DATA(vData)     do {                                                        \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA0), READ_BIT((vData), 0));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA1), READ_BIT((vData), 1));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA2), READ_BIT((vData), 2));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA3), READ_BIT((vData), 3));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA4), READ_BIT((vData), 4));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA5), READ_BIT((vData), 5));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA6), READ_BIT((vData), 6));  \
-                                        DRV_IO_Write(IO_PIN(EPP_DATA7), READ_BIT((vData), 7));  \
+#define DRV_EPP_SET_nWRITE(vData)   DRV_IO_Write(IO(EPP_nWRITE), (vData))
+#define DRV_EPP_SET_nDSTRB(vData)   DRV_IO_Write(IO(EPP_nDSTRB), (vData))
+#define DRV_EPP_SET_nASTRB(vData)   DRV_IO_Write(IO(EPP_nASTRB), (vData))
+#define DRV_EPP_GET_nWAIT()         DRV_IO_Read(IO(EPP_nWAIT))
+#define DRV_EPP_SET_DATA(vData)     do {                                                    \
+                                        DRV_IO_Write(IO(EPP_DATA0), READ_BIT((vData), 0));  \
+                                        DRV_IO_Write(IO(EPP_DATA1), READ_BIT((vData), 1));  \
+                                        DRV_IO_Write(IO(EPP_DATA2), READ_BIT((vData), 2));  \
+                                        DRV_IO_Write(IO(EPP_DATA3), READ_BIT((vData), 3));  \
+                                        DRV_IO_Write(IO(EPP_DATA4), READ_BIT((vData), 4));  \
+                                        DRV_IO_Write(IO(EPP_DATA5), READ_BIT((vData), 5));  \
+                                        DRV_IO_Write(IO(EPP_DATA6), READ_BIT((vData), 6));  \
+                                        DRV_IO_Write(IO(EPP_DATA7), READ_BIT((vData), 7));  \
                                     } while (0)
-#define DRV_EPP_GET_DATA()          (                                                           \
-                                          ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA0)) << 0)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA1)) << 1)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA2)) << 2)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA3)) << 3)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA4)) << 4)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA5)) << 5)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA6)) << 6)          \
-                                        | ((UINT8)DRV_IO_Read(IO_PIN(EPP_DATA7)) << 7)          \
+#define DRV_EPP_GET_DATA()          (                                                       \
+                                          ((UINT8)DRV_IO_Read(IO(EPP_DATA0)) << 0)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA1)) << 1)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA2)) << 2)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA3)) << 3)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA4)) << 4)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA5)) << 5)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA6)) << 6)          \
+                                        | ((UINT8)DRV_IO_Read(IO(EPP_DATA7)) << 7)          \
                                     )
-#define DRV_EPP_SET_DATA_INPUT()    do {                                                        \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA0));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA1));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA2));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA3));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA4));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA5));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA6));                     \
-                                        DRV_IO_SetInput(IO_PIN(EPP_DATA7));                     \
+#define DRV_EPP_SET_DATA_INPUT()    do {                                                    \
+                                        DRV_IO_SetInput(IO(EPP_DATA0));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA1));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA2));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA3));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA4));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA5));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA6));                     \
+                                        DRV_IO_SetInput(IO(EPP_DATA7));                     \
                                     } while (0)
-#define DRV_EPP_SET_DATA_OUTPUT()   do {                                                        \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA0));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA1));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA2));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA3));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA4));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA5));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA6));                    \
-                                        DRV_IO_SetOutput(IO_PIN(EPP_DATA7));                    \
+#define DRV_EPP_SET_DATA_OUTPUT()   do {                                                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA0));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA1));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA2));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA3));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA4));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA5));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA6));                    \
+                                        DRV_IO_SetOutput(IO(EPP_DATA7));                    \
                                     } while (0)
 
 

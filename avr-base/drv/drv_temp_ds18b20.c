@@ -34,9 +34,9 @@
  *  Porting Part:
  ******************************************************************************/
 
-#define DS18B20_SET_DQ()            DRV_IO_Write(IO_PIN(DS18B20_DQ), HIGH)
-#define DS18B20_CLR_DQ()            DRV_IO_Write(IO_PIN(DS18B20_DQ), LOW)
-#define DS18B20_GET_DQ()            DRV_IO_Read(IO_PIN(DS18B20_DQ))
+#define DS18B20_SET_DQ()            DRV_IO_Write(IO(DS18B20_DQ), HIGH)
+#define DS18B20_CLR_DQ()            DRV_IO_Write(IO(DS18B20_DQ), LOW)
+#define DS18B20_GET_DQ()            DRV_IO_Read(IO(DS18B20_DQ))
 
 #define DS18B20_ENTER_CRITICAL()    do { BOOL bIntState = DRV_INT_LockGlobalInterrupt()
 #define DS18B20_EXIT_CRITICAL()     DRV_INT_UnlockGlobalInterrupt(bIntState); } while (0)

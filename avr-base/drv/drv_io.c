@@ -51,15 +51,15 @@ void DRV_IO_Init(void)
 #define DECLARE_IO_PIN(_name,_port_bit,_mode,_init_val,_pin_no,_desc)       \
     do                                                                      \
     {                                                                       \
-        DRV_IO_Write(IO_PIN(_name), _IO_INIT(_name));                       \
+        DRV_IO_Write(IO(_name), _IO_INIT(_name));                           \
                                                                             \
         if (_IO_MODE(_name) == IO_INPUT)                                    \
         {                                                                   \
-            DRV_IO_SetInput(IO_PIN(_name));                                 \
+            DRV_IO_SetInput(IO(_name));                                     \
         }                                                                   \
         else                                                                \
         {                                                                   \
-            DRV_IO_SetOutput(IO_PIN(_name));                                \
+            DRV_IO_SetOutput(IO(_name));                                    \
         }                                                                   \
     } while (0);
 

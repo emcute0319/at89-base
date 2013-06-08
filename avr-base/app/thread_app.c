@@ -78,7 +78,7 @@ PT_HANDLE thread_App_Entry(PT_TCB *pt)
       #endif
 
       #if DRV_ADC_SUPPORT
-        DRV_UART_Printf(" ADC_VCC:0x%X", DRV_ADC_Get(ADC_CH(ADC_VCC)));
+        DRV_UART_Printf(" ADC_VCC:0x%X", DRV_ADC_Get(ADC(ADC_VCC)));
       #endif
 
         /* delay 1000ms */

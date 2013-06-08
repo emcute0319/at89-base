@@ -44,10 +44,11 @@
  *  Thus, the Pull-Up resister on SCL/SDA should be designed to 1K-10K ohm,
  *   recommend to choice 4K-5K ohm !!!
  */
-#define DRV_I2CM_SET_SCL(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SCL), (vData)); } while (0)
-#define DRV_I2CM_SET_SDA(vData)     do { DRV_IO_Write(IO_PIN(I2CM_SDA), (vData)); } while (0)
-#define DRV_I2CM_GET_SCL()          DRV_IO_Read(IO_PIN(I2CM_SCL))
-#define DRV_I2CM_GET_SDA()          DRV_IO_Read(IO_PIN(I2CM_SDA))
+#define DRV_I2CM_Delay_Us(_us)      DRV_CPU_DelayUs(_us)
+#define DRV_I2CM_SET_SCL(_data)     do { DRV_IO_Write(IO(I2CM_SCL), (_data)); if (_data) {DRV_I2CM_Delay_Us(1);} } while (0)
+#define DRV_I2CM_SET_SDA(_data)     do { DRV_IO_Write(IO(I2CM_SDA), (_data)); if (_data) {DRV_I2CM_Delay_Us(1);} } while (0)
+#define DRV_I2CM_GET_SCL()          DRV_IO_Read(IO(I2CM_SCL))
+#define DRV_I2CM_GET_SDA()          DRV_IO_Read(IO(I2CM_SDA))
 #endif
 
 
@@ -63,19 +64,19 @@ static BOOL _drv_i2cm_SendByte(UINT8 vData)
     BOOL    vAck;
 
     /* Send Byte Data: MSB first, LSB last */
-    for (vLoop = 8; vLoop > 0; vLoop--)
+    for (vLoop = 8; vLoop != 0; vLoop--)
     {
-        DRV_I2CM_SET_SCL(0);
-
         CROL(vData, 1);
-        DRV_I2CM_SET_SDA(vData & 0x1);
+        DRV_I2CM_SET_SDA((vData & 0x1));
 
         DRV_I2CM_SET_SCL(1);
+        DRV_I2CM_SET_SCL(0);
     }
 
-    /* check ACK */
-    DRV_I2CM_SET_SCL(0);
+    /* release SDA */
     DRV_I2CM_SET_SDA(1);
+
+    /* check ACK */
     DRV_I2CM_SET_SCL(1);
     vAck = DRV_I2CM_GET_SDA();
     DRV_I2CM_SET_SCL(0);
@@ -89,35 +90,28 @@ static UINT8 _drv_i2cm_ReceiveByte(void)
     UINT8   vData = 0;
 
     /* Receive Byte Data: MSB first, LSB last */
-    for (vLoop = 8; vLoop > 0; vLoop--)
+    for (vLoop = 8; vLoop != 0; vLoop--)
     {
-        DRV_I2CM_SET_SCL(0);
         DRV_I2CM_SET_SCL(1);
-
         vData <<= 1;
         vData |= DRV_I2CM_GET_SDA();
+        DRV_I2CM_SET_SCL(0);
     }
-
-    DRV_I2CM_SET_SCL(0);
 
     return vData;
 }
 
-#define _drv_i2cm_SendAck()                                                 \
+#define _drv_i2cm_SendAck(_ack)                                             \
     do {                                                                    \
-        DRV_I2CM_SET_SCL(0);                                                \
-        DRV_I2CM_SET_SDA(0);                                                \
+        /* send ACK */                                                      \
+        DRV_I2CM_SET_SDA(_ack);                                             \
                                                                             \
+        /* generate one clock */                                            \
         DRV_I2CM_SET_SCL(1);                                                \
         DRV_I2CM_SET_SCL(0);                                                \
+                                                                            \
+        /* release SDA */                                                   \
         DRV_I2CM_SET_SDA(1);                                                \
-    } while (0)
-
-#define _drv_i2cm_SendNoAck()                                               \
-    do {                                                                    \
-        DRV_I2CM_SET_SDA(1);                                                \
-        DRV_I2CM_SET_SCL(1);                                                \
-        DRV_I2CM_SET_SCL(0);                                                \
     } while (0)
 
 #define _drv_i2cm_Start()                                                   \
@@ -153,6 +147,56 @@ static UINT8 _drv_i2cm_ReceiveByte(void)
         /* force stop all operations on I2C bus */                          \
         _drv_i2cm_Stop();                                                   \
     } while (0)
+
+/* check I2C hardware is ready to operate or not */
+static BOOL _drv_i2cm_CheckReady(void)
+{
+    BOOL    bResult = FALSE;
+
+    if ((DRV_I2CM_GET_SCL() == 1)
+        && (DRV_I2CM_GET_SDA() == 1))
+    {
+        /* The I2C only can be started, while SCL/SDA is at high level */
+        bResult = TRUE;
+    }
+    else if ((DRV_I2CM_GET_SCL() == 1)
+            && (DRV_I2CM_GET_SDA() == 0))
+    {
+        /* SCL line is OK, but SDA line has been stretched by I2C Slave,
+         *  we should attempt to reset the I2C Bus,
+         *  to recover the SDA to idle state.
+         *
+         * According to SFF-8431 & INF-8077 Spec,
+         *  we can follow below steps to recover SDA line:
+         *
+         *   Memory (Management Interface) Reset:
+         *    1) Clock up to 9 cycles.
+         *    2) Look for SDA high in each cycle while SCL is high.
+         *    3) Create a START condition as SDA is high.
+         */
+
+        UINT8   vLoop;
+
+        for (vLoop = 9; vLoop > 0; vLoop--)
+        {
+            DRV_I2CM_SET_SCL(0);
+            DRV_I2CM_SET_SCL(1);
+
+            if (DRV_I2CM_GET_SDA() == 1)
+            {
+                /* we have successfully recover the SDA line to idle state */
+                bResult = TRUE;
+                break;
+            }
+        }
+    }
+    else
+    {
+        /* Unsupported stretching on SCL/SDA line, operation fail */
+    }
+
+    return bResult;
+}
 
 #endif
 
