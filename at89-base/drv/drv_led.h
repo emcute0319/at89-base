@@ -43,7 +43,7 @@
  */
 #define DRV_LED_TYPE            (0)
 
-#define DRV_LED_BLINK_DELAY     (500)   /* ms, Blink Delay time */
+#define DRV_LED_BLINK_INTERVAL  (500)   /* ms, Blink Delay time */
 
 /******************************************************************************
  *  Common Part:
@@ -137,11 +137,14 @@ void DRV_LED_SetLedData
  *****************************************************************************/
 void DRV_LED_Init(void);
 
+
+#if DRV_LED_Blink_SUPPORT
+
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_LED_ISR
+ *      DRV_LED_Blink_ISR
  * DESCRIPTION:
- *      LED Interrupt Service Routine Entry.
+ *      LED Blink Interrupt Service Routine Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -151,7 +154,9 @@ void DRV_LED_Init(void);
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_LED_ISR(void);
+void DRV_LED_Blink_ISR(void);
+
+#endif
 
 #endif
 

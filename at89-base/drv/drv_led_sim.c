@@ -31,42 +31,10 @@
 #if DRV_LED_Sim_SUPPORT
 
 /******************************************************************************
- *  Porting Part:
- ******************************************************************************/
-
-#define DRV_LED_SIM_SET_DATA(_v)        do { IO_PORT_LED_DATA_OUT = (_v); } while (0)
-#define DRV_LED_SIM_SEL_LED(_n)         do {                                        \
-                                            if ((_n) == 0)                          \
-                                            {                                       \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_1), 0); \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_0), 1); \
-                                            }                                       \
-                                            else if ((_n) == 1)                     \
-                                            {                                       \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_0), 0); \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_1), 1); \
-                                            }                                       \
-                                            else                                    \
-                                            {                                       \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_0), 0); \
-                                                DRV_IO_Write(IO_PIN(LED_SEL_1), 0); \
-                                            }                                       \
-                                        } while (0)
-
-#define DRV_LED_SIM_REFRESH_DELAY       (2)     /* ms, maximum 255ms */
-
-
-/******************************************************************************
- *  Common Part:
- ******************************************************************************/
-
-static volatile BOOL bDisplayEnabled = FALSE;
-
-/******************************************************************************
  * FUNCTION NAME:
- *      drv_led_Sim_Refresh
+ *      DRV_LED_Sim_ISR
  * DESCRIPTION:
- *      Simulated Refresh LED.
+ *      Simulated LED Interrupt Service Routine Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -76,7 +44,7 @@ static volatile BOOL bDisplayEnabled = FALSE;
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-static void drv_led_Sim_Refresh(void)
+void DRV_LED_Sim_ISR(void)
 {
     static UINT8 vCurrentSelLed = 0;
 
@@ -109,41 +77,8 @@ void DRV_LED_Sim_Init(void)
     /* Select none LED at power-on */
     DRV_LED_SIM_SEL_LED(_EMPTY);
 
-    /* Enable LED Dynamic Display */
-    bDisplayEnabled = TRUE;
-}
-
-
-/******************************************************************************
- * FUNCTION NAME:
- *      DRV_LED_Sim_ISR
- * DESCRIPTION:
- *      Simulated LED Interrupt Service Routine Entry.
- * PARAMETERS:
- *      N/A
- * RETURN:
- *      N/A
- * NOTES:
- *      N/A
- * HISTORY:
- *      2011.6.7        Panda.Xiong         Create/Update
- *****************************************************************************/
-void DRV_LED_Sim_ISR(void)
-{
-    if (bDisplayEnabled)
-    {
-        #define _REFRESH_MAX_COUNT  (DRV_LED_SIM_REFRESH_DELAY/DRV_TIMER_SysTimerTick)
-
-        static UINT8    vRefreshCounter = 0;
-
-        if (vRefreshCounter++ >= _REFRESH_MAX_COUNT)
-        {
-            vRefreshCounter = 0;
-
-            /* Time to refresh LED */
-            drv_led_Sim_Refresh();
-        }
-    }
+    /* Enable LED Dynamic Display Timer */
+    DRV_Timer_SetState(TIMER(Timer_LED_Sim), ENABLE);
 }
 
 #endif

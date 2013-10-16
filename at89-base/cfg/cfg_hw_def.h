@@ -52,8 +52,8 @@
 #define DRV_I2CM_SUPPORT        0       /* I2C Master          */
 #define DRV_I2CS_SUPPORT        0       /* I2C Slave           */
 #define DRV_LED_SUPPORT         0       /* LED Driver          */
- #define DRV_LED_Blink_SUPPORT      (0 && DRV_LED_SUPPORT)                      /* LED Blink support    */
- #define DRV_LED_Sim_SUPPORT        (0 && DRV_LED_SUPPORT)                      /* Simulated LED Driver */
+ #define DRV_LED_Blink_SUPPORT      (0 && DRV_LED_SUPPORT && DRV_TIMER_SUPPORT) /* LED Blink support    */
+ #define DRV_LED_Sim_SUPPORT        (0 && DRV_LED_SUPPORT && DRV_TIMER_SUPPORT) /* Simulated LED Driver */
  #define DRV_LED_MAX7219_SUPPORT    (0 && DRV_LED_SUPPORT && DRV_SPI_SUPPORT)   /* MAX7219   LED Driver */
 #define DRV_TEMP_SUPPORT        0       /* Temperature Sensor Driver */
  #define DRV_TEMP_DS18B20_SUPPORT   (0 && DRV_TEMP_SUPPORT)     /* DS18B20 Driver */

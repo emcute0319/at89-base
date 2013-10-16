@@ -64,11 +64,6 @@ INTERRUPT_USING(DRV_VECTOR_Timer0, VECTOR_ID_TIMER0, REG_GROUP_1)
     DRV_Timer_ISR();
   #endif
 
-  #if DRV_LED_SUPPORT
-    /* LED driver ISR */
-    DRV_LED_ISR();
-  #endif
-
     DRV_VECTOR_END(TIMER0);
 }
 

@@ -188,14 +188,21 @@ void DRV_LED_Init(void)
   #if DRV_LED_MAX7219_SUPPORT
     DRV_LED_MAX7219_Init();
   #endif
+
+  #if DRV_LED_Blink_SUPPORT
+    /* Enable LED Blink Timer */
+    DRV_Timer_SetState(TIMER(Timer_LED_Blink), ENABLE);
+  #endif
 }
 
 
+#if DRV_LED_Blink_SUPPORT
+
 /******************************************************************************
  * FUNCTION NAME:
- *      DRV_LED_ISR
+ *      DRV_LED_Blink_ISR
  * DESCRIPTION:
- *      LED Interrupt Service Routine Entry.
+ *      LED Blink Interrupt Service Routine Entry.
  * PARAMETERS:
  *      N/A
  * RETURN:
@@ -205,47 +212,27 @@ void DRV_LED_Init(void)
  * HISTORY:
  *      2011.6.7        Panda.Xiong         Create/Update
  *****************************************************************************/
-void DRV_LED_ISR(void)
+void DRV_LED_Blink_ISR(void)
 {
-  #if DRV_LED_Blink_SUPPORT
-    #define _BLINK_MAX_COUNT    (DRV_LED_BLINK_DELAY/DRV_TIMER_SysTimerTick)
-    #if (_BLINK_MAX_COUNT <= 255)
-     typedef UINT8  BLINK_COUNTER_T;
-    #elif (_BLINK_MAX_COUNT <= 65535)
-     typedef UINT16 BLINK_COUNTER_T;
-    #else
-     typedef UINT32 BLINK_COUNTER_T;
-    #endif
+    static BOOL bDark = FALSE;
+    UINT8       vLoop;
 
-    static BLINK_COUNTER_T  vBlinkCounter = 0;
-
-    if (vBlinkCounter++ >= _BLINK_MAX_COUNT)
+    /* Time to Blink LED */
+    for (vLoop = 0; vLoop < COUNT_OF(aLedDataBuf); vLoop++)
     {
-        static BOOL bDark = FALSE;
-        UINT8       vLoop;
-
-        vBlinkCounter = 0;
-
-        /* Time to Blink LED */
-        for (vLoop = 0; vLoop < COUNT_OF(aLedDataBuf); vLoop++)
+        if (bDark && READ_BIT(vLedBlinkState, vLoop))
         {
-            if (bDark && READ_BIT(vLedBlinkState, vLoop))
-            {
-                _SET_DATA(vLoop, _LED_CODE_DARK);
-            }
-            else
-            {
-                _SET_DATA(vLoop, aLedDataBuf[vLoop]);
-            }
+            _SET_DATA(vLoop, _LED_CODE_DARK);
         }
-        bDark = !bDark;
+        else
+        {
+            _SET_DATA(vLoop, aLedDataBuf[vLoop]);
+        }
     }
-  #endif
-
-  #if DRV_LED_Sim_SUPPORT
-    DRV_LED_Sim_ISR();
-  #endif
+    bDark = !bDark;
 }
+
+#endif
 
 #endif
 

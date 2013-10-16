@@ -100,12 +100,19 @@ DECLARE_IO_PIN(SPI_SCK,       _IO_PORT(3), _IO_BIT(7), IO_OUTPUT,  1,      11,  
  *  4. Maximum 256 simulated timers are supported.
  */
 
-/*
-DECLARE_VECTOR_TIMER(Timer_TEST,
-                     TIMER_MS(500),
-                     TIMER_TEST_ISR,
-                     "TEST Timer ISR")
-*/
+#if DRV_LED_Blink_SUPPORT
+DECLARE_VECTOR_TIMER(Timer_LED_Blink,
+                     TIMER_MS(DRV_LED_BLINK_INTERVAL),
+                     DRV_LED_Blink_ISR,
+                     "LED Blink Timer ISR")
+#endif
+
+#if DRV_LED_Sim_SUPPORT
+DECLARE_VECTOR_TIMER(Timer_LED_Sim,
+                     TIMER_MS(DRV_LED_SIM_REFRESH_INTERVAL),
+                     DRV_LED_Sim_ISR,
+                     "Simulated LED Timer ISR")
+#endif
 
 #endif
 
