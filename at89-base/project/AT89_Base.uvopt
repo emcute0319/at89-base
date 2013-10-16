@@ -137,6 +137,7 @@
           <Name>(98=944,385,1277,673,0)(83=959,163,1157,272,1)(85=956,273,1154,382,1)(80=-1,-1,-1,-1,0)(91=-1,-1,-1,-1,0)(92=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
+      <Breakpoint/>
       <DebugFlag>
         <trace>0</trace>
         <periodic>1</periodic>

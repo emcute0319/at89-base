@@ -40,7 +40,7 @@ typedef UINT8   DRV_IO_PIN_T;
 /* GPIO pin definition */
 #define DECLARE_IO_PIN(_name,_port,_bit,_mode,_init_val,_pin_no,_desc)  \
                                             SBIT(IO_PIN(_name), _port, _bit);
-#include "cfg_hw_def.h"
+#include "cfg_hw_porting.h"
 #undef DECLARE_IO_PIN
 
 
