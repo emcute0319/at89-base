@@ -405,6 +405,20 @@
       <PathWithFileName>..\drv\drv_swi.c</PathWithFileName>
       <FilenameWithoutPath>drv_swi.c</FilenameWithoutPath>
     </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>28</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>41</TopLine>
+      <CurrentLine>57</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\drv\drv_timer.c</PathWithFileName>
+      <FilenameWithoutPath>drv_timer.c</FilenameWithoutPath>
+    </File>
   </Group>
 
   <Group>

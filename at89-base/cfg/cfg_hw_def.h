@@ -45,6 +45,7 @@
 #define DRV_WATCHDOG_SUPPORT    1       /* Watchdog            */
 
 /* Simulated/Miscellaneous Driver */
+#define DRV_TIMER_SUPPORT       0       /* Simulated Timer     */
 #define DRV_SWI_SUPPORT         0       /* Software Interrupt  */
 #define DRV_SPI_SUPPORT         0       /* SPI                 */
 #define DRV_EPP_SUPPORT         0       /* EPP                 */

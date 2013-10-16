@@ -103,5 +103,67 @@
     } while (0)
 
 
+/* Simulated Timer Supporting */
+#if DRV_TIMER_SUPPORT
+
+/* timer counter format definition,
+ * if want to support longer timer, change this type definition.
+ */
+typedef UINT16  DRV_TIMER_COUNTER_T;
+
+#define TIMER_MS(x)     (DRV_TIMER_COUNTER_T)(((x)*1000UL+DRV_TIMER_SysTimerTick-1)/DRV_TIMER_SysTimerTick)
+
+/* timer name definition */
+#define TIMER(n)        COMBINE(TIMER_, n)
+#define DECLARE_VECTOR_TIMER(_name, _tick, _callback, _desc)    TIMER(_name),
+typedef enum
+{
+    DRV_TIMER_NAME_START = -1,
+    #include "cfg_hw_porting.h"
+    DRV_TIMER_NAME_END
+} DRV_TIMER_NAME_T;
+#undef  DECLARE_VECTOR_TIMER
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_Timer_ISR
+ * DESCRIPTION:
+ *      Simulated Timer Dispatcher ISR.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2013.5.27        Panda.Xiong        Create/Update
+ *****************************************************************************/
+void DRV_Timer_ISR(void);
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_Timer_SetState
+ * DESCRIPTION:
+ *      Set Simulated Timer State.
+ * PARAMETERS:
+ *      vName  : Timer Name;
+ *      bState : ENABLE/DISABLE.
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2013.5.27        Panda.Xiong        Create/Update
+ *****************************************************************************/
+void DRV_Timer_SetState
+(
+    IN DRV_TIMER_NAME_T vName,
+    IN BOOL             bState
+);
+
+#endif
+
+
 #endif /* __DRV_TIMER_H */
 

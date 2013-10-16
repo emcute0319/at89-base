@@ -84,6 +84,32 @@ DECLARE_IO_PIN(SPI_SCK,       _IO_PORT(3), _IO_BIT(7), IO_OUTPUT,  1,      11,  
 #endif
 
 
+/* Simulated Timer Entry Definition */
+#ifdef DECLARE_VECTOR_TIMER
+
+/* Note:
+ *  1. All timer interval values should not below "DRV_TIMER_SysTimerTick";
+ *     else, it will be auto limited to "DRV_TIMER_SysTimerTick".
+ *  2. All timer interval values should not over
+ *      (256*DRV_TIMER_SysTimerTick/1000) ms;
+ *      else, the interval will be auto AND'd with 0xFF;
+ *     If want to support longer timer interval,
+ *      change the definition of type "DRV_TIMER_COUNTER_T".
+ *  3. Default, all timers are disabled;
+ *     use DRV_Timer_SetState() to enable it.
+ *  4. Maximum 256 simulated timers are supported.
+ */
+
+/*
+DECLARE_VECTOR_TIMER(Timer_TEST,
+                     TIMER_MS(500),
+                     TIMER_TEST_ISR,
+                     "TEST Timer ISR")
+*/
+
+#endif
+
+
 /* Simulated Software Interrupt (SWI) Entry Definition */
 #ifdef DECLARE_VECTOR_SWI
 
@@ -95,9 +121,9 @@ DECLARE_IO_PIN(SPI_SCK,       _IO_PORT(3), _IO_BIT(7), IO_OUTPUT,  1,      11,  
  */
 
 /*
-DECLARE_VECTOR_SWI(SWI_TEST0,
-                   SWI_TEST0_ISR,
-                   "TEST0 SWI ISR")
+DECLARE_VECTOR_SWI(SWI_TEST,
+                   SWI_TEST_ISR,
+                   "TEST SWI ISR")
 */
 
 #endif
