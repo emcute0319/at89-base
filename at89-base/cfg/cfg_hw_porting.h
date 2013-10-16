@@ -83,3 +83,22 @@ DECLARE_IO_PIN(SPI_SCK,       _IO_PORT(3), _IO_BIT(7), IO_OUTPUT,  1,      11,  
 
 #endif
 
+
+/* Simulated Software Interrupt (SWI) Entry Definition */
+#ifdef DECLARE_VECTOR_SWI
+
+/* Note:
+ *  1. Default, all software interrupt are disabled;
+ *      use DRV_SWI_SetState() to enable it.
+ *  2. Use DRV_SWI_SetInterrupt() to trigger the software interrupt.
+ *  3. Maximum 256 software interrupts are supported.
+ */
+
+/*
+DECLARE_VECTOR_SWI(SWI_TEST0,
+                   SWI_TEST0_ISR,
+                   "TEST0 SWI ISR")
+*/
+
+#endif
+

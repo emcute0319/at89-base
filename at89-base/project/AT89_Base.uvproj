@@ -429,6 +429,11 @@
               <FileType>1</FileType>
               <FilePath>..\drv\drv_temp_ds18b20.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_swi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\drv\drv_swi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

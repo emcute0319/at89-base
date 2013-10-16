@@ -50,6 +50,9 @@ typedef S32     SINT32;
 #define HIGH    1
 #define LOW     0
 
+#define ENABLE  TRUE
+#define DISABLE FALSE
+
 /* NULL pointer */
 #define NULL    ((void *)0)
 

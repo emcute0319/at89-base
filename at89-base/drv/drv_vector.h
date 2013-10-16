@@ -40,14 +40,14 @@
  *        ID5  : 0x002B
  *        ...
  */
-#define VECTOR_ID_INT0       0  /* External Interrupt 0  */
-#define VECTOR_ID_TIMER0     1  /* Timer 0               */
-#define VECTOR_ID_INT1       2  /* External Interrupt 1  */
-#define VECTOR_ID_TIMER1     3  /* Timer 1               */
-#define VECTOR_ID_UART0      4  /* UART 0                */
+#define VECTOR_ID_INT0      0  /* External Interrupt 0  */
+#define VECTOR_ID_TIMER0    1  /* Timer 0               */
+#define VECTOR_ID_INT1      2  /* External Interrupt 1  */
+#define VECTOR_ID_TIMER1    3  /* Timer 1               */
+#define VECTOR_ID_UART0     4  /* UART 0                */
 
 #if ( defined(_CPU_AT89C52_) || defined(_CPU_AT89S52_) )
- #define VECTOR_ID_TIMER2    5  /* Timer 2               */
+ #define VECTOR_ID_TIMER2   5  /* Timer 2               */
 #endif
 
 /* register group definition */

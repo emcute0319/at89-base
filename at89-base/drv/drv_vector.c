@@ -60,7 +60,8 @@ INTERRUPT_USING(DRV_VECTOR_Timer0, VECTOR_ID_TIMER0, REG_GROUP_1)
     DRV_CPU_UpdateSysTick();
 
   #if DRV_LED_SUPPORT
-    DRV_LED_ISR();  /* LED driver ISR */
+    /* LED driver ISR */
+    DRV_LED_ISR();
   #endif
 
     DRV_VECTOR_END(TIMER0);
@@ -136,7 +137,12 @@ INTERRUPT(DRV_VECTOR_UART, VECTOR_ID_UART0)
 INTERRUPT(DRV_VECTOR_Timer2, VECTOR_ID_TIMER2)
 {
     DRV_VECTOR_START(TIMER2);
-    /* Add porting code here */
+
+  #if DRV_SWI_SUPPORT
+    /* Simulated Interrupt (SWI) ISR */
+    DRV_SWI_ISR();
+  #endif
+
     DRV_VECTOR_END(TIMER2);
 }
 
