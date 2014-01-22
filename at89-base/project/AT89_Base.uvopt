@@ -75,7 +75,7 @@
         <tvExpOptDlg>0</tvExpOptDlg>
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
-      <CpuCode>0</CpuCode>
+      <CpuCode>255</CpuCode>
       <Books>
         <Book>
           <Number>0</Number>
@@ -115,6 +115,7 @@
         <tRmem>1</tRmem>
         <tRfunc>0</tRfunc>
         <tRbox>1</tRbox>
+        <tRtrace>0</tRtrace>
         <sRunDeb>0</sRunDeb>
         <sLrtime>1</sLrtime>
         <nTsel>-1</nTsel>
@@ -138,6 +139,9 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
+      <Tracepoint>
+        <THDelay>0</THDelay>
+      </Tracepoint>
       <DebugFlag>
         <trace>0</trace>
         <periodic>1</periodic>
@@ -174,6 +178,7 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>1</GroupNumber>
       <FileNumber>1</FileNumber>
@@ -187,6 +192,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\startup\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -195,6 +202,7 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>2</GroupNumber>
       <FileNumber>2</FileNumber>
@@ -208,6 +216,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\startup.S</PathWithFileName>
       <FilenameWithoutPath>startup.S</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -222,6 +232,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv.c</PathWithFileName>
       <FilenameWithoutPath>drv.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -236,6 +248,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_cpu.c</PathWithFileName>
       <FilenameWithoutPath>drv_cpu.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -250,6 +264,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_vector.c</PathWithFileName>
       <FilenameWithoutPath>drv_vector.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -264,6 +280,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_io.c</PathWithFileName>
       <FilenameWithoutPath>drv_io.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -278,6 +296,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_uart.c</PathWithFileName>
       <FilenameWithoutPath>drv_uart.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -292,6 +312,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_spi.c</PathWithFileName>
       <FilenameWithoutPath>drv_spi.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -306,6 +328,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_i2cm.c</PathWithFileName>
       <FilenameWithoutPath>drv_i2cm.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -320,6 +344,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_i2cs.c</PathWithFileName>
       <FilenameWithoutPath>drv_i2cs.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -334,6 +360,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_led.c</PathWithFileName>
       <FilenameWithoutPath>drv_led.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -348,6 +376,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_led_sim.c</PathWithFileName>
       <FilenameWithoutPath>drv_led_sim.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -362,6 +392,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_led_max7219.c</PathWithFileName>
       <FilenameWithoutPath>drv_led_max7219.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -376,6 +408,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_temp.c</PathWithFileName>
       <FilenameWithoutPath>drv_temp.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -390,6 +424,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_temp_ds18b20.c</PathWithFileName>
       <FilenameWithoutPath>drv_temp_ds18b20.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -404,6 +440,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_swi.c</PathWithFileName>
       <FilenameWithoutPath>drv_swi.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
@@ -418,6 +456,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\drv\drv_timer.c</PathWithFileName>
       <FilenameWithoutPath>drv_timer.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -426,6 +466,7 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>3</GroupNumber>
       <FileNumber>18</FileNumber>
@@ -439,6 +480,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\os\protothread.c</PathWithFileName>
       <FilenameWithoutPath>protothread.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
   </Group>
 
@@ -447,6 +490,7 @@
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>4</GroupNumber>
       <FileNumber>19</FileNumber>
@@ -460,6 +504,8 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\app\thread_idle.c</PathWithFileName>
       <FilenameWithoutPath>thread_idle.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
     </File>
   </Group>
 

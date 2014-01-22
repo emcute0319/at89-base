@@ -37,6 +37,10 @@
 #define DRV_INT_LockGlobalInterrupt()       ((EA)? (EA=0, TRUE) : FALSE)
 #define DRV_INT_UnlockGlobalInterrupt(_s)   do { EA=(_s); } while (0)
 
+/* lock/unlock Timer0 interrupt */
+#define DRV_INT_LockTimer0Interrupt()       ((ET0)? (ET0=0, TRUE) : FALSE)
+#define DRV_INT_UnlockTimer0Interrupt(_s)   do { ET0=(_s); } while (0)
+
 
 #endif /* __DRV_INT_H */
 

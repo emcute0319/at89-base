@@ -28,14 +28,15 @@
 #ifndef __DRV_CPU_H
 #define __DRV_CPU_H
 
+
 #ifdef _DRV_CPU_INTERNAL_
  #define _DRV_CPU_EXTERN_   /* nothing */
 #else
  #define _DRV_CPU_EXTERN_   extern
 #endif
 
-_DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
 
+_DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -51,7 +52,7 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
  * HISTORY:
  *      2009.6.16        Panda.Xiong         Create/Update
  *****************************************************************************/
-#define DRV_CPU_GetSysTick()        (vSysTickCount)
+UINT32 DRV_CPU_GetSysTick(void);
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -65,7 +66,7 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
  * NOTES:
  *      N/A
  * HISTORY:
- *      2009.6.16        Panda.Xiong         Create/Update
+ *      2010.1.26        PANDA         Create/Update
  *****************************************************************************/
 #define DRV_CPU_UpdateSysTick()     do { vSysTickCount++; } while (0)
 
@@ -98,7 +99,7 @@ void DRV_CPU_DelayUs(UINT8  vUs);
  * NOTES:
  *      N/A
  * HISTORY:
- *      2010.1.28        panda.xiong         Create/Update
+ *      2010.1.26        PANDA         Create/Update
  *****************************************************************************/
 void DRV_CPU_PreInit(void);
 

@@ -32,6 +32,33 @@
 
 /******************************************************************************
  * FUNCTION NAME:
+ *      DRV_CPU_GetSysTick
+ * DESCRIPTION:
+ *      Get System Real-Time Tick.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2010.1.26        PANDA         Create/Update
+ *****************************************************************************/
+UINT32 DRV_CPU_GetSysTick(void)
+{
+    BOOL    bIntState;
+    UINT32  vCurrentTick;
+
+    bIntState = DRV_INT_LockTimer0Interrupt();
+	vCurrentTick = vSysTickCount;
+    DRV_INT_UnlockTimer0Interrupt(bIntState);
+
+    return vCurrentTick;
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
  *      DRV_CPU_DelayUs
  * DESCRIPTION:
  *      CPU Delay us driver.
@@ -90,7 +117,7 @@ void DRV_CPU_DelayUs(UINT8  vUs)
  * NOTES:
  *      N/A
  * HISTORY:
- *      2010.1.28        panda.xiong         Create/Update
+ *      2010.1.26        PANDA         Create/Update
  *****************************************************************************/
 void DRV_CPU_PreInit(void)
 {
