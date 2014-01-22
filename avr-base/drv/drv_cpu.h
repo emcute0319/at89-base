@@ -28,14 +28,15 @@
 #ifndef __DRV_CPU_H
 #define __DRV_CPU_H
 
+
 #ifdef _DRV_CPU_INTERNAL_
  #define _DRV_CPU_EXTERN_   /* nothing */
 #else
  #define _DRV_CPU_EXTERN_   extern
 #endif
 
-_DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
 
+_DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
 
 /******************************************************************************
  * FUNCTION NAME:
@@ -51,7 +52,7 @@ _DRV_CPU_EXTERN_ volatile UINT32    vSysTickCount;
  * HISTORY:
  *      2009.6.16        Panda.Xiong         Create/Update
  *****************************************************************************/
-#define DRV_CPU_GetSysTick()        (vSysTickCount)
+UINT32 DRV_CPU_GetSysTick(void);
 
 /******************************************************************************
  * FUNCTION NAME:

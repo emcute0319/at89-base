@@ -35,6 +35,12 @@
 #define DRV_INT_LockGlobalInterrupt()       ((SREG_Bit7)? (SREG_Bit7=0, TRUE) : FALSE)
 #define DRV_INT_UnlockGlobalInterrupt(_s)   do { SREG_Bit7=(_s); } while (0)
 
+/* enable/disable/lock/unlock timer(n) interrupt */
+#define DRV_INT_EnableTimerInterrupt(n)     do { COMBINE(TIMSK_OCIE,n) = 1; } while (0)
+#define DRV_INT_DisableTimerInterrupt(n)    do { COMBINE(TIMSK_OCIE,n) = 0; } while (0)
+#define DRV_INT_LockTimerInterrupt(n)       (COMBINE(TIMSK_OCIE,n)? (COMBINE(TIMSK_OCIE,n)=0, TRUE) : FALSE)
+#define DRV_INT_UnlockTimerInterrupt(n, _s) do { COMBINE(TIMSK_OCIE,n) = (_s); } while (0)
+
 /* enable/disable external interrrupt */
 #define DRV_INT_EnableExtInterrupt(n)       do { COMBINE(GICR_INT,n) = 1; } while (0)
 #define DRV_INT_DisableExtInterrupt(n)      do { COMBINE(GICR_INT,n) = 0; } while (0)

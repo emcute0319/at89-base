@@ -66,12 +66,12 @@
         TCCR0 = 0x0B;                                                   \
                                                                         \
         /* enable TC0 interrupt */                                      \
-        TIMSK_OCIE0 = 1;                                                \
+        DRV_INT_EnableTimerInterrupt(0);                                \
     } while (0)
 #define DRV_TIMER_SysTimer_Disable()                                    \
     do {                                                                \
         /* disable TC0 interrupt */                                     \
-        TIMSK_OCIE0 = 0;                                                \
+        DRV_INT_DisableTimerInterrupt(0);                               \
     } while (0)
 
 

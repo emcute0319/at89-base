@@ -30,3 +30,29 @@
 #include "drv.h"
 
 
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_CPU_GetSysTick
+ * DESCRIPTION:
+ *      Get System Real-Time Tick.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ *      2009.6.16        Panda.Xiong         Create/Update
+ *****************************************************************************/
+UINT32 DRV_CPU_GetSysTick(void)
+{
+    BOOL    bIntState;
+    UINT32  vCurrentTick;
+
+    bIntState = DRV_INT_LockTimerInterrupt(0);
+	vCurrentTick = vSysTickCount;
+    DRV_INT_UnlockTimerInterrupt(0, bIntState);
+
+    return vCurrentTick;
+}
+
