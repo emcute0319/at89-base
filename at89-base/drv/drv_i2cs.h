@@ -33,6 +33,24 @@
 
 /******************************************************************************
  * FUNCTION NAME:
+ *      DRV_I2CS_SetInterruptedFlag
+ * DESCRIPTION:
+ *      Set interrupted flag for I2C Slave,
+  *      while there is another higher interrupt occurrerd.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ * HISTORY:
+ *      2011.5.24        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_I2CS_SetInterruptedFlag(void);
+
+/******************************************************************************
+ * FUNCTION NAME:
  *      DRV_I2CS_Init
  * DESCRIPTION:
  *      I2C Slave Init.

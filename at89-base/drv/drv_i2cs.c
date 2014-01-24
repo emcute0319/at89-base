@@ -122,8 +122,8 @@ static BOOL bI2cTimeout;
  *   -->  source clock: system clock
  */
 #define DRV_I2CS_TIMER_RELOAD_VAL   \
-            (65536UL - (DRV_I2CS_TIMEOUT_INTERVAL * CPU_CORE_CLOCK /1 /1000))
-#if (DRV_I2CS_TIMER_RELOAD_VAL <= 0)
+            (65536L - (DRV_I2CS_TIMEOUT_INTERVAL * CPU_CORE_CLOCK /1 /1000))
+#if (DRV_I2CS_TIMER_RELOAD_VAL < 0)
  #error "Unsupported Timer Initial Value for Simulated I2C Slave Driver!"
 #endif
 #define THn_VAL                 ((DRV_I2CS_TIMER_RELOAD_VAL >> 8) & 0xFF)
@@ -142,7 +142,7 @@ static BOOL bI2cTimeout;
                                     DRV_I2CS_TimerReload();                 \
                                 } while(0)
 #define DRV_I2CS_IsTimeout()    (TFn)
-#define DRV_I2CS_SetTimerTimeout() do { TFn = 1; } while (0)
+#define DRV_I2CS_SetTimerTimeout() do { TFn = 1; bI2cTimeout = TRUE; } while (0)
 
 #define WAIT_SCL_L2H(_err_code) do {                                        \
                                     DRV_I2CS_TimerReload();                 \
@@ -464,6 +464,37 @@ void DRV_I2CS_Enable(void)
 {
     /* Enable I2C Slave Interrupt */
     DRV_I2CS_ISR_Enable();
+}
+
+
+/******************************************************************************
+ * FUNCTION NAME:
+ *      DRV_I2CS_SetInterruptedFlag
+ * DESCRIPTION:
+ *      Set interrupted flag for I2C Slave,
+  *      while there is another higher interrupt occurrerd.
+ * PARAMETERS:
+ *      N/A
+ * RETURN:
+ *      N/A
+ * NOTES:
+ *      N/A
+ * HISTORY:
+ * HISTORY:
+ *      2011.5.24        Panda.Xiong         Create/Update
+ *****************************************************************************/
+void DRV_I2CS_SetInterruptedFlag(void)
+{
+    /* Force set timer timeout,
+     *  to drop current operation of simulated I2C Slave.
+     */
+    DRV_I2CS_SetTimerTimeout();
+
+    /* Make sure the SDA line is released to HIGH level,
+     *  while dealing another higher priority interrupt,
+     *  to prevent always occupying the simulated I2C Bus.
+     */
+    DRV_I2CS_SET_SDA(HIGH);
 }
 
 

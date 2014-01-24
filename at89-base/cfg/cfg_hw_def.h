@@ -60,7 +60,7 @@
 
 
 /* CPU Clock */
-#define CPU_Crystal_Frequency   12000000UL    /* Hz    */
+#define CPU_Crystal_Frequency   12000000L    /* Hz    */
 #define CPU_Prescale            12
 #define CPU_CORE_CLOCK          (CPU_Crystal_Frequency / CPU_Prescale)
 

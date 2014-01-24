@@ -38,8 +38,8 @@
  *   -->  source clock: system clock
  */
 #define DRV_TIMER_SYSTIMER_RELOAD_VAL   \
-            (65536UL - (DRV_TIMER_SysTimerTick * CPU_CORE_CLOCK /1 /1000))
-#if (DRV_TIMER_SYSTIMER_RELOAD_VAL <= 0)
+            (65536L - (DRV_TIMER_SysTimerTick * CPU_CORE_CLOCK /1 /1000))
+#if (DRV_TIMER_SYSTIMER_RELOAD_VAL < 0)
   #error "Unsupported System Timer Initial Value for current System Clock!"
 #endif
 

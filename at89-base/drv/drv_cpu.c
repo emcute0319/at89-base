@@ -74,7 +74,7 @@ UINT32 DRV_CPU_GetSysTick(void)
  *****************************************************************************/
 void DRV_CPU_DelayUs(UINT8  vUs)
 {
-#if ( CPU_CORE_CLOCK == 1000000UL)
+#if ( CPU_CORE_CLOCK == 1000000L)
 
     /* 1us = 1 Tick */
 
@@ -87,7 +87,7 @@ void DRV_CPU_DelayUs(UINT8  vUs)
     while (--vUs)
     {}
 
-#elif ( CPU_CORE_CLOCK == 2000000UL)
+#elif ( CPU_CORE_CLOCK == 2000000L)
 
     /* 1us = 2 Tick */
 
