@@ -73,6 +73,9 @@ void DRV_SWI_ISR(void)
 {
     UINT8   vLoop;
 
+    /* clear SWI global interrupt flag */
+    DRV_SWI_ClearGlobalInterrupt();
+
     for (vLoop = 0; vLoop < COUNT_OF(aSwiRTTable); vLoop++)
     {
         if (aSwiRTTable[vLoop].bEnable == ENABLE)
@@ -87,9 +90,6 @@ void DRV_SWI_ISR(void)
             }
         }
     }
-
-    /* clear SWI global interrupt flag */
-    DRV_SWI_ClearGlobalInterrupt();
 }
 
 
